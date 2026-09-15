@@ -1,6 +1,6 @@
 // Central place for nav, contact and social data shared across the header,
-// footer and individual pages. Phone/email are placeholders for this demo —
-// swap in the school's real admissions line and inbox before going live.
+// footer and individual pages. Phone/email are placeholders for this demo.
+// Swap in the school's real admissions line and inbox before going live.
 
 export const siteConfig = {
   name: "Saint Vincent Pallotti School Masaka",
