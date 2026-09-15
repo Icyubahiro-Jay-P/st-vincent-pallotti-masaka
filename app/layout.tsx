@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Saint Vincent Pallotti School Masaka | Strive Beyond",
     description:
-      "A Pallottine Missionary Sisters school in Masaka, Kigali — Day Care through Secondary, Cambridge and National curricula, Special Needs Education, and TVET.",
+      "A Pallottine Missionary Sisters school in Masaka, Kigali, covering Day Care through Secondary, Cambridge and National curricula, Special Needs Education, and TVET.",
     url: siteUrl,
     siteName: "Saint Vincent Pallotti School Masaka",
     locale: "en_RW",
