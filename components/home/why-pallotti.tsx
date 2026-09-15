@@ -7,7 +7,7 @@ const features = [
     icon: Building2,
     title: "A Campus Built to Last",
     description:
-      "Expanded in 2022 and inaugurated by Cardinal Antoine Kambanda with the Ministry of Education, our campus now holds over 1,200 additional seats — modern classrooms, workshops and grounds designed for growth.",
+      "Expanded in 2022 and inaugurated by Cardinal Antoine Kambanda with the Ministry of Education, our campus now holds over 1,200 additional seats: modern classrooms, workshops and grounds designed for growth.",
     size: "lg",
   },
   {
