@@ -1,6 +1,6 @@
 /**
  * A thin geometric rule inspired by imigongo, the traditional Rwandan
- * triangle-and-spiral relief art — used as a section divider so the site's
+ * triangle-and-spiral relief art, used as a section divider so the site's
  * Rwandan setting shows up as a real graphic motif, not a stock photo.
  */
 export function ImigongoDivider({ className }: { className?: string }) {
