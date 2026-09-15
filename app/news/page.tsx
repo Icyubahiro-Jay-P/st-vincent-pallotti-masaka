@@ -17,7 +17,7 @@ export default function NewsPage() {
       <PageHero
         eyebrow="School Life"
         title="News & Updates"
-        description="What's happening on campus — academics, TVET and community life at Pallotti."
+        description="What's happening on campus: academics, TVET and community life at Pallotti."
       />
 
       <section className="border-b border-border bg-background py-16 sm:py-20">
