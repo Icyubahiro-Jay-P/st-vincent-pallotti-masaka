@@ -40,7 +40,7 @@ export function Hero() {
           <p className="mt-6 max-w-xl text-base/relaxed text-muted-foreground sm:text-lg/relaxed">
             From Day Care to Secondary and TVET, Saint Vincent Pallotti School
             Masaka forms confident, capable graduates on a new campus built for
-            over 1,400 students &mdash; Cambridge and National curricula, Special
+            over 1,400 students: Cambridge and National curricula, Special
             Needs Education, and hands-on vocational training, all rooted in
             Catholic values.
           </p>
