@@ -15,7 +15,7 @@ import { siteConfig, socialLinks } from "@/lib/site-config"
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Get in touch with Saint Vincent Pallotti School Masaka — phone, WhatsApp, email and campus location in Masaka, Kigali.",
+    "Get in touch with Saint Vincent Pallotti School Masaka: phone, WhatsApp, email and campus location in Masaka, Kigali.",
 }
 
 const contactCards = [
@@ -51,7 +51,7 @@ export default function ContactPage() {
       <PageHero
         eyebrow="Contact"
         title="We'd Love to Hear From You"
-        description="Call, WhatsApp, email or visit our campus in Masaka, Kigali — whichever is easiest for your family."
+        description="Call, WhatsApp, email or visit our campus in Masaka, Kigali, whichever is easiest for your family."
       />
 
       <section className="border-b border-border bg-background py-16 sm:py-20">
