@@ -7,7 +7,7 @@ import { ImigongoDivider } from "@/components/patterns/imigongo-divider"
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "The story of Saint Vincent Pallotti School Masaka — run by the Pallottine Missionary Sisters in Masaka, Kigali, Rwanda.",
+    "The story of Saint Vincent Pallotti School Masaka, run by the Pallottine Missionary Sisters in Masaka, Kigali, Rwanda.",
 }
 
 const values = [
@@ -70,7 +70,7 @@ export default function AboutPage() {
       <PageHero
         eyebrow="About Us"
         title="Our Story"
-        description="Saint Vincent Pallotti School Masaka is run by the Pallottine Missionary Sisters, Our Lady of Kibeho Region — a mission of faith, academics and opportunity in Masaka, Kigali."
+        description="Saint Vincent Pallotti School Masaka is run by the Pallottine Missionary Sisters, Our Lady of Kibeho Region, a mission of faith, academics and opportunity in Masaka, Kigali."
       />
 
       <section className="border-b border-border bg-background py-16 sm:py-20">
@@ -83,13 +83,13 @@ export default function AboutPage() {
               &ldquo;{"The love of Christ urges us on"}&rdquo;
             </h2>
             <p className="mt-2 text-sm italic text-muted-foreground">
-              Caritas Christi urget nos &mdash; 2 Corinthians 5:14
+              Caritas Christi urget nos (2 Corinthians 5:14)
             </p>
             <p className="mt-6 text-sm/relaxed text-muted-foreground">
               We are run by the Pallottine Missionary Sisters, part of the
               Union of Catholic Apostolate founded on the vision of St.
-              Vincent Pallotti. That charism &mdash; that Christ&rsquo;s love
-              compels us to act &mdash; shapes how our staff teach, how our
+              Vincent Pallotti. That charism, that Christ&rsquo;s love
+              compels us to act, shapes how our staff teach, how our
               Sisters care for students, and why Special Needs Education and
               TVET sit alongside our academic curricula: everyone deserves a
               path to strive beyond their circumstances.
