@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Fraunces, Geist_Mono, Inter, Noto_Sans, Playfair_Display } from "next/font/google"
+import { Fraunces, Geist_Mono, Inter } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -8,9 +8,7 @@ import { SiteFooter } from "@/components/site-footer"
 import { WhatsAppFab } from "@/components/whatsapp-fab"
 import { cn } from "@/lib/utils"
 
-const playfairDisplayHeading = Playfair_Display({subsets:['latin'],variable:'--font-heading'});
-
-const notoSans = Noto_Sans({subsets:['latin'],variable:'--font-sans'})
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -64,10 +62,12 @@ export default function RootLayout({
       suppressHydrationWarning
       data-scroll-behavior="smooth"
       className={cn(
-              "antialiased",
-              fontMono.variable,
-              fraunces.variable
-            , "font-sans", notoSans.variable, playfairDisplayHeading.variable)}
+        "antialiased",
+        fontMono.variable,
+        "font-sans",
+        inter.variable,
+        fraunces.variable
+      )}
     >
       <body className="flex min-h-svh flex-col">
         <ThemeProvider>
