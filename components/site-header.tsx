@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { Menu, ArrowRight } from "lucide-react"
 
 import { Crest } from "@/components/crest"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
