@@ -102,7 +102,7 @@ export function AdmissionInquiryForm() {
           id="message"
           name="message"
           rows={4}
-          placeholder="Tell us anything that would help our admissions team — current grade, special needs support required, etc."
+          placeholder="Tell us anything that would help our admissions team, such as current grade or special needs support required."
         />
       </Field>
 
