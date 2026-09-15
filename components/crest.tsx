@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils"
 
 /**
  * The school's own crest sits on a plain white field, so it's mounted on a
- * white medallion with a gold ring here — that keeps it legible on the navy
+ * white medallion with a gold ring here, which keeps it legible on the navy
  * header/footer and in dark mode, rather than showing a stray white box.
  */
 export function Crest({
