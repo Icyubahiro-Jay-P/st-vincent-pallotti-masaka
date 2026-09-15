@@ -15,7 +15,7 @@ import { siteConfig } from "@/lib/site-config"
 export const metadata: Metadata = {
   title: "Admissions",
   description:
-    "Start an admissions inquiry at Saint Vincent Pallotti School Masaka — Day Care, Kindergarten, Cambridge and National Primary & Secondary, Special Needs Education, and TVET.",
+    "Start an admissions inquiry at Saint Vincent Pallotti School Masaka: Day Care, Kindergarten, Cambridge and National Primary & Secondary, Special Needs Education, and TVET.",
 }
 
 const processSteps = [
@@ -96,7 +96,7 @@ export default function AdmissionsPage() {
       <PageHero
         eyebrow="Admissions"
         title="Join the Pallotti Family"
-        description="Seats are open across Day Care, Kindergarten, Cambridge and National Primary & Secondary, Special Needs Education, and TVET. Here's how to apply — and a form to get started today."
+        description="Seats are open across Day Care, Kindergarten, Cambridge and National Primary & Secondary, Special Needs Education, and TVET. Here's how to apply, plus a form to get started today."
       />
 
       <section className="border-b border-border bg-background py-16 sm:py-20">
@@ -144,7 +144,7 @@ export default function AdmissionsPage() {
               What to bring, by level
             </h2>
             <p className="text-sm/relaxed text-muted-foreground">
-              A general guide &mdash; our admissions team will confirm the exact
+              A general guide. Our admissions team will confirm the exact
               documents for your child during your campus visit.
             </p>
           </div>
