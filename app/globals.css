@@ -106,7 +106,7 @@
 }
 
 .dark {
-    /* Near-black navy — gold reads like candlelight against it, so it leads instead of navy. */
+    /* Near-black navy. Gold reads like candlelight against it, so it leads instead of navy. */
     --background: oklch(0.17 0.028 258);
     --foreground: oklch(0.96 0.014 90);
     --card: oklch(0.21 0.032 258);
