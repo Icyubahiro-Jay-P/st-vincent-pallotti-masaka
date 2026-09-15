@@ -10,7 +10,7 @@ import { tvetTrades } from "@/lib/site-config"
 export const metadata: Metadata = {
   title: "TVET / Vocational Programs",
   description:
-    "Hands-on trade training at Saint Vincent Pallotti School Masaka — Welding, Tailoring, Hairdressing, Carpentry and Culinary Arts.",
+    "Hands-on trade training at Saint Vincent Pallotti School Masaka: Welding, Tailoring, Hairdressing, Carpentry and Culinary Arts.",
 }
 
 const reasons = [
@@ -37,7 +37,7 @@ export default function TvetPage() {
       <PageHero
         eyebrow="TVET / Vocational"
         title="A Trade Is a Future"
-        description="Alongside our academic tracks, Pallotti offers Technical and Vocational Education and Training in five hands-on trades — a real, certifiable path to work."
+        description="Alongside our academic tracks, Pallotti offers Technical and Vocational Education and Training in five hands-on trades: a real, certifiable path to work."
       />
 
       <section className="border-b border-border bg-background py-16 sm:py-20">
