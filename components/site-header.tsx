@@ -73,6 +73,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
+          <ThemeToggle className="text-ink-foreground hover:bg-white/10 hover:text-ink-foreground" />
           <Button
             render={<Link href="/admissions" />}
             className="bg-gold text-gold-foreground hover:bg-gold/85"
@@ -82,19 +83,21 @@ export function SiteHeader() {
           </Button>
         </div>
 
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger
-            render={
-              <Button
-                variant="ghost"
-                size="icon"
-                className="size-11 text-ink-foreground hover:bg-white/10 hover:text-ink-foreground lg:hidden"
-              />
-            }
-          >
-            <Menu />
-            <span className="sr-only">Open menu</span>
-          </SheetTrigger>
+        <div className="flex items-center gap-1 lg:hidden">
+          <ThemeToggle className="text-ink-foreground hover:bg-white/10 hover:text-ink-foreground" />
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-11 text-ink-foreground hover:bg-white/10 hover:text-ink-foreground"
+                />
+              }
+            >
+              <Menu />
+              <span className="sr-only">Open menu</span>
+            </SheetTrigger>
           <SheetContent side="right" className="flex w-full flex-col sm:max-w-xs">
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2">
