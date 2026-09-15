@@ -100,7 +100,7 @@ export function SiteHeader() {
                 <Crest size={32} />
                 St. Vincent Pallotti
               </SheetTitle>
-              <SheetDescription>Strive Beyond &mdash; Masaka, Kigali</SheetDescription>
+              <SheetDescription>Strive Beyond &middot; Masaka, Kigali</SheetDescription>
             </SheetHeader>
             <nav className="flex flex-col gap-1 px-4" aria-label="Primary">
               {navLinks.map((link) => {
