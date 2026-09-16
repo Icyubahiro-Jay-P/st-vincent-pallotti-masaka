@@ -323,6 +323,7 @@ const en = {
         "We are run by the Pallottine Missionary Sisters, part of the Union of Catholic Apostolate founded on the vision of St. Vincent Pallotti. That charism, that Christ’s love compels us to act, shapes how our staff teach, how our Sisters care for students, and why Special Needs Education and TVET sit alongside our academic curricula: everyone deserves a path to strive beyond their circumstances.",
       glanceTitle: "At a glance",
       runBy: "Run by",
+      runByValue: "Pallottine Missionary Sisters",
       region: "Region",
       location: "Location",
       motto: "Motto",
