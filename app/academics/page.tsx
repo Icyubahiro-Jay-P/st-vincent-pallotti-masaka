@@ -13,6 +13,7 @@ import {
 } from "lucide-react"
 
 import { PageHero } from "@/components/page-hero"
+import { ProgramsGrid } from "@/components/programs-grid"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 
 const curricula = [
   {
-    id: "cambridge-primary",
+    slug: "cambridge-primary",
     name: "Cambridge Curriculum",
     tagline: "Internationally benchmarked",
     description:
@@ -33,7 +34,7 @@ const curricula = [
     icon: Globe2,
   },
   {
-    id: "national-primary",
+    slug: "national-primary",
     name: "National Curriculum",
     tagline: "Rwanda's competence-based curriculum",
     description:
@@ -56,14 +57,14 @@ export default function AcademicsPage() {
       <PageHero
         eyebrow="Academics"
         title="Two Curricula. One Standard of Excellence."
-        description="Families choose between the Cambridge and National curricula at Pallotti — both taught to the same high standard, from Nursery through Secondary."
+        description="Families choose between the Cambridge and National curricula at Pallotti, both taught to the same high standard, from Nursery through Secondary."
       />
 
       <section className="border-b border-border bg-background py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {curricula.map((track) => (
-              <div key={track.id} id={track.id} className="flex flex-col gap-5 border border-border bg-card p-8">
+              <div key={track.slug} className="flex flex-col gap-5 border border-border bg-card p-8">
                 <div className="flex items-center justify-between">
                   <track.icon className="size-9 text-primary" />
                   <Badge variant="secondary" className="uppercase">
@@ -84,6 +85,13 @@ export default function AcademicsPage() {
                     </span>
                   ))}
                 </div>
+                <Link
+                  href={`/academics/${track.slug}`}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-primary uppercase hover:underline"
+                >
+                  View full program page
+                  <ArrowRight className="size-3.5" />
+                </Link>
               </div>
             ))}
           </div>
@@ -99,10 +107,7 @@ export default function AcademicsPage() {
         </div>
       </section>
 
-      <section
-        id="special-needs"
-        className="border-b border-border bg-ink py-16 text-ink-foreground sm:py-20"
-      >
+      <section className="border-b border-border bg-ink py-16 text-ink-foreground sm:py-20">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
           <div className="lg:col-span-1">
             <HeartHandshake className="size-10 text-gold" />
@@ -115,8 +120,8 @@ export default function AcademicsPage() {
               Every child deserves a classroom built around them. Our Special
               Needs Education program provides individualised learning plans,
               trained support staff and an inclusive environment where
-              students with a range of abilities learn alongside their peers
-              &mdash; consistent with the Pallottine belief that no learner
+              students with a range of abilities learn alongside their peers,
+              consistent with the Pallottine belief that no learner
               should be left behind.
             </p>
             <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -132,9 +137,22 @@ export default function AcademicsPage() {
                 </li>
               ))}
             </ul>
+            <Link
+              href="/academics/special-needs"
+              className="mt-6 inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-gold uppercase hover:underline"
+            >
+              View full program page
+              <ArrowRight className="size-3.5" />
+            </Link>
           </div>
         </div>
       </section>
+
+      <ProgramsGrid
+        eyebrow="Every Program"
+        title="Find your child's program"
+        description="Every program below has its own page with age range, what students learn, and how to apply."
+      />
 
       <section className="bg-background py-16 sm:py-20">
         <div className="mx-auto flex max-w-5xl flex-col items-start gap-6 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
@@ -143,7 +161,7 @@ export default function AcademicsPage() {
             <p className="max-w-lg text-sm/relaxed text-muted-foreground">
               Pallotti students are consistently among the stronger-performing
               cohorts in the Kigali area, across both the Cambridge and
-              National streams &mdash; a track record our teachers work hard
+              National streams, a track record our teachers work hard
               to build on every term.
             </p>
           </div>
