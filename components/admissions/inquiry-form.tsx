@@ -14,26 +14,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { submitInquiry, type InquiryState } from "@/app/[locale]/admissions/actions"
+import { submitInquiry, type InquiryState } from "@/app/admissions/actions"
 import { programs } from "@/lib/site-config"
-import type { Locale } from "@/lib/i18n/config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import { cn } from "@/lib/utils"
 
 const initialState: InquiryState = { status: "idle" }
 
 export function AdmissionInquiryForm({
-  locale,
   dict,
   defaultProgram,
 }: {
-  locale: Locale
   dict: Dictionary
   defaultProgram?: string
 }) {
   const f = dict.admissions.form
-  const boundSubmitInquiry = submitInquiry.bind(null, locale)
-  const [state, formAction, pending] = useActionState(boundSubmitInquiry, initialState)
+  const [state, formAction, pending] = useActionState(submitInquiry, initialState)
   const formRef = useRef<HTMLFormElement>(null)
   const validDefaultProgram = programs.find(
     (program) => dict.programs[program.slug].name === defaultProgram
