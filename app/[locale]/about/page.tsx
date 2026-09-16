@@ -62,7 +62,7 @@ export default async function AboutPage({
                   {a.charism.runBy}
                 </dt>
                 <dd className="text-right text-sm font-medium text-foreground">
-                  {dict.site.foundedBy.split(",")[0]}
+                  {a.charism.runByValue}
                 </dd>
               </div>
               <div className="flex items-baseline justify-between border-b border-border pb-3">
