@@ -1,8 +1,9 @@
 // Locale-independent structure: routes, icons, contact facts and other data
 // that doesn't change between languages. Translatable copy (nav labels,
 // program names/descriptions, page content) lives in lib/i18n/dictionaries
-// instead, see that folder when you need to change wording.
-import type { Locale } from "@/lib/i18n/config"
+// instead, see that folder when you need to change wording. Routes carry no
+// locale prefix (language is a cookie, not a URL segment) so hrefs are
+// plain paths.
 
 export const siteConfig = {
   name: "Saint Vincent Pallotti School Masaka",
@@ -18,10 +19,10 @@ export const siteConfig = {
     "https://www.google.com/maps/search/?api=1&query=Saint+Vincent+Pallotti+School+Masaka+Kigali+Rwanda",
 } as const
 
-// href is the locale-independent path suffix; nav labels come from
-// dict.nav[key] so the header/footer can render them in any language.
+// nav labels come from dict.nav[key] so the header/footer can render them
+// in any language.
 export const navLinks = [
-  { href: "", key: "home" },
+  { href: "/", key: "home" },
   { href: "/about", key: "about" },
   { href: "/academics", key: "academics" },
   { href: "/tvet", key: "tvet" },
@@ -53,15 +54,9 @@ export type ProgramMeta = (typeof programs)[number]
 export type ProgramSlug = ProgramMeta["slug"]
 
 // TVET already has its own full page at /tvet; every other program gets a
-// dedicated detail page at /[locale]/academics/[slug].
-export function programHref(locale: Locale, slug: ProgramSlug): string {
-  return slug === "tvet"
-    ? `/${locale}/tvet`
-    : `/${locale}/academics/${slug}`
-}
-
-export function localeHref(locale: Locale, path: string = ""): string {
-  return `/${locale}${path}`
+// dedicated detail page at /academics/[slug].
+export function programHref(slug: ProgramSlug): string {
+  return slug === "tvet" ? "/tvet" : `/academics/${slug}`
 }
 
 // Structural TVET trade list: name/description text lives in
