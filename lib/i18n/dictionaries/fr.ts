@@ -320,6 +320,7 @@ const fr: Dictionary = {
         "Nous sommes dirigés par les Sœurs Missionnaires Pallottines, membres de l'Union de l'Apostolat Catholique fondée sur la vision de saint Vincent Pallotti. Ce charisme, cet amour du Christ qui nous presse d'agir, guide la manière dont notre personnel enseigne, dont nos Sœurs prennent soin des élèves, et la raison pour laquelle l'éducation spécialisée et le TVET accompagnent nos programmes académiques : chacun mérite un chemin pour aller au-delà de sa condition.",
       glanceTitle: "En bref",
       runBy: "Dirigée par",
+      runByValue: "Sœurs Missionnaires Pallottines",
       region: "Région",
       location: "Lieu",
       motto: "Devise",
