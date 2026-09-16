@@ -46,7 +46,7 @@ export function CtaBand() {
             Chat on WhatsApp
           </Button>
         </div>
-        <ImigongoDivider className="mx-auto mt-12 h-3 w-40 text-gold/70" />
+        <ImigongoDivider className="mx-auto mt-12 h-3 w-40 text-ink-foreground/70" />
       </div>
     </section>
   )
