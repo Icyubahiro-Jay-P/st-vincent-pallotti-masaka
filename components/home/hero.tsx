@@ -87,7 +87,7 @@ export function Hero() {
 
         <div className="relative lg:col-span-5">
           <div className="relative overflow-hidden border border-ink bg-ink text-ink-foreground">
-            <ImigongoField className="absolute inset-0 h-full w-full text-gold/40" />
+            <ImigongoField className="absolute inset-0 h-full w-full text-ink-foreground/[0.15]" />
             <div className="relative flex flex-col items-center gap-5 px-8 py-14 text-center sm:py-16">
               <Crest size={128} ringClassName="ring-4" />
               <div>
