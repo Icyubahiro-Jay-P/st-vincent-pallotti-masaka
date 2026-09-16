@@ -47,6 +47,14 @@ export const programs = [
     ageRange: "3 months – 2 years",
     description:
       "A warm, secure nursery environment for our youngest learners, with qualified caregivers and Montessori-inspired play.",
+    overview:
+      "Our Day Care welcomes infants and toddlers into a secure, home-like setting where trained caregivers focus on comfort, routine and early stimulation. Montessori-inspired activities build the first foundations of independence and curiosity, in a space designed and supervised for our youngest learners.",
+    highlights: [
+      "Low caregiver-to-child ratios",
+      "Montessori-inspired sensory play",
+      "Structured daily routines for feeding, rest and hygiene",
+      "A secure, home-like nursery environment",
+    ],
     icon: "Baby",
   },
   {
@@ -55,6 +63,14 @@ export const programs = [
     ageRange: "3 – 5 years",
     description:
       "Play-based early learning that builds language, number sense and social skills ahead of Primary One.",
+    overview:
+      "Kindergarten builds on Day Care with structured, play-based learning that develops language, number sense and social skills. Children leave ready for the structure of Primary One, confident and curious about the world around them.",
+    highlights: [
+      "Play-based literacy and numeracy foundations",
+      "Social and emotional skill building",
+      "Preparation for Primary One",
+      "Creative arts, music and movement",
+    ],
     icon: "Blocks",
   },
   {
@@ -63,6 +79,14 @@ export const programs = [
     ageRange: "All ages",
     description:
       "Individualised support and an inclusive classroom model so every child learns at their own pace, with dignity.",
+    overview:
+      "Every learner deserves a classroom built around them. Our Special Needs Education program pairs individualised learning plans with trained support staff, so students with a range of abilities learn alongside their peers with dignity, consistent with the Pallottine belief that no learner should be left behind.",
+    highlights: [
+      "Individualised learning plans",
+      "Trained special needs educators",
+      "Inclusive, mixed-ability classrooms",
+      "Available at every level, from Day Care to Secondary",
+    ],
     icon: "HeartHandshake",
   },
   {
@@ -71,6 +95,14 @@ export const programs = [
     ageRange: "P1 – P6",
     description:
       "An internationally benchmarked curriculum in English, Mathematics and Science for globally minded families.",
+    overview:
+      "Our Cambridge stream follows the Cambridge Primary framework in English, Mathematics and Science, giving globally minded families an internationally benchmarked education from the earliest grades.",
+    highlights: [
+      "Cambridge Primary English, Mathematics and Science",
+      "Internationally benchmarked assessment",
+      "Small class sizes and dedicated subject teachers",
+      "A clear pathway into Cambridge Secondary",
+    ],
     icon: "Globe2",
   },
   {
@@ -79,6 +111,14 @@ export const programs = [
     ageRange: "N1 – P6",
     description:
       "The Rwandan competence-based curriculum, delivered in a disciplined, values-led classroom.",
+    overview:
+      "National Nursery and Primary follows Rwanda's competence-based curriculum, taught in a disciplined, values-led classroom that builds strong academic fundamentals in Kinyarwanda, English and Mathematics.",
+    highlights: [
+      "Rwanda's official competence-based curriculum",
+      "Kinyarwanda, English and Mathematics foundations",
+      "Values-led, disciplined classroom culture",
+      "A clear pathway into National Secondary",
+    ],
     icon: "BookOpen",
   },
   {
@@ -87,6 +127,14 @@ export const programs = [
     ageRange: "S1 – S6",
     description:
       "O-Level and A-Level pathways that prepare students for national examinations and university entry.",
+    overview:
+      "National Secondary carries students through O-Level and A-Level study, preparing them for national examinations, university entry and the working world through rigorous academics and character formation.",
+    highlights: [
+      "O-Level and A-Level pathways",
+      "Preparation for national examinations",
+      "University and career guidance",
+      "Leadership and character formation",
+    ],
     icon: "GraduationCap",
   },
   {
@@ -95,9 +143,25 @@ export const programs = [
     ageRange: "Post-S3",
     description:
       "Hands-on trade training in Welding, Tailoring, Hairdressing, Carpentry and Culinary Arts.",
+    overview:
+      "Alongside our academic tracks, TVET offers hands-on trade training in five workshops, building toward real certification and a direct path to work.",
+    highlights: [
+      "Five hands-on trades to choose from",
+      "Certification-track training",
+      "Real workshop equipment and practice",
+      "A direct path to employment or self-employment",
+    ],
     icon: "Hammer",
   },
 ] as const
+
+export type Program = (typeof programs)[number]
+
+// TVET already has its own full page at /tvet; every other program gets a
+// dedicated detail page at /academics/[slug] rather than a same-page anchor.
+export function programHref(program: Pick<Program, "slug">): string {
+  return program.slug === "tvet" ? "/tvet" : `/academics/${program.slug}`
+}
 
 export const tvetTrades = [
   {
