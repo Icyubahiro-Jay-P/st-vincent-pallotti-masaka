@@ -7,13 +7,12 @@ import {
   YoutubeGlyph,
   FacebookGlyph,
 } from "@/components/icons/social-icons"
-import { navLinks, programHref, programs, siteConfig, socialLinks, localeHref } from "@/lib/site-config"
-import type { Locale } from "@/lib/i18n/config"
+import { navLinks, programHref, programs, siteConfig, socialLinks } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function SiteFooter({ dict }: { dict: Dictionary }) {
   return (
-    <footer className="border-t border-white/10 bg-ink text-ink-foreground">
+    <footer className="border-t border-white/20 bg-ink text-ink-foreground">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
@@ -53,7 +52,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
               {navLinks.map((link) => (
                 <li key={link.key}>
                   <Link
-                    href={localeHref(locale, link.href)}
+                    href={link.href}
                     className="text-xs text-ink-foreground/75 transition-colors hover:text-ink-foreground"
                   >
                     {dict.nav[link.key]}
@@ -71,7 +70,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
               {programs.slice(0, 5).map((program) => (
                 <li key={program.slug}>
                   <Link
-                    href={programHref(locale, program.slug)}
+                    href={programHref(program.slug)}
                     className="text-xs text-ink-foreground/75 transition-colors hover:text-ink-foreground"
                   >
                     {dict.programs[program.slug].name}
@@ -119,7 +118,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-[0.7rem] text-ink-foreground/55 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-3 border-t border-white/20 pt-6 text-[0.7rem] text-ink-foreground/55 sm:flex-row sm:items-center sm:justify-between">
           <p>
             &copy; {new Date().getFullYear()} {siteConfig.name}. {dict.footer.runByPrefix}{" "}
             {dict.site.foundedBy}.
