@@ -29,7 +29,8 @@ export function LanguageSwitcher({
   const router = useRouter()
   const pathname = usePathname()
 
-  function switchTo(nextLocale: string) {
+  function switchTo(nextLocale: string | null) {
+    if (!nextLocale) return
     const segments = pathname.split("/")
     segments[1] = nextLocale
     router.push(segments.join("/"))
