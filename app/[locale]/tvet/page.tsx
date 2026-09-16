@@ -5,46 +5,44 @@ import { ArrowRight, Award, Briefcase, Wrench } from "lucide-react"
 import { PageHero } from "@/components/page-hero"
 import { Button } from "@/components/ui/button"
 import { iconMap } from "@/components/icon-map"
-import { tvetTrades } from "@/lib/site-config"
+import { tvetTradeIcons, localeHref } from "@/lib/site-config"
+import { getDictionary } from "@/lib/i18n/get-dictionary"
+import type { Locale } from "@/lib/i18n/config"
 
-export const metadata: Metadata = {
-  title: "TVET / Vocational Programs",
-  description:
-    "Hands-on trade training at Saint Vincent Pallotti School Masaka: Welding, Tailoring, Hairdressing, Carpentry and Culinary Arts.",
+const reasonIcons = [Wrench, Award, Briefcase] as const
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  return { title: dict.meta.tvet.title, description: dict.meta.tvet.description }
 }
 
-const reasons = [
-  {
-    icon: Wrench,
-    title: "Hands-On From Day One",
-    description: "Real workshop equipment and practical assessments, not just theory.",
-  },
-  {
-    icon: Award,
-    title: "Certification-Track Training",
-    description: "Curriculum built toward recognised trade certification standards.",
-  },
-  {
-    icon: Briefcase,
-    title: "A Direct Path to Work",
-    description: "Graduates leave ready to employ themselves or join Rwanda's growing trades sector.",
-  },
-] as const
+export default async function TvetPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>
+}) {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  const t = dict.tvet
 
-export default function TvetPage() {
   return (
     <>
       <PageHero
-        eyebrow="TVET / Vocational"
-        title="A Trade Is a Future"
-        description="Alongside our academic tracks, Pallotti offers Technical and Vocational Education and Training in five hands-on trades: a real, certifiable path to work."
+        eyebrow={t.hero.eyebrow}
+        title={t.hero.title}
+        description={t.hero.description}
       />
 
       <section className="border-b border-border bg-background py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {tvetTrades.map((trade) => {
-              const Icon = iconMap[trade.icon]
+            {t.trades.map((trade, index) => {
+              const Icon = iconMap[tvetTradeIcons[index]]
               return (
                 <div key={trade.name} className="flex flex-col gap-4 border border-border bg-card p-6">
                   <span className="flex size-11 items-center justify-center border border-border bg-accent text-accent-foreground">
@@ -59,17 +57,14 @@ export default function TvetPage() {
             })}
             <div className="flex flex-col justify-center gap-3 border border-dashed border-border bg-muted/40 p-6">
               <p className="text-xs font-semibold tracking-[0.15em] text-teal uppercase">
-                Ready to enrol?
+                {t.enrolCard.eyebrow}
               </p>
-              <p className="text-sm/relaxed text-foreground">
-                Speak to our admissions team about placement, workshop tours
-                and entry requirements for each trade.
-              </p>
+              <p className="text-sm/relaxed text-foreground">{t.enrolCard.paragraph}</p>
               <Button
-                render={<Link href="/admissions" />}
+                render={<Link href={localeHref(locale, "/admissions")} />}
                 className="mt-2 h-10 self-start px-5 text-xs"
               >
-                Apply to TVET
+                {t.enrolCard.cta}
                 <ArrowRight data-icon="inline-end" className="size-3.5" />
               </Button>
             </div>
@@ -81,20 +76,23 @@ export default function TvetPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 sm:max-w-xl">
             <p className="text-xs font-semibold tracking-[0.2em] text-gold uppercase">
-              Why TVET at Pallotti
+              {t.reasons.eyebrow}
             </p>
             <h2 className="font-heading text-[clamp(1.75rem,1.5rem+1.2vw,2.75rem)] font-semibold tracking-tight">
-              Skills that put students to work
+              {t.reasons.title}
             </h2>
           </div>
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {reasons.map((reason) => (
-              <div key={reason.title} className="flex flex-col gap-4 border border-white/15 p-6">
-                <reason.icon className="size-7 text-gold" />
-                <h3 className="font-heading text-base font-semibold">{reason.title}</h3>
-                <p className="text-xs/relaxed text-ink-foreground/75">{reason.description}</p>
-              </div>
-            ))}
+            {t.reasons.items.map((reason, index) => {
+              const Icon = reasonIcons[index]
+              return (
+                <div key={reason.title} className="flex flex-col gap-4 border border-white/15 p-6">
+                  <Icon className="size-7 text-gold" />
+                  <h3 className="font-heading text-base font-semibold">{reason.title}</h3>
+                  <p className="text-xs/relaxed text-ink-foreground/75">{reason.description}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
