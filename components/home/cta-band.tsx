@@ -3,11 +3,10 @@ import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon"
-import { siteConfig, localeHref } from "@/lib/site-config"
-import type { Locale } from "@/lib/i18n/config"
+import { siteConfig } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-export function CtaBand({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function CtaBand({ dict }: { dict: Dictionary }) {
   const c = dict.home.cta
 
   return (
@@ -25,7 +24,7 @@ export function CtaBand({ locale, dict }: { locale: Locale; dict: Dictionary }) 
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button
             size="lg"
-            render={<Link href={localeHref(locale, "/admissions")} />}
+            render={<Link href="/admissions" />}
             className="h-11 bg-gold px-6 text-sm text-gold-foreground hover:bg-gold/85"
           >
             {c.startApplication}
