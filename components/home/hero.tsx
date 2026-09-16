@@ -4,11 +4,10 @@ import { ArrowRight, PlayCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Crest } from "@/components/crest"
 import { ImigongoSpiral } from "@/components/patterns/imigongo-spiral"
-import { siteConfig, localeHref } from "@/lib/site-config"
-import type { Locale } from "@/lib/i18n/config"
+import { siteConfig } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function Hero({ dict }: { dict: Dictionary }) {
   const h = dict.home.hero
 
   return (
@@ -48,7 +47,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button
               size="lg"
-              render={<Link href={localeHref(locale, "/admissions")} />}
+              render={<Link href="/admissions" />}
               className="h-11 bg-primary px-6 text-sm text-primary-foreground hover:bg-primary/85"
             >
               {h.applyNow}
@@ -57,7 +56,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             <Button
               size="lg"
               variant="outline"
-              render={<Link href={localeHref(locale, "/about")} />}
+              render={<Link href="/about" />}
               className="h-11 px-6 text-sm"
             >
               <PlayCircle data-icon="inline-start" />
