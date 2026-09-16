@@ -98,43 +98,44 @@ export function SiteHeader() {
               <Menu />
               <span className="sr-only">Open menu</span>
             </SheetTrigger>
-          <SheetContent side="right" className="flex w-full flex-col sm:max-w-xs">
-            <SheetHeader>
-              <SheetTitle className="flex items-center gap-2">
-                <Crest size={32} />
-                St. Vincent Pallotti
-              </SheetTitle>
-              <SheetDescription>Strive Beyond &middot; Masaka, Kigali</SheetDescription>
-            </SheetHeader>
-            <nav className="flex flex-col gap-1 px-4" aria-label="Primary">
-              {navLinks.map((link) => {
-                const isActive =
-                  link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)
-                return (
-                  <SheetClose
-                    key={link.href}
-                    render={<Link href={link.href} />}
-                    className={cn(
-                      "border-b border-border py-3 text-sm font-medium",
-                      isActive ? "text-primary" : "text-foreground/80"
-                    )}
-                  >
-                    {link.label}
-                  </SheetClose>
-                )
-              })}
-            </nav>
-            <SheetFooter>
-              <SheetClose
-                render={<Link href="/admissions" />}
-                className="flex w-full items-center justify-center gap-1.5 bg-gold px-4 py-2.5 text-xs font-semibold text-gold-foreground uppercase transition-colors hover:bg-gold/85"
-              >
-                Apply Now
-                <ArrowRight className="size-3.5" />
-              </SheetClose>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
+            <SheetContent side="right" className="flex w-full flex-col sm:max-w-xs">
+              <SheetHeader>
+                <SheetTitle className="flex items-center gap-2">
+                  <Crest size={32} />
+                  St. Vincent Pallotti
+                </SheetTitle>
+                <SheetDescription>Strive Beyond &middot; Masaka, Kigali</SheetDescription>
+              </SheetHeader>
+              <nav className="flex flex-col gap-1 px-4" aria-label="Primary">
+                {navLinks.map((link) => {
+                  const isActive =
+                    link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)
+                  return (
+                    <SheetClose
+                      key={link.href}
+                      render={<Link href={link.href} />}
+                      className={cn(
+                        "border-b border-border py-3 text-sm font-medium",
+                        isActive ? "text-primary" : "text-foreground/80"
+                      )}
+                    >
+                      {link.label}
+                    </SheetClose>
+                  )
+                })}
+              </nav>
+              <SheetFooter>
+                <SheetClose
+                  render={<Link href="/admissions" />}
+                  className="flex w-full items-center justify-center gap-1.5 bg-gold px-4 py-2.5 text-xs font-semibold text-gold-foreground uppercase transition-colors hover:bg-gold/85"
+                >
+                  Apply Now
+                  <ArrowRight className="size-3.5" />
+                </SheetClose>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   )
