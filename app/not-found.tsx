@@ -1,33 +1,29 @@
-// Fallback for the rare case where app/[locale]/layout.tsx itself calls
-// notFound() (an invalid locale segment) before it can render <html>/<body>.
-// In normal use, proxy.ts redirects any unrecognised locale to the default
-// one, so this should rarely render. Next.js still requires a root-level
-// not-found.tsx to supply its own html/body since there is no layout above
-// app/[locale]/layout.tsx to provide one.
-export default function GlobalNotFound() {
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+
+import { Crest } from "@/components/crest"
+import { Button } from "@/components/ui/button"
+import { getDictionary } from "@/lib/i18n/get-dictionary"
+import { getLocale } from "@/lib/i18n/get-locale"
+
+export default async function NotFound() {
+  const locale = await getLocale()
+  const nf = getDictionary(locale).notFound
+
   return (
-    <html lang="en">
-      <body
-        style={{
-          display: "flex",
-          minHeight: "100svh",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "1rem",
-          fontFamily: "system-ui, sans-serif",
-          textAlign: "center",
-          padding: "1.5rem",
-        }}
-      >
-        <p style={{ fontSize: "3rem", fontWeight: 600, margin: 0 }}>404</p>
-        <h1 style={{ fontSize: "1.25rem", fontWeight: 600, margin: 0 }}>
-          Page not found
-        </h1>
-        <a href="/en" style={{ textDecoration: "underline" }}>
-          Back to Homepage
-        </a>
-      </body>
-    </html>
+    <section className="flex flex-col items-center gap-6 px-4 py-24 text-center">
+      <Crest size={64} />
+      <p className="font-heading text-6xl font-semibold text-primary">{nf.code}</p>
+      <h1 className="font-heading text-2xl font-semibold text-foreground">
+        {nf.title}
+      </h1>
+      <p className="max-w-sm text-sm/relaxed text-muted-foreground">
+        {nf.description}
+      </p>
+      <Button render={<Link href="/" />} className="h-11 px-6 text-sm">
+        {nf.cta}
+        <ArrowRight data-icon="inline-end" />
+      </Button>
+    </section>
   )
 }
