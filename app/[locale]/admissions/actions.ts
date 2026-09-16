@@ -1,5 +1,8 @@
 "use server"
 
+import { getDictionary } from "@/lib/i18n/get-dictionary"
+import type { Locale } from "@/lib/i18n/config"
+
 export type InquiryState = {
   status: "idle" | "success" | "error"
   message?: string
@@ -12,10 +15,16 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // Demo backend: validates and "logs" the inquiry server-side. Wire this up to
 // Resend, Formspree or a database before taking real admissions inquiries.
+// `locale` is bound in by the client form (see inquiry-form.tsx) so error and
+// success messages come back in the visitor's language.
 export async function submitInquiry(
+  locale: Locale,
   _prevState: InquiryState,
   formData: FormData
 ): Promise<InquiryState> {
+  const dict = getDictionary(locale)
+  const errors = dict.admissions.errors
+
   const parentName = String(formData.get("parentName") ?? "").trim()
   const email = String(formData.get("email") ?? "").trim()
   const phone = String(formData.get("phone") ?? "").trim()
@@ -25,20 +34,20 @@ export async function submitInquiry(
   const message = String(formData.get("message") ?? "").trim()
 
   const fieldErrors: InquiryState["fieldErrors"] = {}
-  if (!parentName) fieldErrors.parentName = "Enter the parent or guardian's name."
+  if (!parentName) fieldErrors.parentName = errors.parentName
   if (!email) {
-    fieldErrors.email = "Enter an email address."
+    fieldErrors.email = errors.email
   } else if (!EMAIL_PATTERN.test(email)) {
-    fieldErrors.email = "Enter a valid email address."
+    fieldErrors.email = errors.emailInvalid
   }
-  if (!phone) fieldErrors.phone = "Enter a phone number."
-  if (!childName) fieldErrors.childName = "Enter the student's name."
-  if (!program) fieldErrors.program = "Select a program."
+  if (!phone) fieldErrors.phone = errors.phone
+  if (!childName) fieldErrors.childName = errors.childName
+  if (!program) fieldErrors.program = errors.program
 
   if (Object.keys(fieldErrors).length > 0) {
     return {
       status: "error",
-      message: "Please fix the fields below and try again.",
+      message: errors.formError,
       fieldErrors,
     }
   }
@@ -46,6 +55,7 @@ export async function submitInquiry(
   await new Promise((resolve) => setTimeout(resolve, 500))
 
   console.log("[admissions] new inquiry", {
+    locale,
     parentName,
     email,
     phone,
@@ -58,6 +68,8 @@ export async function submitInquiry(
 
   return {
     status: "success",
-    message: `Thank you, ${parentName.split(" ")[0]}. We've received your inquiry for ${childName} and will be in touch within 2 business days.`,
+    message: dict.admissions.success
+      .replace("{parentName}", parentName.split(" ")[0])
+      .replace("{childName}", childName),
   }
 }
