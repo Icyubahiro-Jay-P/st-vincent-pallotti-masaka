@@ -101,7 +101,7 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="absolute -bottom-6 -left-4 max-w-[13rem] border border-border bg-card p-4 shadow-lg sm:-left-8">
+          <div className="absolute -bottom-6 -left-4 max-w-52 border border-border bg-card p-4 shadow-lg sm:-left-8">
             <p className="font-heading text-2xl font-semibold text-primary">
               1,200+
             </p>
