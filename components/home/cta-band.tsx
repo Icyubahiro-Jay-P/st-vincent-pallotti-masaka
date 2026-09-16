@@ -2,7 +2,6 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { ImigongoDivider } from "@/components/patterns/imigongo-divider"
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon"
 import { siteConfig, localeHref } from "@/lib/site-config"
 import type { Locale } from "@/lib/i18n/config"
@@ -12,7 +11,7 @@ export function CtaBand({ locale, dict }: { locale: Locale; dict: Dictionary }) 
   const c = dict.home.cta
 
   return (
-    <section className="relative overflow-hidden bg-ink py-16 text-ink-foreground sm:py-20">
+    <section className="bg-ink py-16 text-ink-foreground sm:py-20">
       <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
         <p className="text-xs font-semibold tracking-[0.2em] text-gold uppercase">
           {c.eyebrow}
@@ -48,7 +47,6 @@ export function CtaBand({ locale, dict }: { locale: Locale; dict: Dictionary }) 
             {c.chatWhatsapp}
           </Button>
         </div>
-        <ImigongoDivider className="mx-auto mt-12 h-3 w-40 text-ink-foreground/70" />
       </div>
     </section>
   )
