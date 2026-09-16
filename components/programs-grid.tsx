@@ -3,18 +3,15 @@ import { ArrowUpRight } from "lucide-react"
 
 import { iconMap } from "@/components/icon-map"
 import { programs, programHref, type ProgramMeta } from "@/lib/site-config"
-import type { Locale } from "@/lib/i18n/config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
 export function ProgramsGrid({
-  locale,
   dict,
   eyebrow,
   title,
   description,
   items = programs,
 }: {
-  locale: Locale
   dict: Dictionary
   eyebrow: string
   title: string
@@ -41,7 +38,7 @@ export function ProgramsGrid({
             return (
               <Link
                 key={program.slug}
-                href={programHref(locale, program.slug)}
+                href={programHref(program.slug)}
                 className="group relative flex flex-col gap-3 bg-card p-6 transition-colors hover:bg-muted focus-visible:z-10 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
               >
                 <div className="flex items-start justify-between">
