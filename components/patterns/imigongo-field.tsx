@@ -1,6 +1,10 @@
 /**
- * A tiled field of the same imigongo-inspired triangles, sized for use as a
- * full panel background (e.g. behind the hero crest) rather than a rule.
+ * A tiled field of imigongo-style diamonds (paired triangles), sized for use
+ * as a full panel background. Real panels alternate solid and open shapes in
+ * black and white, so this alternates a solid diamond with an outlined one
+ * per tile rather than varying the opacity of a single tint. Pass an
+ * adaptive foreground-token className (text-foreground / text-ink-foreground)
+ * so it reads correctly on both light and dark surfaces.
  */
 export function ImigongoField({ className }: { className?: string }) {
   return (
@@ -18,11 +22,13 @@ export function ImigongoField({ className }: { className?: string }) {
           height="40"
           patternUnits="userSpaceOnUse"
         >
-          <polygon points="0,40 20,40 0,20" fill="currentColor" opacity="0.5" />
-          <polygon points="20,40 40,40 40,20" fill="currentColor" opacity="0.18" />
-          <polygon points="0,0 20,0 0,20" fill="currentColor" opacity="0.18" />
-          <polygon points="20,0 40,0 40,20" fill="currentColor" opacity="0.32" />
-          <circle cx="20" cy="20" r="3" fill="currentColor" opacity="0.4" />
+          <polygon points="10,1 19,10 10,19 1,10" fill="currentColor" />
+          <polygon
+            points="30,21 39,30 30,39 21,30"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
         </pattern>
       </defs>
       <rect width="200" height="200" fill="url(#imigongo-field)" />
