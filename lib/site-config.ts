@@ -1,7 +1,7 @@
 // Locale-independent structure: routes, icons, contact facts and other data
 // that doesn't change between languages. Translatable copy (nav labels,
 // program names/descriptions, page content) lives in lib/i18n/dictionaries
-// instead — see that folder when you need to change wording.
+// instead, see that folder when you need to change wording.
 import type { Locale } from "@/lib/i18n/config"
 
 export const siteConfig = {
