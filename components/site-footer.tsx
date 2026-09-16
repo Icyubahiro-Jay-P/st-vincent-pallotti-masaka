@@ -7,7 +7,7 @@ import {
   YoutubeGlyph,
   FacebookGlyph,
 } from "@/components/icons/social-icons"
-import { ImigongoDivider } from "@/components/patterns/imigongo-divider"
+import { ImigongoBand } from "@/components/patterns/imigongo-band"
 import { navLinks, programHref, programs, siteConfig, socialLinks, localeHref } from "@/lib/site-config"
 import type { Locale } from "@/lib/i18n/config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
@@ -15,7 +15,7 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary"
 export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <footer className="border-t border-white/10 bg-ink text-ink-foreground">
-      <ImigongoDivider className="h-2 w-full text-ink-foreground" />
+      <ImigongoBand className="h-3 w-full text-ink-foreground" />
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
