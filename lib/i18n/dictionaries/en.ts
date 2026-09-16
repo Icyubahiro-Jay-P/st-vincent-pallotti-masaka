@@ -154,6 +154,7 @@ const en = {
   },
 
   nav: {
+    primaryLabel: "Primary",
     home: "Home",
     about: "About",
     academics: "Academics",
