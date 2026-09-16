@@ -2,8 +2,11 @@
  * A coiled spiral accent, the single most recognisable imigongo motif
  * (traditionally a raised, rope-like coil). Built from straight steps with
  * rounded joins rather than true arcs, so the geometry stays exact while the
- * rounded corners still read as an organic coil. Adaptive: pass a
- * foreground-token className so it renders correctly on any surface.
+ * rounded corners still read as an organic coil. Ring spacing (6 units) is
+ * kept comfortably wider than the stroke (3.5): at tighter spacing the
+ * stroke overlaps itself and the whole coil fills in solid instead of
+ * reading as nested rings. Adaptive: pass a foreground-token className so
+ * it renders correctly on any surface.
  */
 export function ImigongoSpiral({ className }: { className?: string }) {
   return (
@@ -14,10 +17,10 @@ export function ImigongoSpiral({ className }: { className?: string }) {
       aria-hidden="true"
     >
       <path
-        d="M50 50 L54 50 L54 54 L46 54 L46 46 L58 46 L58 58 L42 58 L42 42 L62 42 L62 62 L38 62 L38 38 L66 38 L66 66"
+        d="M50 50 L56 50 L56 56 L44 56 L44 44 L62 44 L62 62 L38 62 L38 38 L68 38 L68 68"
         fill="none"
         stroke="currentColor"
-        strokeWidth="4.5"
+        strokeWidth="3.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
