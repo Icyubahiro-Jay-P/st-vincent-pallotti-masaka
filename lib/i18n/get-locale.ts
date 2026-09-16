@@ -8,7 +8,7 @@ import { LOCALE_COOKIE } from "./locale-cookie"
 // /fr/about. Falls back to the default locale when no cookie is set yet.
 // Because this reads a per-request cookie, every page that calls it is
 // rendered dynamically (Next.js can't statically prerender content that
-// depends on a cookie) — a fair trade for not needing a URL segment.
+// depends on a cookie), a fair trade for not needing a URL segment.
 export async function getLocale(): Promise<Locale> {
   const store = await cookies()
   const value = store.get(LOCALE_COOKIE)?.value
