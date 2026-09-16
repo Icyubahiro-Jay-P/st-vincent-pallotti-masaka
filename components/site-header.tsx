@@ -7,6 +7,7 @@ import { Menu, ArrowRight } from "lucide-react"
 
 import { Crest } from "@/components/crest"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { LanguageSwitcher } from "@/components/language-switcher"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -18,18 +19,28 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet"
-import { navLinks } from "@/lib/site-config"
+import { navLinks, localeHref } from "@/lib/site-config"
+import type { Locale } from "@/lib/i18n/config"
+import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import { cn } from "@/lib/utils"
 
-export function SiteHeader() {
+export function SiteHeader({
+  locale,
+  dict,
+}: {
+  locale: Locale
+  dict: Dictionary
+}) {
   const pathname = usePathname()
   const [open, setOpen] = React.useState(false)
+  const home = localeHref(locale)
+  const admissions = localeHref(locale, "/admissions")
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-ink text-ink-foreground">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link
-          href="/"
+          href={home}
           className="flex items-center gap-3 rounded-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
         >
           <Crest size={40} />
@@ -45,12 +56,12 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
           {navLinks.map((link) => {
-            const isActive =
-              link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)
+            const href = localeHref(locale, link.href)
+            const isActive = href === home ? pathname === home : pathname.startsWith(href)
             return (
               <Link
-                key={link.href}
-                href={link.href}
+                key={link.key}
+                href={href}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "relative px-3 py-2 text-xs font-medium tracking-wide uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold",
@@ -59,7 +70,7 @@ export function SiteHeader() {
                     : "text-ink-foreground/75 hover:text-ink-foreground"
                 )}
               >
-                {link.label}
+                {dict.nav[link.key]}
                 <span
                   className={cn(
                     "absolute inset-x-3 -bottom-0.5 h-0.5 bg-gold transition-transform duration-200",
@@ -73,18 +84,20 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <ThemeToggle className="text-ink-foreground hover:bg-white/10 hover:text-ink-foreground" />
+          <LanguageSwitcher locale={locale} dict={dict} />
+          <ThemeToggle dict={dict} className="text-ink-foreground hover:bg-white/10 hover:text-ink-foreground" />
           <Button
-            render={<Link href="/admissions" />}
+            render={<Link href={admissions} />}
             className="bg-gold text-gold-foreground hover:bg-gold/85"
           >
-            Apply Now
+            {dict.nav.applyNow}
             <ArrowRight data-icon="inline-end" />
           </Button>
         </div>
 
         <div className="flex items-center gap-1 lg:hidden">
-          <ThemeToggle className="text-ink-foreground hover:bg-white/10 hover:text-ink-foreground" />
+          <LanguageSwitcher locale={locale} dict={dict} />
+          <ThemeToggle dict={dict} className="text-ink-foreground hover:bg-white/10 hover:text-ink-foreground" />
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger
               render={
@@ -96,7 +109,7 @@ export function SiteHeader() {
               }
             >
               <Menu />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">{dict.nav.openMenu}</span>
             </SheetTrigger>
             <SheetContent side="right" className="flex w-full flex-col sm:max-w-xs">
               <SheetHeader>
@@ -104,32 +117,32 @@ export function SiteHeader() {
                   <Crest size={32} />
                   St. Vincent Pallotti
                 </SheetTitle>
-                <SheetDescription>Strive Beyond &middot; Masaka, Kigali</SheetDescription>
+                <SheetDescription>{dict.nav.sheetDescription}</SheetDescription>
               </SheetHeader>
               <nav className="flex flex-col gap-1 px-4" aria-label="Primary">
                 {navLinks.map((link) => {
-                  const isActive =
-                    link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)
+                  const href = localeHref(locale, link.href)
+                  const isActive = href === home ? pathname === home : pathname.startsWith(href)
                   return (
                     <SheetClose
-                      key={link.href}
-                      render={<Link href={link.href} />}
+                      key={link.key}
+                      render={<Link href={href} />}
                       className={cn(
                         "border-b border-border py-3 text-sm font-medium",
                         isActive ? "text-primary" : "text-foreground/80"
                       )}
                     >
-                      {link.label}
+                      {dict.nav[link.key]}
                     </SheetClose>
                   )
                 })}
               </nav>
               <SheetFooter>
                 <SheetClose
-                  render={<Link href="/admissions" />}
+                  render={<Link href={admissions} />}
                   className="flex w-full items-center justify-center gap-1.5 bg-gold px-4 py-2.5 text-xs font-semibold text-gold-foreground uppercase transition-colors hover:bg-gold/85"
                 >
-                  Apply Now
+                  {dict.nav.applyNow}
                   <ArrowRight className="size-3.5" />
                 </SheetClose>
               </SheetFooter>
