@@ -54,7 +54,7 @@ export function SiteHeader({
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label={dict.nav.primaryLabel}>
           {navLinks.map((link) => {
             const href = localeHref(locale, link.href)
             const isActive = href === home ? pathname === home : pathname.startsWith(href)
@@ -119,7 +119,7 @@ export function SiteHeader({
                 </SheetTitle>
                 <SheetDescription>{dict.nav.sheetDescription}</SheetDescription>
               </SheetHeader>
-              <nav className="flex flex-col gap-1 px-4" aria-label="Primary">
+              <nav className="flex flex-col gap-1 px-4" aria-label={dict.nav.primaryLabel}>
                 {navLinks.map((link) => {
                   const href = localeHref(locale, link.href)
                   const isActive = href === home ? pathname === home : pathname.startsWith(href)
