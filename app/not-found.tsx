@@ -1,7 +1,7 @@
 // Fallback for the rare case where app/[locale]/layout.tsx itself calls
 // notFound() (an invalid locale segment) before it can render <html>/<body>.
 // In normal use, proxy.ts redirects any unrecognised locale to the default
-// one, so this should rarely render — but Next.js requires a root-level
+// one, so this should rarely render. Next.js still requires a root-level
 // not-found.tsx to supply its own html/body since there is no layout above
 // app/[locale]/layout.tsx to provide one.
 export default function GlobalNotFound() {
