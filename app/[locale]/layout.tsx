@@ -45,7 +45,7 @@ export async function generateMetadata({
     metadataBase: new URL(siteUrl),
     title: {
       default: dict.meta.home.title,
-      template: `%s | ${dict.site.foundedBy.includes("Pallotti") ? "" : ""}Saint Vincent Pallotti School Masaka`,
+      template: "%s | Saint Vincent Pallotti School Masaka",
     },
     description: dict.meta.home.description,
     keywords: [
