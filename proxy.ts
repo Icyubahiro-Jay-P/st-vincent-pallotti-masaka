@@ -24,5 +24,8 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico|icon.png|apple-icon.png|robots.txt|sitemap.xml).*)"],
+  // Skip _next internals and any request for a file with an extension
+  // (images, icons, robots.txt, sitemap.xml, etc.) so static assets in
+  // public/ are served directly instead of being redirected under /en.
+  matcher: ["/((?!_next|.*\\..*).*)"],
 }
