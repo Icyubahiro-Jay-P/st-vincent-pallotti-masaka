@@ -19,28 +19,19 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet"
-import { navLinks, localeHref } from "@/lib/site-config"
-import type { Locale } from "@/lib/i18n/config"
+import { navLinks } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import { cn } from "@/lib/utils"
 
-export function SiteHeader({
-  locale,
-  dict,
-}: {
-  locale: Locale
-  dict: Dictionary
-}) {
+export function SiteHeader({ dict }: { dict: Dictionary }) {
   const pathname = usePathname()
   const [open, setOpen] = React.useState(false)
-  const home = localeHref(locale)
-  const admissions = localeHref(locale, "/admissions")
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-ink text-ink-foreground">
+    <header className="sticky top-0 z-50 border-b border-white/20 bg-ink text-ink-foreground">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link
-          href={home}
+          href="/"
           className="flex items-center gap-3 rounded-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
         >
           <Crest size={40} />
@@ -56,12 +47,12 @@ export function SiteHeader({
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label={dict.nav.primaryLabel}>
           {navLinks.map((link) => {
-            const href = localeHref(locale, link.href)
-            const isActive = href === home ? pathname === home : pathname.startsWith(href)
+            const isActive =
+              link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)
             return (
               <Link
                 key={link.key}
-                href={href}
+                href={link.href}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "relative px-3 py-2 text-xs font-medium tracking-wide uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold",
@@ -84,10 +75,10 @@ export function SiteHeader({
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <LanguageSwitcher locale={locale} dict={dict} />
+          <LanguageSwitcher dict={dict} />
           <ThemeToggle dict={dict} className="text-ink-foreground hover:bg-white/10 hover:text-ink-foreground" />
           <Button
-            render={<Link href={admissions} />}
+            render={<Link href="/admissions" />}
             className="bg-gold text-gold-foreground hover:bg-gold/85"
           >
             {dict.nav.applyNow}
@@ -96,7 +87,7 @@ export function SiteHeader({
         </div>
 
         <div className="flex items-center gap-1 lg:hidden">
-          <LanguageSwitcher locale={locale} dict={dict} />
+          <LanguageSwitcher dict={dict} />
           <ThemeToggle dict={dict} className="text-ink-foreground hover:bg-white/10 hover:text-ink-foreground" />
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger
@@ -121,12 +112,12 @@ export function SiteHeader({
               </SheetHeader>
               <nav className="flex flex-col gap-1 px-4" aria-label={dict.nav.primaryLabel}>
                 {navLinks.map((link) => {
-                  const href = localeHref(locale, link.href)
-                  const isActive = href === home ? pathname === home : pathname.startsWith(href)
+                  const isActive =
+                    link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)
                   return (
                     <SheetClose
                       key={link.key}
-                      render={<Link href={href} />}
+                      render={<Link href={link.href} />}
                       className={cn(
                         "border-b border-border py-3 text-sm font-medium",
                         isActive ? "text-primary" : "text-foreground/80"
@@ -139,7 +130,7 @@ export function SiteHeader({
               </nav>
               <SheetFooter>
                 <SheetClose
-                  render={<Link href={admissions} />}
+                  render={<Link href="/admissions" />}
                   className="flex w-full items-center justify-center gap-1.5 bg-gold px-4 py-2.5 text-xs font-semibold text-gold-foreground uppercase transition-colors hover:bg-gold/85"
                 >
                   {dict.nav.applyNow}
