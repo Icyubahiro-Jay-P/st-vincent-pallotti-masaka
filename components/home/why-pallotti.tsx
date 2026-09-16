@@ -84,7 +84,7 @@ export function WhyPallotti() {
                 </p>
               </div>
               {feature.size === "lg" && (
-                <ImigongoDivider className="h-2 w-24 text-gold" />
+                <ImigongoDivider className="h-2 w-24 text-ink-foreground" />
               )}
             </div>
           ))}
