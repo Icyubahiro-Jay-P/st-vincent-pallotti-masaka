@@ -1,6 +1,5 @@
 import { Building2, Award, Church, HeartHandshake } from "lucide-react"
 
-import { ImigongoDivider } from "@/components/patterns/imigongo-divider"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
 const icons = [Building2, Award, Church, HeartHandshake] as const
@@ -30,7 +29,7 @@ export function WhyPallotti({ dict }: { dict: Dictionary }) {
                 key={feature.title}
                 className={
                   size === "lg"
-                    ? "flex flex-col justify-between gap-6 bg-ink p-8 text-ink-foreground lg:col-span-2 lg:row-span-2"
+                    ? "flex flex-col gap-6 bg-ink p-8 text-ink-foreground lg:col-span-2 lg:row-span-2"
                     : "flex flex-col gap-4 bg-card p-6"
                 }
               >
@@ -55,9 +54,6 @@ export function WhyPallotti({ dict }: { dict: Dictionary }) {
                     {feature.description}
                   </p>
                 </div>
-                {size === "lg" && (
-                  <ImigongoDivider className="h-2 w-24 text-ink-foreground" />
-                )}
               </div>
             )
           })}
