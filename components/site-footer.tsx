@@ -8,7 +8,7 @@ import {
   FacebookGlyph,
 } from "@/components/icons/social-icons"
 import { ImigongoDivider } from "@/components/patterns/imigongo-divider"
-import { navLinks, programs, siteConfig, socialLinks } from "@/lib/site-config"
+import { navLinks, programHref, programs, siteConfig, socialLinks } from "@/lib/site-config"
 
 export function SiteFooter() {
   return (
@@ -73,11 +73,7 @@ export function SiteFooter() {
               {programs.slice(0, 5).map((program) => (
                 <li key={program.slug}>
                   <Link
-                    href={
-                      program.slug === "tvet"
-                        ? "/tvet"
-                        : `/academics#${program.slug}`
-                    }
+                    href={programHref(program)}
                     className="text-xs text-ink-foreground/75 transition-colors hover:text-ink-foreground"
                   >
                     {program.name}
