@@ -75,8 +75,10 @@
     --accent: oklch(0.95 0.045 88);
     --accent-foreground: oklch(0.32 0.07 75);
     --destructive: oklch(0.577 0.215 27.325);
-    --border: oklch(0.9 0.012 250);
-    --input: oklch(0.9 0.012 250);
+    /* Darkened from a barely-visible 0.9 so structural lines (header/card/
+       section edges) read clearly instead of nearly disappearing. */
+    --border: oklch(0.84 0.016 250);
+    --input: oklch(0.84 0.016 250);
     /* Deeper than --gold so the solid focus-ring border clears 3:1 against white. */
     --ring: oklch(0.54 0.13 85);
 
@@ -106,25 +108,32 @@
 }
 
 .dark {
-    /* Near-black navy. Gold reads like candlelight against it, so it leads instead of navy. */
-    --background: oklch(0.17 0.028 258);
-    --foreground: oklch(0.96 0.014 90);
-    --card: oklch(0.21 0.032 258);
-    --card-foreground: oklch(0.96 0.014 90);
+    /* Near-black navy page. --ink is NOT inverted here (it was before, which
+       made the header/footer/hero-panel flip to a near-white surface in
+       "dark mode" - the most visible chrome on every page went light, so
+       dark mode never read as dark). --ink now stays the same navy brand
+       surface in both themes, just lightened enough to stay distinguishable
+       from the near-black page background instead of disappearing into it. */
+    --background: oklch(0.15 0.026 258);
+    --foreground: oklch(0.95 0.012 90);
+    --card: oklch(0.2 0.032 258);
+    --card-foreground: oklch(0.95 0.012 90);
     --popover: oklch(0.2 0.032 258);
-    --popover-foreground: oklch(0.96 0.014 90);
+    --popover-foreground: oklch(0.95 0.012 90);
 
     --primary: oklch(0.78 0.14 85);
     --primary-foreground: oklch(0.18 0.03 258);
-    --secondary: oklch(0.27 0.032 258);
-    --secondary-foreground: oklch(0.96 0.014 90);
-    --muted: oklch(0.25 0.03 258);
-    --muted-foreground: oklch(0.72 0.02 250);
+    --secondary: oklch(0.25 0.032 258);
+    --secondary-foreground: oklch(0.95 0.012 90);
+    --muted: oklch(0.23 0.03 258);
+    --muted-foreground: oklch(0.7 0.02 250);
     --accent: oklch(0.3 0.05 85);
     --accent-foreground: oklch(0.88 0.09 88);
     --destructive: oklch(0.7 0.19 22.216);
-    --border: oklch(1 0 0 / 12%);
-    --input: oklch(1 0 0 / 14%);
+    /* Raised from a barely-visible 12% so structural lines stay legible
+       against the dark surfaces instead of nearly disappearing. */
+    --border: oklch(1 0 0 / 20%);
+    --input: oklch(1 0 0 / 22%);
     --ring: oklch(0.78 0.14 85);
 
     --chart-1: oklch(0.78 0.14 85);
@@ -134,16 +143,16 @@
     --chart-5: oklch(0.4 0.03 258);
 
     --sidebar: oklch(0.19 0.03 258);
-    --sidebar-foreground: oklch(0.96 0.014 90);
+    --sidebar-foreground: oklch(0.95 0.012 90);
     --sidebar-primary: oklch(0.78 0.14 85);
     --sidebar-primary-foreground: oklch(0.18 0.03 258);
     --sidebar-accent: oklch(0.3 0.05 85);
     --sidebar-accent-foreground: oklch(0.88 0.09 88);
-    --sidebar-border: oklch(1 0 0 / 12%);
+    --sidebar-border: oklch(1 0 0 / 20%);
     --sidebar-ring: oklch(0.78 0.14 85);
 
-    --ink: oklch(0.96 0.014 90);
-    --ink-foreground: oklch(0.18 0.03 258);
+    --ink: oklch(0.26 0.055 258);
+    --ink-foreground: oklch(0.95 0.012 90);
     --gold: oklch(0.78 0.14 85);
     --gold-foreground: oklch(0.18 0.03 258);
     --teal: oklch(0.65 0.1 195);
