@@ -13,7 +13,7 @@ import { navLinks, programHref, programs, siteConfig, socialLinks } from "@/lib/
 export function SiteFooter() {
   return (
     <footer className="border-t border-white/10 bg-ink text-ink-foreground">
-      <ImigongoDivider className="h-2 w-full text-gold" />
+      <ImigongoDivider className="h-2 w-full text-ink-foreground" />
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
