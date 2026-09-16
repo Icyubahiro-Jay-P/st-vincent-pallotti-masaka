@@ -10,54 +10,51 @@ import {
   YoutubeGlyph,
   FacebookGlyph,
 } from "@/components/icons/social-icons"
-import { siteConfig, socialLinks } from "@/lib/site-config"
+import { siteConfig, socialLinks, localeHref } from "@/lib/site-config"
+import { getDictionary } from "@/lib/i18n/get-dictionary"
+import type { Locale } from "@/lib/i18n/config"
+import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Get in touch with Saint Vincent Pallotti School Masaka: phone, WhatsApp, email and campus location in Masaka, Kigali.",
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  return { title: dict.meta.contact.title, description: dict.meta.contact.description }
 }
 
-const contactCards = [
-  {
-    icon: Phone,
-    label: "Call Us",
-    value: siteConfig.phoneDisplay,
-    href: `tel:${siteConfig.phoneHref}`,
-  },
-  {
-    icon: WhatsAppIcon,
-    label: "WhatsApp",
-    value: "Chat with Admissions",
-    href: `https://wa.me/${siteConfig.whatsappNumber}`,
-  },
-  {
-    icon: Mail,
-    label: "Email",
-    value: siteConfig.email,
-    href: `mailto:${siteConfig.email}`,
-  },
-  {
-    icon: MapPin,
-    label: "Visit Us",
-    value: siteConfig.location,
-    href: siteConfig.mapsQuery,
-  },
-] as const
+function contactCards(dict: Dictionary) {
+  return [
+    { icon: Phone, label: dict.contact.cards.call, value: siteConfig.phoneDisplay, href: `tel:${siteConfig.phoneHref}` },
+    { icon: WhatsAppIcon, label: dict.contact.cards.whatsapp, value: dict.contact.cards.whatsappValue, href: `https://wa.me/${siteConfig.whatsappNumber}` },
+    { icon: Mail, label: dict.contact.cards.email, value: siteConfig.email, href: `mailto:${siteConfig.email}` },
+    { icon: MapPin, label: dict.contact.cards.visit, value: siteConfig.location, href: siteConfig.mapsQuery },
+  ] as const
+}
 
-export default function ContactPage() {
+export default async function ContactPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>
+}) {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  const c = dict.contact
+
   return (
     <>
       <PageHero
-        eyebrow="Contact"
-        title="We'd Love to Hear From You"
-        description="Call, WhatsApp, email or visit our campus in Masaka, Kigali, whichever is easiest for your family."
+        eyebrow={c.hero.eyebrow}
+        title={c.hero.title}
+        description={c.hero.description}
       />
 
       <section className="border-b border-border bg-background py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
-            {contactCards.map((card) => (
+            {contactCards(dict).map((card) => (
               <a
                 key={card.label}
                 href={card.href}
@@ -84,22 +81,21 @@ export default function ContactPage() {
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div>
             <p className="text-xs font-semibold tracking-[0.2em] text-teal uppercase">
-              Find Us
+              {c.findUs.eyebrow}
             </p>
             <h2 className="mt-3 font-heading text-[clamp(1.75rem,1.5rem+1.2vw,2.5rem)] font-semibold tracking-tight text-foreground">
-              Masaka, Kigali, Rwanda
+              {c.findUs.title}
             </h2>
             <p className="mt-4 max-w-md text-sm/relaxed text-muted-foreground">
-              Our campus sits in Masaka, on the outskirts of Kigali. Tap the
-              map to open directions in Google Maps.
+              {c.findUs.paragraph}
             </p>
             <div className="mt-6 flex flex-col gap-3 border-t border-border pt-6">
               <div className="flex items-start gap-3">
                 <Clock className="mt-0.5 size-4 shrink-0 text-teal" />
                 <div>
-                  <p className="text-sm font-medium text-foreground">Office Hours</p>
+                  <p className="text-sm font-medium text-foreground">{c.findUs.officeHoursTitle}</p>
                   <p className="text-xs text-muted-foreground">
-                    Monday &ndash; Friday, 7:30 AM &ndash; 4:30 PM
+                    {c.findUs.officeHoursValue}
                   </p>
                 </div>
               </div>
@@ -135,17 +131,17 @@ export default function ContactPage() {
             </div>
             <Button
               size="lg"
-              render={<Link href="/admissions" />}
+              render={<Link href={localeHref(locale, "/admissions")} />}
               className="mt-8 h-11 px-6 text-sm"
             >
-              Go to Admissions
+              {c.findUs.goToAdmissions}
               <ArrowRight data-icon="inline-end" />
             </Button>
           </div>
 
           <div className="aspect-4/3 overflow-hidden border border-border bg-card lg:aspect-auto">
             <iframe
-              title="Map showing Saint Vincent Pallotti School Masaka"
+              title={c.findUs.mapTitle}
               src="https://www.google.com/maps?q=Saint+Vincent+Pallotti+School+Masaka,+Kigali,+Rwanda&output=embed"
               className="h-full min-h-80 w-full grayscale-15"
               loading="lazy"
