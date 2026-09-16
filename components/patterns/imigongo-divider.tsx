@@ -1,30 +1,40 @@
 /**
- * A thin geometric rule inspired by imigongo, the traditional Rwandan
- * triangle-and-spiral relief art, used as a section divider so the site's
- * Rwandan setting shows up as a real graphic motif, not a stock photo.
+ * A bold triangular band inspired by imigongo, the traditional Rwandan
+ * relief art, used as a section rule so the site's Rwandan setting shows up
+ * as a real graphic motif rather than a stock photo. Real imigongo panels
+ * are carved and painted in stark black and white (occasionally red-brown),
+ * so this renders as solid marks alternating with open, outlined ones in a
+ * single adaptive color rather than a tinted wash: pass a foreground-token
+ * className (e.g. text-foreground or text-ink-foreground) so it reads as
+ * true black-on-light or white-on-dark in both themes.
  */
 export function ImigongoDivider({ className }: { className?: string }) {
+  const count = 8
+  const width = 20
+
   return (
     <svg
-      viewBox="0 0 240 12"
+      viewBox={`0 0 ${count * width} 20`}
       preserveAspectRatio="xMidYMid meet"
       className={className}
       role="presentation"
       aria-hidden="true"
     >
-      <g fill="currentColor">
-        {Array.from({ length: 20 }).map((_, i) => (
+      {Array.from({ length: count }).map((_, i) => {
+        const x = i * width
+        const points = `${x},20 ${x + width},20 ${x + width / 2},0`
+        const solid = i % 2 === 0
+        return (
           <polygon
             key={i}
-            points={
-              i % 2 === 0
-                ? `${i * 12},12 ${i * 12 + 12},12 ${i * 12 + 6},0`
-                : `${i * 12},0 ${i * 12 + 12},0 ${i * 12 + 6},12`
-            }
-            opacity={i % 4 === 0 ? 1 : i % 2 === 0 ? 0.55 : 0.25}
+            points={points}
+            fill={solid ? "currentColor" : "none"}
+            stroke="currentColor"
+            strokeWidth={solid ? 0 : 1.5}
+            strokeLinejoin="round"
           />
-        ))}
-      </g>
+        )
+      })}
     </svg>
   )
 }
