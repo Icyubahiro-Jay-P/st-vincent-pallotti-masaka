@@ -3,11 +3,10 @@ import { ArrowRight } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { InstagramGlyph, YoutubeGlyph } from "@/components/icons/social-icons"
-import { socialLinks, localeHref } from "@/lib/site-config"
-import type { Locale } from "@/lib/i18n/config"
+import { socialLinks } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-export function NewsTeaser({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function NewsTeaser({ dict }: { dict: Dictionary }) {
   const n = dict.home.news
 
   return (
@@ -23,7 +22,7 @@ export function NewsTeaser({ locale, dict }: { locale: Locale; dict: Dictionary 
             </h2>
           </div>
           <Link
-            href={localeHref(locale, "/news")}
+            href="/news"
             className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-primary uppercase hover:underline"
           >
             {n.viewAll}
@@ -35,7 +34,7 @@ export function NewsTeaser({ locale, dict }: { locale: Locale; dict: Dictionary 
           {dict.news.items.map((item) => (
             <Link
               key={item.slug}
-              href={`${localeHref(locale, "/news")}#${item.slug}`}
+              href={`/news#${item.slug}`}
               className="group flex flex-col gap-4 border border-border bg-card p-6 transition-colors hover:border-primary"
             >
               <div className="flex items-center justify-between">
