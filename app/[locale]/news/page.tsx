@@ -3,27 +3,41 @@ import type { Metadata } from "next"
 import { PageHero } from "@/components/page-hero"
 import { Badge } from "@/components/ui/badge"
 import { InstagramGlyph, YoutubeGlyph } from "@/components/icons/social-icons"
-import { newsItems, socialLinks } from "@/lib/site-config"
+import { socialLinks } from "@/lib/site-config"
+import { getDictionary } from "@/lib/i18n/get-dictionary"
+import type { Locale } from "@/lib/i18n/config"
 
-export const metadata: Metadata = {
-  title: "News & School Life",
-  description:
-    "News, achievements and school life updates from Saint Vincent Pallotti School Masaka.",
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  return { title: dict.meta.news.title, description: dict.meta.news.description }
 }
 
-export default function NewsPage() {
+export default async function NewsPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>
+}) {
+  const { locale } = await params
+  const dict = getDictionary(locale)
+  const n = dict.news
+
   return (
     <>
       <PageHero
-        eyebrow="School Life"
-        title="News & Updates"
-        description="What's happening on campus: academics, TVET and community life at Pallotti."
+        eyebrow={n.hero.eyebrow}
+        title={n.hero.title}
+        description={n.hero.description}
       />
 
       <section className="border-b border-border bg-background py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-8">
-            {newsItems.map((item) => (
+            {n.items.map((item) => (
               <article
                 key={item.slug}
                 id={item.slug}
@@ -48,10 +62,10 @@ export default function NewsPage() {
       <section className="bg-muted/40 py-16 sm:py-20">
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-4 text-center sm:px-6 lg:px-8">
           <p className="text-xs font-semibold tracking-[0.2em] text-teal uppercase">
-            Follow Along
+            {n.follow.eyebrow}
           </p>
           <h2 className="font-heading text-[clamp(1.5rem,1.3rem+1vw,2.25rem)] font-semibold tracking-tight text-foreground">
-            More school life on Instagram &amp; YouTube
+            {n.follow.title}
           </h2>
           <div className="flex items-center gap-3">
             <a
@@ -61,7 +75,7 @@ export default function NewsPage() {
               className="inline-flex items-center gap-2 border border-border bg-card px-4 py-2.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
             >
               <InstagramGlyph className="size-4" />
-              Instagram
+              {n.follow.instagram}
             </a>
             <a
               href={socialLinks.youtube}
@@ -70,7 +84,7 @@ export default function NewsPage() {
               className="inline-flex items-center gap-2 border border-border bg-card px-4 py-2.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
             >
               <YoutubeGlyph className="size-4" />
-              YouTube
+              {n.follow.youtube}
             </a>
           </div>
         </div>
