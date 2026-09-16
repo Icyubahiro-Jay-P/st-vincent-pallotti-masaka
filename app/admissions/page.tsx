@@ -90,7 +90,12 @@ const requirementsByLevel = [
   },
 ] as const
 
-export default function AdmissionsPage() {
+export default async function AdmissionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ program?: string }>
+}) {
+  const { program } = await searchParams
   return (
     <>
       <PageHero
