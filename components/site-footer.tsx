@@ -8,9 +8,11 @@ import {
   FacebookGlyph,
 } from "@/components/icons/social-icons"
 import { ImigongoDivider } from "@/components/patterns/imigongo-divider"
-import { navLinks, programHref, programs, siteConfig, socialLinks } from "@/lib/site-config"
+import { navLinks, programHref, programs, siteConfig, socialLinks, localeHref } from "@/lib/site-config"
+import type { Locale } from "@/lib/i18n/config"
+import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-export function SiteFooter() {
+export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <footer className="border-t border-white/10 bg-ink text-ink-foreground">
       <ImigongoDivider className="h-2 w-full text-ink-foreground" />
@@ -29,10 +31,8 @@ export function SiteFooter() {
               </div>
             </div>
             <p className="text-xs/relaxed text-ink-foreground/70">
-              &ldquo;{siteConfig.spiritualMotto}&rdquo;
-              <span className="block italic">
-                {siteConfig.spiritualMottoLatin}
-              </span>
+              &ldquo;{dict.site.spiritualMotto}&rdquo;
+              <span className="block italic">{siteConfig.spiritualMottoLatin}</span>
             </p>
             <div className="flex items-center gap-3 pt-1">
               <SocialLink href={socialLinks.instagram} label="Instagram">
@@ -49,16 +49,16 @@ export function SiteFooter() {
 
           <div>
             <h3 className="text-xs font-semibold tracking-[0.15em] text-gold uppercase">
-              Explore
+              {dict.footer.exploreHeading}
             </h3>
             <ul className="mt-4 flex flex-col gap-2.5">
               {navLinks.map((link) => (
-                <li key={link.href}>
+                <li key={link.key}>
                   <Link
-                    href={link.href}
+                    href={localeHref(locale, link.href)}
                     className="text-xs text-ink-foreground/75 transition-colors hover:text-ink-foreground"
                   >
-                    {link.label}
+                    {dict.nav[link.key]}
                   </Link>
                 </li>
               ))}
@@ -67,16 +67,16 @@ export function SiteFooter() {
 
           <div>
             <h3 className="text-xs font-semibold tracking-[0.15em] text-gold uppercase">
-              Programs
+              {dict.footer.programsHeading}
             </h3>
             <ul className="mt-4 flex flex-col gap-2.5">
               {programs.slice(0, 5).map((program) => (
                 <li key={program.slug}>
                   <Link
-                    href={programHref(program)}
+                    href={programHref(locale, program.slug)}
                     className="text-xs text-ink-foreground/75 transition-colors hover:text-ink-foreground"
                   >
-                    {program.name}
+                    {dict.programs[program.slug].name}
                   </Link>
                 </li>
               ))}
@@ -85,7 +85,7 @@ export function SiteFooter() {
 
           <div>
             <h3 className="text-xs font-semibold tracking-[0.15em] text-gold uppercase">
-              Contact
+              {dict.footer.contactHeading}
             </h3>
             <ul className="mt-4 flex flex-col gap-3 text-xs text-ink-foreground/75">
               <li className="flex items-start gap-2">
@@ -123,8 +123,8 @@ export function SiteFooter() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-[0.7rem] text-ink-foreground/55 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            &copy; {new Date().getFullYear()} {siteConfig.name}. Run by the{" "}
-            {siteConfig.foundedBy}.
+            &copy; {new Date().getFullYear()} {siteConfig.name}. {dict.footer.runByPrefix}{" "}
+            {dict.site.foundedBy}.
           </p>
           <p className="uppercase tracking-[0.15em]">{siteConfig.motto}</p>
         </div>
