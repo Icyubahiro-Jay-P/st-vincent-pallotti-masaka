@@ -3,35 +3,39 @@ import { ArrowRight } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { InstagramGlyph, YoutubeGlyph } from "@/components/icons/social-icons"
-import { newsItems, socialLinks } from "@/lib/site-config"
+import { socialLinks, localeHref } from "@/lib/site-config"
+import type { Locale } from "@/lib/i18n/config"
+import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-export function NewsTeaser() {
+export function NewsTeaser({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+  const n = dict.home.news
+
   return (
     <section className="border-t border-border bg-muted/40 py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div className="flex flex-col gap-3 sm:max-w-xl">
             <p className="text-xs font-semibold tracking-[0.2em] text-teal uppercase">
-              School Life
+              {n.eyebrow}
             </p>
             <h2 className="font-heading text-[clamp(1.75rem,1.5rem+1.2vw,2.75rem)] font-semibold tracking-tight text-foreground">
-              Latest from Pallotti
+              {n.title}
             </h2>
           </div>
           <Link
-            href="/news"
+            href={localeHref(locale, "/news")}
             className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-primary uppercase hover:underline"
           >
-            View all news
+            {n.viewAll}
             <ArrowRight className="size-3.5" />
           </Link>
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {newsItems.map((item) => (
+          {dict.news.items.map((item) => (
             <Link
               key={item.slug}
-              href={`/news#${item.slug}`}
+              href={`${localeHref(locale, "/news")}#${item.slug}`}
               className="group flex flex-col gap-4 border border-border bg-card p-6 transition-colors hover:border-primary"
             >
               <div className="flex items-center justify-between">
@@ -53,9 +57,7 @@ export function NewsTeaser() {
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-border pt-6 sm:flex-row sm:items-center">
-          <p className="text-xs text-muted-foreground">
-            Follow daily life on campus on Instagram and YouTube.
-          </p>
+          <p className="text-xs text-muted-foreground">{n.followText}</p>
           <div className="flex items-center gap-3">
             <a
               href={socialLinks.instagram}
@@ -71,7 +73,7 @@ export function NewsTeaser() {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center border border-border p-2 text-foreground transition-colors hover:border-primary hover:text-primary"
-              aria-label="YouTube"
+              aria-label={n.youtubeAriaLabel}
             >
               <YoutubeGlyph className="size-4" />
             </a>
