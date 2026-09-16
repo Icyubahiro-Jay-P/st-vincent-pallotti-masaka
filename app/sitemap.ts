@@ -1,7 +1,5 @@
 import type { MetadataRoute } from "next"
 
-import { locales } from "@/lib/i18n/config"
-
 const siteUrl = "https://www.pallottimasaka.org"
 
 const programSlugs = [
@@ -24,18 +22,16 @@ const routes = [
   "/contact",
 ]
 
+// Each page now has exactly one URL (language is a cookie, not a URL
+// segment), so there's only one entry per route rather than one per locale.
+// Search engines never send cookies on first crawl, so they'll only ever
+// index the default-language version of each page; that's the trade-off of
+// not using locale-prefixed URLs.
 export default function sitemap(): MetadataRoute.Sitemap {
-  return routes.flatMap((route) =>
-    locales.map((locale) => ({
-      url: `${siteUrl}/${locale}${route}`,
-      lastModified: new Date(),
-      changeFrequency: (route === "" ? "weekly" : "monthly") as "weekly" | "monthly",
-      priority: route === "" ? 1 : route === "/admissions" ? 0.9 : 0.6,
-      alternates: {
-        languages: Object.fromEntries(
-          locales.map((l) => [l, `${siteUrl}/${l}${route}`])
-        ),
-      },
-    }))
-  )
+  return routes.map((route) => ({
+    url: `${siteUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: route === "" ? "weekly" : "monthly",
+    priority: route === "" ? 1 : route === "/admissions" ? 0.9 : 0.6,
+  }))
 }
