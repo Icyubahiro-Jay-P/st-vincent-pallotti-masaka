@@ -181,7 +181,7 @@ export default function AboutPage() {
             ))}
           </ol>
 
-          <ImigongoDivider className="mt-8 h-2.5 w-32 text-gold" />
+          <ImigongoDivider className="mt-8 h-2.5 w-32 text-foreground" />
         </div>
       </section>
     </>
