@@ -82,7 +82,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
         <div className="relative lg:col-span-5">
           <div className="relative overflow-hidden border border-ink bg-ink text-ink-foreground">
-            <ImigongoSpiral className="pointer-events-none absolute -top-6 -right-6 size-36 text-ink-foreground/30" />
+            {/* TEMP-DIAGNOSTIC-REMOVED */}
             <div className="relative flex flex-col items-center gap-5 px-8 py-14 text-center sm:py-16">
               <Crest size={128} ringClassName="ring-4" />
               <div>
