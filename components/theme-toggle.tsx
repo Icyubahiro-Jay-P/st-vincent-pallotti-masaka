@@ -6,8 +6,15 @@ import { Moon, Sun } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-export function ThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle({
+  dict,
+  className,
+}: {
+  dict: Dictionary
+  className?: string
+}) {
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
 
@@ -24,7 +31,13 @@ export function ThemeToggle({ className }: { className?: string }) {
       size="icon"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className={cn("size-11", className)}
-      aria-label={mounted ? (isDark ? "Switch to light mode" : "Switch to dark mode") : "Toggle theme"}
+      aria-label={
+        mounted
+          ? isDark
+            ? dict.themeToggle.switchToLight
+            : dict.themeToggle.switchToDark
+          : dict.themeToggle.toggle
+      }
     >
       {mounted ? (
         isDark ? <Sun /> : <Moon />
