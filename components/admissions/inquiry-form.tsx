@@ -20,9 +20,16 @@ import { cn } from "@/lib/utils"
 
 const initialState: InquiryState = { status: "idle" }
 
-export function AdmissionInquiryForm() {
+export function AdmissionInquiryForm({
+  defaultProgram,
+}: {
+  defaultProgram?: string
+}) {
   const [state, formAction, pending] = useActionState(submitInquiry, initialState)
   const formRef = useRef<HTMLFormElement>(null)
+  const validDefaultProgram = programs.find(
+    (program) => program.name === defaultProgram
+  )?.name
 
   useEffect(() => {
     if (state.status === "success") {
@@ -69,7 +76,7 @@ export function AdmissionInquiryForm() {
           <Input id="phone" name="phone" type="tel" autoComplete="tel" placeholder="+250 7xx xxx xxx" />
         </Field>
         <Field label="Program of Interest" htmlFor="program" error={state.fieldErrors?.program}>
-          <Select name="program">
+          <Select name="program" defaultValue={validDefaultProgram}>
             <SelectTrigger id="program" className="w-full">
               <SelectValue placeholder="Select a program" />
             </SelectTrigger>
