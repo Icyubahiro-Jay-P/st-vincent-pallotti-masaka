@@ -2,18 +2,24 @@ import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 
 import { iconMap } from "@/components/icon-map"
-import { programs, programHref, type Program } from "@/lib/site-config"
+import { programs, programHref, type ProgramMeta } from "@/lib/site-config"
+import type { Locale } from "@/lib/i18n/config"
+import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
 export function ProgramsGrid({
+  locale,
+  dict,
   eyebrow,
   title,
   description,
   items = programs,
 }: {
+  locale: Locale
+  dict: Dictionary
   eyebrow: string
   title: string
   description: string
-  items?: readonly Program[]
+  items?: readonly ProgramMeta[]
 }) {
   return (
     <section className="border-b border-border bg-background py-16 sm:py-20">
@@ -31,10 +37,11 @@ export function ProgramsGrid({
         <div className="mt-10 grid grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {items.map((program) => {
             const Icon = iconMap[program.icon]
+            const text = dict.programs[program.slug]
             return (
               <Link
                 key={program.slug}
-                href={programHref(program)}
+                href={programHref(locale, program.slug)}
                 className="group relative flex flex-col gap-3 bg-card p-6 transition-colors hover:bg-muted focus-visible:z-10 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
               >
                 <div className="flex items-start justify-between">
@@ -45,14 +52,14 @@ export function ProgramsGrid({
                 </div>
                 <div>
                   <h3 className="font-heading text-base font-semibold text-foreground">
-                    {program.name}
+                    {text.name}
                   </h3>
                   <p className="mt-0.5 text-[0.7rem] font-medium tracking-wide text-teal uppercase">
-                    {program.ageRange}
+                    {text.ageRange}
                   </p>
                 </div>
                 <p className="text-xs/relaxed text-muted-foreground">
-                  {program.description}
+                  {text.description}
                 </p>
               </Link>
             )
