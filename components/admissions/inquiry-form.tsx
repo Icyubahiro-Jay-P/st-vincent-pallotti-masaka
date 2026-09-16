@@ -14,22 +14,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { submitInquiry, type InquiryState } from "@/app/admissions/actions"
+import { submitInquiry, type InquiryState } from "@/app/[locale]/admissions/actions"
 import { programs } from "@/lib/site-config"
+import type { Locale } from "@/lib/i18n/config"
+import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import { cn } from "@/lib/utils"
 
 const initialState: InquiryState = { status: "idle" }
 
 export function AdmissionInquiryForm({
+  locale,
+  dict,
   defaultProgram,
 }: {
+  locale: Locale
+  dict: Dictionary
   defaultProgram?: string
 }) {
-  const [state, formAction, pending] = useActionState(submitInquiry, initialState)
+  const f = dict.admissions.form
+  const boundSubmitInquiry = submitInquiry.bind(null, locale)
+  const [state, formAction, pending] = useActionState(boundSubmitInquiry, initialState)
   const formRef = useRef<HTMLFormElement>(null)
   const validDefaultProgram = programs.find(
-    (program) => program.name === defaultProgram
-  )?.name
+    (program) => dict.programs[program.slug].name === defaultProgram
+  )
+  const validDefaultProgramName = validDefaultProgram
+    ? dict.programs[validDefaultProgram.slug].name
+    : undefined
 
   useEffect(() => {
     if (state.status === "success") {
@@ -42,7 +53,7 @@ export function AdmissionInquiryForm({
       <div className="flex flex-col items-center gap-4 border border-border bg-card px-6 py-14 text-center">
         <CheckCircle2 className="size-12 text-teal" />
         <h3 className="font-heading text-xl font-semibold text-foreground">
-          Inquiry received
+          {f.receivedTitle}
         </h3>
         <p className="max-w-sm text-sm/relaxed text-muted-foreground">
           {state.message}
@@ -63,65 +74,61 @@ export function AdmissionInquiryForm({
       )}
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <Field label="Parent / Guardian Name" htmlFor="parentName" error={state.fieldErrors?.parentName}>
-          <Input id="parentName" name="parentName" autoComplete="name" placeholder="e.g. Jean Mukamana" />
+        <Field label={f.parentName} htmlFor="parentName" error={state.fieldErrors?.parentName}>
+          <Input id="parentName" name="parentName" autoComplete="name" placeholder={f.parentNamePlaceholder} />
         </Field>
-        <Field label="Student's Name" htmlFor="childName" error={state.fieldErrors?.childName}>
-          <Input id="childName" name="childName" placeholder="e.g. Aline Mukamana" />
+        <Field label={f.childName} htmlFor="childName" error={state.fieldErrors?.childName}>
+          <Input id="childName" name="childName" placeholder={f.childNamePlaceholder} />
         </Field>
-        <Field label="Email Address" htmlFor="email" error={state.fieldErrors?.email}>
-          <Input id="email" name="email" type="email" autoComplete="email" placeholder="you@example.com" />
+        <Field label={f.email} htmlFor="email" error={state.fieldErrors?.email}>
+          <Input id="email" name="email" type="email" autoComplete="email" placeholder={f.emailPlaceholder} />
         </Field>
-        <Field label="Phone Number" htmlFor="phone" error={state.fieldErrors?.phone}>
-          <Input id="phone" name="phone" type="tel" autoComplete="tel" placeholder="+250 7xx xxx xxx" />
+        <Field label={f.phone} htmlFor="phone" error={state.fieldErrors?.phone}>
+          <Input id="phone" name="phone" type="tel" autoComplete="tel" placeholder={f.phonePlaceholder} />
         </Field>
-        <Field label="Program of Interest" htmlFor="program" error={state.fieldErrors?.program}>
-          <Select name="program" defaultValue={validDefaultProgram}>
+        <Field label={f.program} htmlFor="program" error={state.fieldErrors?.program}>
+          <Select name="program" defaultValue={validDefaultProgramName}>
             <SelectTrigger id="program" className="w-full">
-              <SelectValue placeholder="Select a program" />
+              <SelectValue placeholder={f.programPlaceholder} />
             </SelectTrigger>
             <SelectContent>
               {programs.map((program) => (
-                <SelectItem key={program.slug} value={program.name}>
-                  {program.name}
+                <SelectItem key={program.slug} value={dict.programs[program.slug].name}>
+                  {dict.programs[program.slug].name}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </Field>
-        <Field label="Preferred Start Term" htmlFor="preferredTerm">
+        <Field label={f.preferredTerm} htmlFor="preferredTerm">
           <Select name="preferredTerm">
             <SelectTrigger id="preferredTerm" className="w-full">
-              <SelectValue placeholder="Select a term" />
+              <SelectValue placeholder={f.preferredTermPlaceholder} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Term 1">Term 1</SelectItem>
-              <SelectItem value="Term 2">Term 2</SelectItem>
-              <SelectItem value="Term 3">Term 3</SelectItem>
-              <SelectItem value="Not sure yet">Not sure yet</SelectItem>
+              {f.terms.map((term) => (
+                <SelectItem key={term} value={term}>
+                  {term}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </Field>
       </div>
 
-      <Field label="Message (optional)" htmlFor="message">
-        <Textarea
-          id="message"
-          name="message"
-          rows={4}
-          placeholder="Tell us anything that would help our admissions team, such as current grade or special needs support required."
-        />
+      <Field label={f.message} htmlFor="message">
+        <Textarea id="message" name="message" rows={4} placeholder={f.messagePlaceholder} />
       </Field>
 
       <Button type="submit" size="lg" disabled={pending} className="h-11 self-start px-6 text-sm">
         {pending ? (
           <>
             <Loader2 data-icon="inline-start" className="animate-spin" />
-            Sending&hellip;
+            {f.sending}
           </>
         ) : (
           <>
-            Submit Inquiry
+            {f.submit}
             <Send data-icon="inline-end" />
           </>
         )}
