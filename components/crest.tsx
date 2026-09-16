@@ -28,7 +28,7 @@ export function Crest({
         alt="Saint Vincent Pallotti School Masaka crest"
         width={size}
         height={size}
-        className={cn("rounded-full object-cover p-[2px]", className)}
+        className={cn("rounded-full object-cover p-0.5", className)}
         priority
       />
     </span>
