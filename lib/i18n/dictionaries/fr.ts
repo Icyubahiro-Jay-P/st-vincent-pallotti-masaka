@@ -150,6 +150,7 @@ const fr: Dictionary = {
   },
 
   nav: {
+    primaryLabel: "Principal",
     home: "Accueil",
     about: "À propos",
     academics: "Programmes",
