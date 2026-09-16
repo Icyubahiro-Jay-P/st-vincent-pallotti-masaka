@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { Church, Compass, HeartHandshake, Sparkles } from "lucide-react"
 
 import { PageHero } from "@/components/page-hero"
-import { ImigongoDivider } from "@/components/patterns/imigongo-divider"
 import { siteConfig } from "@/lib/site-config"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import type { Locale } from "@/lib/i18n/config"
@@ -154,8 +153,6 @@ export default async function AboutPage({
               </li>
             ))}
           </ol>
-
-          <ImigongoDivider className="mt-8 h-2.5 w-32 text-foreground" />
         </div>
       </section>
     </>
