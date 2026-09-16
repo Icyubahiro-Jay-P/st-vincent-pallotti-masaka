@@ -1,6 +1,6 @@
 "use client"
 
-import { usePathname, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Languages } from "lucide-react"
 
 import {
@@ -10,40 +10,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { locales, localeNames, type Locale } from "@/lib/i18n/config"
+import { locales, localeNames } from "@/lib/i18n/config"
+import { LOCALE_COOKIE } from "@/lib/i18n/locale-cookie"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-// Swaps the locale segment in the current URL and navigates there, so
-// switching language keeps you on the same page instead of bouncing to the
-// homepage. To add Kinyarwanda, no changes are needed here: it will show up
-// automatically once "rw" is added to lib/i18n/config.ts's `locales` array.
+// Switches language via a cookie instead of a URL segment, so pages stay at
+// plain paths like /about. Setting the cookie client-side and refreshing
+// re-runs the server components with the new value, no page navigation or
+// full reload needed. To add Kinyarwanda later, no changes are needed here:
+// it shows up automatically once "rw" is added to lib/i18n/config.ts.
 export function LanguageSwitcher({
-  locale,
   dict,
   className,
 }: {
-  locale: Locale
   dict: Dictionary
   className?: string
 }) {
   const router = useRouter()
-  const pathname = usePathname()
 
   function switchTo(nextLocale: string | null) {
     if (!nextLocale) return
-    const segments = pathname.split("/")
-    segments[1] = nextLocale
-    router.push(segments.join("/"))
+    document.cookie = `${LOCALE_COOKIE}=${nextLocale}; path=/; max-age=31536000; SameSite=Lax`
+    router.refresh()
   }
 
   return (
-    <Select value={locale} onValueChange={switchTo}>
+    <Select value={dict.locale} onValueChange={switchTo}>
       <SelectTrigger
         aria-label={dict.languageSwitcher.label}
         className={className ?? "h-9 gap-1.5 border-white/20 bg-transparent text-ink-foreground hover:bg-white/10"}
       >
         <Languages className="size-3.5" data-icon="inline-start" />
-        <SelectValue>{locale.toUpperCase()}</SelectValue>
+        <SelectValue>{dict.locale.toUpperCase()}</SelectValue>
       </SelectTrigger>
       <SelectContent align="end">
         {locales.map((code) => (
