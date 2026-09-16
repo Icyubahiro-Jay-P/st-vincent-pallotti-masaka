@@ -4,6 +4,10 @@
 // every string value, and leave the keys, slugs and icon names untouched.
 
 const en = {
+  // Lets any component holding a dict identify the current language without
+  // needing a separate `locale` prop threaded down from the layout.
+  locale: "en",
+
   // Translatable text for the seven programs, keyed by the slug defined in
   // lib/site-config.ts (which also owns the locale-independent icon name and
   // route). Keep the keys identical across locales.
