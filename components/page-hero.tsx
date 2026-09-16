@@ -1,4 +1,5 @@
 import { ImigongoDivider } from "@/components/patterns/imigongo-divider"
+import { ImigongoSpiral } from "@/components/patterns/imigongo-spiral"
 
 export function PageHero({
   eyebrow,
@@ -10,8 +11,9 @@ export function PageHero({
   description?: string
 }) {
   return (
-    <section className="border-b border-border bg-ink py-14 text-ink-foreground sm:py-18">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden border-b border-border bg-ink py-14 text-ink-foreground sm:py-18">
+      <ImigongoSpiral className="pointer-events-none absolute -top-8 -right-8 size-40 text-ink-foreground/10 sm:size-56" />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-xs font-semibold tracking-[0.2em] text-gold uppercase">
           {eyebrow}
         </p>
@@ -23,7 +25,7 @@ export function PageHero({
             {description}
           </p>
         ) : null}
-        <ImigongoDivider className="mt-8 h-2.5 w-28 text-gold/70" />
+        <ImigongoDivider className="mt-8 h-2.5 w-28 text-ink-foreground/70" />
       </div>
     </section>
   )
