@@ -147,7 +147,7 @@ export default function ContactPage() {
             <iframe
               title="Map showing Saint Vincent Pallotti School Masaka"
               src="https://www.google.com/maps?q=Saint+Vincent+Pallotti+School+Masaka,+Kigali,+Rwanda&output=embed"
-              className="h-full min-h-[320px] w-full grayscale-[15%]"
+              className="h-full min-h-80 w-full grayscale-15"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
