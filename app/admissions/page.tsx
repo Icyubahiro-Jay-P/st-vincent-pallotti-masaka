@@ -199,7 +199,7 @@ export default async function AdmissionsPage({
               campus visit.
             </p>
             <div className="mt-8">
-              <AdmissionInquiryForm />
+              <AdmissionInquiryForm defaultProgram={program} />
             </div>
           </div>
 
