@@ -3,6 +3,8 @@ import type { Dictionary } from "./en"
 // French translation. Typed as `Dictionary` so TypeScript enforces the exact
 // same shape as en.ts, keys included.
 const fr: Dictionary = {
+  locale: "fr",
+
   programs: {
     "day-care": {
       name: "Garderie",
