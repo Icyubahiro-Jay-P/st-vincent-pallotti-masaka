@@ -5,9 +5,22 @@ import { Badge } from "@/components/ui/badge"
 import { InstagramGlyph, YoutubeGlyph } from "@/components/icons/social-icons"
 import { socialLinks } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
+import type { Locale } from "@/lib/i18n/config"
+import type { events as eventsTable } from "@/lib/db/schema"
 
-export function NewsTeaser({ dict }: { dict: Dictionary }) {
+type Event = typeof eventsTable.$inferSelect
+
+export function NewsTeaser({
+  dict,
+  locale,
+  events,
+}: {
+  dict: Dictionary
+  locale: Locale
+  events: Event[]
+}) {
   const n = dict.home.news
+  const isFrench = locale === "fr"
 
   return (
     <section className="border-t border-border bg-muted/40 py-16 sm:py-20">
@@ -31,25 +44,28 @@ export function NewsTeaser({ dict }: { dict: Dictionary }) {
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {dict.news.items.map((item) => (
+          {events.map((event) => (
             <Link
-              key={item.slug}
-              href={`/news#${item.slug}`}
+              key={event.slug}
+              href={`/news/${event.slug}`}
               className="group flex flex-col gap-4 border border-border bg-card p-6 transition-colors hover:border-primary"
             >
               <div className="flex items-center justify-between">
                 <Badge variant="secondary" className="uppercase">
-                  {item.category}
+                  {event.category}
                 </Badge>
                 <span className="text-[0.7rem] text-muted-foreground">
-                  {item.date}
+                  {(event.publishedAt ?? event.createdAt).toLocaleDateString(
+                    isFrench ? "fr-RW" : "en-RW",
+                    { year: "numeric", month: "short", day: "numeric" }
+                  )}
                 </span>
               </div>
               <h3 className="font-heading text-base font-semibold text-foreground group-hover:text-primary">
-                {item.title}
+                {isFrench ? event.titleFr : event.titleEn}
               </h3>
               <p className="text-xs/relaxed text-muted-foreground">
-                {item.excerpt}
+                {isFrench ? event.excerptFr : event.excerptEn}
               </p>
             </Link>
           ))}
