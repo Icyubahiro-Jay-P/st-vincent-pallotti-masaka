@@ -260,7 +260,8 @@ const en = {
         {
           stage: "Secondary",
           range: "S1 – S6",
-          description: "O-Level and A-Level study, character formation and leadership.",
+          description:
+            "O-Level and A-Level study, character formation and leadership.",
         },
         {
           stage: "TVET & Beyond",
@@ -613,7 +614,8 @@ const en = {
     form: {
       eyebrow: "Start Now",
       title: "Admissions Inquiry Form",
-      description: "Tell us about your child and we’ll reach out to arrange a campus visit.",
+      description:
+        "Tell us about your child and we’ll reach out to arrange a campus visit.",
       parentName: "Parent / Guardian Name",
       parentNamePlaceholder: "e.g. Jean Mukamana",
       childName: "Student's Name",
@@ -669,38 +671,21 @@ const en = {
       description:
         "What's happening on campus: academics, TVET and community life at Pallotti.",
     },
-    items: [
-      {
-        slug: "new-campus-inauguration",
-        title: "New Campus Officially Inaugurated",
-        date: "2022",
-        excerpt:
-          "Our expanded campus was blessed and opened by Cardinal Antoine Kambanda alongside the Ministry of Education, raising capacity to over 1,200 students.",
-        category: "School Life",
-      },
-      {
-        slug: "cambridge-results",
-        title: "Strong Results Across Cambridge & National Streams",
-        date: "This Year",
-        excerpt:
-          "Pallotti students continue to place among the stronger-performing schools in the Kigali area across both curricula.",
-        category: "Academics",
-      },
-      {
-        slug: "tvet-open-day",
-        title: "TVET Workshops Open Day",
-        date: "This Term",
-        excerpt:
-          "Families visited our Welding, Tailoring, Hairdressing, Carpentry and Culinary workshops to see hands-on trade training in action.",
-        category: "TVET",
-      },
-    ],
+    empty: "No news yet, check back soon.",
     follow: {
       eyebrow: "Follow Along",
       title: "More school life on Instagram & YouTube",
       instagram: "Instagram",
       youtube: "YouTube",
     },
+  },
+
+  newsletter: {
+    footerHeading: "Newsletter",
+    placeholder: "Your email address",
+    button: "Subscribe",
+    invalidEmail: "Enter a valid email address.",
+    success: "Thanks! You'll hear about our next updates.",
   },
 
   contact: {
