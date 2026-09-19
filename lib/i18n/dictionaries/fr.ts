@@ -674,7 +674,9 @@ const fr: Dictionary = {
   },
 
   newsletter: {
-    footerHeading: "Bulletin d'information",
+    footerHeading: "Restez informés",
+    footerDescription:
+      "Dates de trimestre, admissions et actualités de l'école, dans votre boîte mail.",
     placeholder: "Votre adresse e-mail",
     button: "S'abonner",
     invalidEmail: "Entrez une adresse e-mail valide.",
