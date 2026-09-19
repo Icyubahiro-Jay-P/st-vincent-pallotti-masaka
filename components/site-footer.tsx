@@ -7,8 +7,15 @@ import {
   YoutubeGlyph,
   FacebookGlyph,
 } from "@/components/icons/social-icons"
-import { navLinks, programHref, programs, siteConfig, socialLinks } from "@/lib/site-config"
+import {
+  navLinks,
+  programHref,
+  programs,
+  siteConfig,
+  socialLinks,
+} from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
+import { SubscribeForm } from "@/components/newsletter/subscribe-form"
 
 export function SiteFooter({ dict }: { dict: Dictionary }) {
   return (
@@ -29,7 +36,9 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
             </div>
             <p className="text-xs/relaxed text-ink-foreground/70">
               &ldquo;{dict.site.spiritualMotto}&rdquo;
-              <span className="block italic">{siteConfig.spiritualMottoLatin}</span>
+              <span className="block italic">
+                {siteConfig.spiritualMottoLatin}
+              </span>
             </p>
             <div className="flex items-center gap-3 pt-1">
               <SocialLink href={socialLinks.instagram} label="Instagram">
@@ -118,12 +127,19 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-white/20 pt-6 text-[0.7rem] text-ink-foreground/55 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-3 border-t border-white/20 pt-6 sm:max-w-xs">
+          <h3 className="text-xs font-semibold tracking-[0.15em] text-gold uppercase">
+            {dict.newsletter.footerHeading}
+          </h3>
+          <SubscribeForm dict={dict} />
+        </div>
+
+        <div className="mt-6 flex flex-col gap-3 border-t border-white/20 pt-6 text-[0.7rem] text-ink-foreground/55 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            &copy; {new Date().getFullYear()} {siteConfig.name}. {dict.footer.runByPrefix}{" "}
-            {dict.site.foundedBy}.
+            &copy; {new Date().getFullYear()} {siteConfig.name}.{" "}
+            {dict.footer.runByPrefix} {dict.site.foundedBy}.
           </p>
-          <p className="uppercase tracking-[0.15em]">{siteConfig.motto}</p>
+          <p className="tracking-[0.15em] uppercase">{siteConfig.motto}</p>
         </div>
       </div>
     </footer>
