@@ -8,6 +8,7 @@
 export const siteConfig = {
   name: "Saint Vincent Pallotti School Masaka",
   shortName: "Pallotti Masaka",
+  url: "https://www.pallottimasaka.org",
   motto: "Strive Beyond",
   spiritualMottoLatin: "Caritas Christi urget nos",
   location: "Masaka, Kigali, Rwanda",
