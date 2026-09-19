@@ -21,7 +21,21 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
   return (
     <footer className="border-t border-white/20 bg-ink text-ink-foreground">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="flex flex-col gap-6 border-b border-white/20 pb-10 sm:flex-row sm:items-end sm:justify-between sm:gap-10">
+          <div className="flex flex-col gap-2">
+            <h3 className="font-heading text-xl font-semibold text-ink-foreground sm:text-2xl">
+              {dict.newsletter.footerHeading}
+            </h3>
+            <p className="max-w-sm text-xs/relaxed text-ink-foreground/70">
+              {dict.newsletter.footerDescription}
+            </p>
+          </div>
+          <div className="w-full sm:w-auto sm:min-w-88">
+            <SubscribeForm dict={dict} />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-10 pt-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3">
               <Crest size={44} />
@@ -127,14 +141,7 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-white/20 pt-6 sm:max-w-xs">
-          <h3 className="text-xs font-semibold tracking-[0.15em] text-gold uppercase">
-            {dict.newsletter.footerHeading}
-          </h3>
-          <SubscribeForm dict={dict} />
-        </div>
-
-        <div className="mt-6 flex flex-col gap-3 border-t border-white/20 pt-6 text-[0.7rem] text-ink-foreground/55 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-3 border-t border-white/20 pt-6 text-[0.7rem] text-ink-foreground/55 sm:flex-row sm:items-center sm:justify-between">
           <p>
             &copy; {new Date().getFullYear()} {siteConfig.name}.{" "}
             {dict.footer.runByPrefix} {dict.site.foundedBy}.
