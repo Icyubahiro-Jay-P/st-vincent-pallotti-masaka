@@ -681,7 +681,9 @@ const en = {
   },
 
   newsletter: {
-    footerHeading: "Newsletter",
+    footerHeading: "Stay in the loop",
+    footerDescription:
+      "Term dates, admissions windows, and school news in your inbox.",
     placeholder: "Your email address",
     button: "Subscribe",
     invalidEmail: "Enter a valid email address.",
