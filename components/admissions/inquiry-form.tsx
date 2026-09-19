@@ -14,7 +14,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { submitInquiry, type InquiryState } from "@/app/admissions/actions"
+import {
+  submitInquiry,
+  type InquiryState,
+} from "@/app/(marketing)/admissions/actions"
 import { programs } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import { cn } from "@/lib/utils"
@@ -29,7 +32,10 @@ export function AdmissionInquiryForm({
   defaultProgram?: string
 }) {
   const f = dict.admissions.form
-  const [state, formAction, pending] = useActionState(submitInquiry, initialState)
+  const [state, formAction, pending] = useActionState(
+    submitInquiry,
+    initialState
+  )
   const formRef = useRef<HTMLFormElement>(null)
   const validDefaultProgram = programs.find(
     (program) => dict.programs[program.slug].name === defaultProgram
@@ -59,7 +65,12 @@ export function AdmissionInquiryForm({
   }
 
   return (
-    <form ref={formRef} action={formAction} noValidate className="flex flex-col gap-5">
+    <form
+      ref={formRef}
+      action={formAction}
+      noValidate
+      className="flex flex-col gap-5"
+    >
       {state.status === "error" && state.message && (
         <p
           role="alert"
@@ -70,26 +81,62 @@ export function AdmissionInquiryForm({
       )}
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <Field label={f.parentName} htmlFor="parentName" error={state.fieldErrors?.parentName}>
-          <Input id="parentName" name="parentName" autoComplete="name" placeholder={f.parentNamePlaceholder} />
+        <Field
+          label={f.parentName}
+          htmlFor="parentName"
+          error={state.fieldErrors?.parentName}
+        >
+          <Input
+            id="parentName"
+            name="parentName"
+            autoComplete="name"
+            placeholder={f.parentNamePlaceholder}
+          />
         </Field>
-        <Field label={f.childName} htmlFor="childName" error={state.fieldErrors?.childName}>
-          <Input id="childName" name="childName" placeholder={f.childNamePlaceholder} />
+        <Field
+          label={f.childName}
+          htmlFor="childName"
+          error={state.fieldErrors?.childName}
+        >
+          <Input
+            id="childName"
+            name="childName"
+            placeholder={f.childNamePlaceholder}
+          />
         </Field>
         <Field label={f.email} htmlFor="email" error={state.fieldErrors?.email}>
-          <Input id="email" name="email" type="email" autoComplete="email" placeholder={f.emailPlaceholder} />
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder={f.emailPlaceholder}
+          />
         </Field>
         <Field label={f.phone} htmlFor="phone" error={state.fieldErrors?.phone}>
-          <Input id="phone" name="phone" type="tel" autoComplete="tel" placeholder={f.phonePlaceholder} />
+          <Input
+            id="phone"
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            placeholder={f.phonePlaceholder}
+          />
         </Field>
-        <Field label={f.program} htmlFor="program" error={state.fieldErrors?.program}>
+        <Field
+          label={f.program}
+          htmlFor="program"
+          error={state.fieldErrors?.program}
+        >
           <Select name="program" defaultValue={validDefaultProgramName}>
             <SelectTrigger id="program" className="w-full">
               <SelectValue placeholder={f.programPlaceholder} />
             </SelectTrigger>
             <SelectContent>
               {programs.map((program) => (
-                <SelectItem key={program.slug} value={dict.programs[program.slug].name}>
+                <SelectItem
+                  key={program.slug}
+                  value={dict.programs[program.slug].name}
+                >
                   {dict.programs[program.slug].name}
                 </SelectItem>
               ))}
@@ -113,10 +160,20 @@ export function AdmissionInquiryForm({
       </div>
 
       <Field label={f.message} htmlFor="message">
-        <Textarea id="message" name="message" rows={4} placeholder={f.messagePlaceholder} />
+        <Textarea
+          id="message"
+          name="message"
+          rows={4}
+          placeholder={f.messagePlaceholder}
+        />
       </Field>
 
-      <Button type="submit" size="lg" disabled={pending} className="h-11 self-start px-6 text-sm">
+      <Button
+        type="submit"
+        size="lg"
+        disabled={pending}
+        className="h-11 self-start px-6 text-sm"
+      >
         {pending ? (
           <>
             <Loader2 data-icon="inline-start" className="animate-spin" />
