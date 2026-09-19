@@ -295,7 +295,8 @@ const fr: Dictionary = {
       eyebrow: "Vie scolaire",
       title: "Dernières nouvelles de Pallotti",
       viewAll: "Voir toutes les actualités",
-      followText: "Suivez la vie quotidienne du campus sur Instagram et YouTube.",
+      followText:
+        "Suivez la vie quotidienne du campus sur Instagram et YouTube.",
       youtubeAriaLabel: "YouTube",
     },
     cta: {
@@ -663,38 +664,21 @@ const fr: Dictionary = {
       description:
         "Ce qui se passe sur le campus : programmes académiques, TVET et vie communautaire à Pallotti.",
     },
-    items: [
-      {
-        slug: "new-campus-inauguration",
-        title: "Inauguration officielle du nouveau campus",
-        date: "2022",
-        excerpt:
-          "Notre campus agrandi a été béni et inauguré par le cardinal Antoine Kambanda et le ministère de l'Éducation, portant la capacité à plus de 1 200 élèves.",
-        category: "Vie scolaire",
-      },
-      {
-        slug: "cambridge-results",
-        title: "De solides résultats dans les filières Cambridge et nationale",
-        date: "Cette année",
-        excerpt:
-          "Les élèves de Pallotti continuent de figurer parmi les écoles les plus performantes de la région de Kigali, dans les deux programmes.",
-        category: "Académique",
-      },
-      {
-        slug: "tvet-open-day",
-        title: "Journée portes ouvertes des ateliers TVET",
-        date: "Ce trimestre",
-        excerpt:
-          "Les familles ont visité nos ateliers de soudure, couture, coiffure, menuiserie et arts culinaires pour découvrir la formation professionnelle en action.",
-        category: "TVET",
-      },
-    ],
+    empty: "Pas encore d'actualités, revenez bientôt.",
     follow: {
       eyebrow: "Suivez-nous",
       title: "Plus de vie scolaire sur Instagram et YouTube",
       instagram: "Instagram",
       youtube: "YouTube",
     },
+  },
+
+  newsletter: {
+    footerHeading: "Bulletin d'information",
+    placeholder: "Votre adresse e-mail",
+    button: "S'abonner",
+    invalidEmail: "Entrez une adresse e-mail valide.",
+    success: "Merci ! Vous recevrez nos prochaines actualités.",
   },
 
   contact: {
