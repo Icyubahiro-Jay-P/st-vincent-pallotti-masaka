@@ -41,7 +41,7 @@ export function SubscribeForm({ dict }: { dict: Dictionary }) {
           required
           placeholder={n.placeholder}
           aria-label={n.placeholder}
-          className="bg-card"
+          className="bg-card pl-2"
         />
         <Button
           type="submit"
