@@ -3,13 +3,11 @@ import { Fraunces, Geist_Mono, Inter } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
-import { WhatsAppFab } from "@/components/whatsapp-fab"
 import { cn } from "@/lib/utils"
 import type { Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
+import { siteConfig } from "@/lib/site-config"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -25,7 +23,6 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
-const siteUrl = "https://www.pallottimasaka.org"
 const ogLocales: Record<Locale, string> = { en: "en_RW", fr: "fr_RW" }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -33,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const dict = getDictionary(locale)
 
   return {
-    metadataBase: new URL(siteUrl),
+    metadataBase: new URL(siteConfig.url),
     title: {
       default: dict.meta.home.title,
       template: "%s | Saint Vincent Pallotti School Masaka",
@@ -50,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: dict.meta.home.title,
       description: dict.meta.home.ogDescription,
-      url: siteUrl,
+      url: siteConfig.url,
       siteName: "Saint Vincent Pallotti School Masaka",
       locale: ogLocales[locale],
       type: "website",
@@ -64,7 +61,6 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const locale = await getLocale()
-  const dict = getDictionary(locale)
 
   return (
     <html
@@ -80,12 +76,7 @@ export default async function RootLayout({
       )}
     >
       <body className="flex min-h-svh flex-col">
-        <ThemeProvider>
-          <SiteHeader dict={dict} />
-          <main className="flex-1">{children}</main>
-          <SiteFooter dict={dict} />
-          <WhatsAppFab dict={dict} />
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   )
