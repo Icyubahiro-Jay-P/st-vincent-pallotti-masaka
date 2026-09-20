@@ -1,12 +1,27 @@
 import { AdminLoginForm } from "@/components/admin/login-form"
+import { AdminAuthShell } from "@/components/admin/auth-shell"
 
-export default function AdminLoginPage() {
+export default async function AdminLoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ reset?: string }>
+}) {
+  const { reset } = await searchParams
+
   return (
-    <div className="mx-auto flex max-w-sm flex-col gap-6 pt-10">
-      <h1 className="font-heading text-xl font-semibold text-foreground">
-        Admin sign in
-      </h1>
+    <AdminAuthShell
+      title="Admin sign in"
+      description="Sign in to manage events, programs, and admissions."
+    >
+      {reset === "success" && (
+        <p
+          role="status"
+          className="border border-border bg-muted/40 px-4 py-3 text-xs text-foreground"
+        >
+          Your password has been reset. Sign in with your new password.
+        </p>
+      )}
       <AdminLoginForm />
-    </div>
+    </AdminAuthShell>
   )
 }
