@@ -7,7 +7,12 @@ import {
   YoutubeGlyph,
   FacebookGlyph,
 } from "@/components/icons/social-icons"
-import { navLinks, programHref, siteConfig, socialLinks } from "@/lib/site-config"
+import {
+  navLinks,
+  programHref,
+  siteConfig,
+  socialLinks,
+} from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import type { Locale } from "@/lib/i18n/config"
 import { getPublishedPrograms } from "@/lib/programs"
