@@ -78,7 +78,7 @@ export function AdminToastRuntime() {
         theme={mounted && resolvedTheme === "dark" ? "dark" : "light"}
         richColors
         closeButton
-        position="top-right"
+        position="bottom-right"
       />
     </>
   )
