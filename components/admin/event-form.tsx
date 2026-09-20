@@ -27,6 +27,7 @@ const initialState: EventFormState = { status: "idle" }
 
 export type EventFormDefaults = {
   id: number
+  slug: string
   titleEn: string
   titleFr: string
   excerptEn: string
@@ -106,6 +107,7 @@ function xhrUpload(
 
 async function uploadAndCompress(
   file: File,
+  eventFolder: string,
   onProgress: (status: UploadStatus, progress: number) => void
 ): Promise<UploadedMedia> {
   const isVideo = file.type.startsWith("video/")
@@ -117,7 +119,8 @@ async function uploadAndCompress(
 
   const credentials = await getUploadCredentials(
     compressed.name,
-    compressed.type
+    compressed.type,
+    eventFolder
   )
 
   let cloudinaryRatio = 0
@@ -195,6 +198,20 @@ export function EventForm({
   const [cover, setCover] = useState<CoverUpload | null>(null)
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([])
 
+  // A saved event already has a stable slug; use it so re-uploads land in
+  // the same Cloudinary folder. A new event doesn't have one yet, so derive
+  // one from the title once (on the first upload) and stick with it for the
+  // rest of this form session, even if the title changes afterwards.
+  const newEventFolderRef = useRef<string | null>(null)
+  function getEventFolder() {
+    if (defaultEvent?.slug) return defaultEvent.slug
+    if (!newEventFolderRef.current) {
+      const base = fields.titleEn.trim() || "untitled-event"
+      newEventFolderRef.current = `${base}-${Date.now().toString(36)}`
+    }
+    return newEventFolderRef.current
+  }
+
   function setField(key: keyof LocalizedFields, value: string) {
     setFields((prev) => ({ ...prev, [key]: value }))
   }
@@ -229,7 +246,7 @@ export function EventForm({
     if (!file) return
 
     setCover({ file, status: "compressing", progress: 0 })
-    uploadAndCompress(file, (status, progress) =>
+    uploadAndCompress(file, getEventFolder(), (status, progress) =>
       setCover((prev) =>
         prev && prev.file === file ? { ...prev, status, progress } : prev
       )
@@ -263,8 +280,9 @@ export function EventForm({
     }))
     setGalleryItems((prev) => [...prev, ...newItems])
 
+    const eventFolder = getEventFolder()
     for (const item of newItems) {
-      uploadAndCompress(item.file, (status, progress) =>
+      uploadAndCompress(item.file, eventFolder, (status, progress) =>
         setGalleryItems((prev) =>
           prev.map((it) =>
             it.id === item.id ? { ...it, status, progress } : it
