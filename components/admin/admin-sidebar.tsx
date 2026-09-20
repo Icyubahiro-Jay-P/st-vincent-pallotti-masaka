@@ -6,10 +6,14 @@ import { usePathname } from "next/navigation"
 import {
   CalendarDays,
   GraduationCap,
+  HeartHandshake,
   Inbox,
+  LayoutDashboard,
   Menu,
+  Milestone,
   PanelLeftClose,
   PanelLeftOpen,
+  Settings,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -26,7 +30,11 @@ import { cn } from "@/lib/utils"
 const navItems = [
   { href: "/admin/events", label: "Events", icon: CalendarDays },
   { href: "/admin/programs", label: "Programs", icon: GraduationCap },
+  { href: "/admin/milestones", label: "Milestones", icon: Milestone },
+  { href: "/admin/values", label: "Values", icon: HeartHandshake },
+  { href: "/admin/homepage", label: "Homepage", icon: LayoutDashboard },
   { href: "/admin/admissions", label: "Admissions", icon: Inbox },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
 ]
 
 const COLLAPSED_KEY = "admin-sidebar-collapsed"
