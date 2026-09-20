@@ -594,6 +594,7 @@ const en = {
       childName: "Enter the student's name.",
       program: "Select a program.",
       formError: "Please fix the fields below and try again.",
+      rateLimited: "Too many submissions. Please try again in a bit.",
     },
     // {parentName} and {childName} are replaced at submit time; keep both
     // placeholders somewhere in the sentence when translating.
@@ -625,6 +626,7 @@ const en = {
     button: "Subscribe",
     invalidEmail: "Enter a valid email address.",
     success: "Thanks! You'll hear about our next updates.",
+    rateLimited: "Too many attempts. Please try again in a bit.",
   },
 
   contact: {
