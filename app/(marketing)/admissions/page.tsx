@@ -12,10 +12,10 @@ import { PageHero } from "@/components/page-hero"
 import { AdmissionInquiryForm } from "@/components/admissions/inquiry-form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon"
-import { siteConfig } from "@/lib/site-config"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getPublishedPrograms } from "@/lib/programs"
+import { getSiteSettings } from "@/lib/site-settings"
 
 const processIcons = [
   UserPlus,
@@ -43,6 +43,7 @@ export default async function AdmissionsPage({
   const dict = getDictionary(locale)
   const ad = dict.admissions
   const publishedPrograms = await getPublishedPrograms(locale)
+  const settings = await getSiteSettings()
 
   return (
     <>
@@ -173,7 +174,7 @@ export default async function AdmissionsPage({
               </p>
               <div className="mt-5 flex flex-col gap-3">
                 <a
-                  href={`https://wa.me/${siteConfig.whatsappNumber}`}
+                  href={`https://wa.me/${settings.whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-gold px-3.5 py-2.5 text-xs font-semibold text-gold-foreground hover:bg-gold/85"
@@ -182,18 +183,18 @@ export default async function AdmissionsPage({
                   {ad.sidebar.whatsapp}
                 </a>
                 <a
-                  href={`tel:${siteConfig.phoneHref}`}
+                  href={`tel:${settings.phoneHref}`}
                   className="inline-flex items-center gap-2 border border-white/20 px-3.5 py-2.5 text-xs font-medium hover:bg-white/10"
                 >
                   <Phone className="size-4" />
-                  {siteConfig.phoneDisplay}
+                  {settings.phoneDisplay}
                 </a>
                 <a
-                  href={`mailto:${siteConfig.email}`}
+                  href={`mailto:${settings.email}`}
                   className="inline-flex items-center gap-2 border border-white/20 px-3.5 py-2.5 text-xs font-medium hover:bg-white/10"
                 >
                   <Mail className="size-4" />
-                  {siteConfig.email}
+                  {settings.email}
                 </a>
               </div>
             </div>
