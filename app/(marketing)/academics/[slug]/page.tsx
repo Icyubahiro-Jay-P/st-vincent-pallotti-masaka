@@ -6,14 +6,16 @@ import { ArrowRight, CheckCircle2 } from "lucide-react"
 import { PageHero } from "@/components/page-hero"
 import { Button } from "@/components/ui/button"
 import { iconMap } from "@/components/icon-map"
-import { programs, programHref, type ProgramSlug } from "@/lib/site-config"
+import { programHref } from "@/lib/site-config"
+import { getPublishedPrograms } from "@/lib/programs"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 
-const detailPrograms = programs.filter((program) => program.slug !== "tvet")
-
-export function generateStaticParams() {
-  return detailPrograms.map((program) => ({ slug: program.slug }))
+export async function generateStaticParams() {
+  const allPrograms = await getPublishedPrograms("en")
+  return allPrograms
+    .filter((program) => program.slug !== "tvet")
+    .map((program) => ({ slug: program.slug }))
 }
 
 export async function generateMetadata({
@@ -22,13 +24,14 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const program = detailPrograms.find((item) => item.slug === slug)
+  const locale = await getLocale()
+  const allPrograms = await getPublishedPrograms(locale)
+  const program = allPrograms.find(
+    (item) => item.slug === slug && item.slug !== "tvet"
+  )
   if (!program) return {}
 
-  const locale = await getLocale()
-  const dict = getDictionary(locale)
-  const text = dict.programs[program.slug]
-  return { title: text.name, description: text.description }
+  return { title: program.name, description: program.description }
 }
 
 export default async function ProgramDetailPage({
@@ -37,24 +40,26 @@ export default async function ProgramDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const program = detailPrograms.find((item) => item.slug === slug)
+  const locale = await getLocale()
+  const dict = getDictionary(locale)
+  const allPrograms = await getPublishedPrograms(locale)
+  const program = allPrograms.find(
+    (item) => item.slug === slug && item.slug !== "tvet"
+  )
 
   if (!program) {
     notFound()
   }
 
-  const locale = await getLocale()
-  const dict = getDictionary(locale)
-  const text = dict.programs[program.slug]
   const Icon = iconMap[program.icon]
-  const otherPrograms = programs.filter((item) => item.slug !== program.slug)
+  const otherPrograms = allPrograms.filter((item) => item.slug !== program.slug)
 
   return (
     <>
       <PageHero
         eyebrow={dict.academics.hero.eyebrow}
-        title={text.name}
-        description={text.description}
+        title={program.name}
+        description={program.description}
       />
 
       <section className="border-b border-border bg-background py-16 sm:py-20">
@@ -68,24 +73,28 @@ export default async function ProgramDetailPage({
                 {dict.academics.detail.ageRangeLabel}
               </p>
               <p className="mt-1 font-heading text-2xl font-semibold text-foreground">
-                {text.ageRange}
+                {program.ageRange}
               </p>
             </div>
             <Button
               render={
-                <Link href={`/admissions?program=${encodeURIComponent(text.name)}`} />
+                <Link
+                  href={`/admissions?program=${encodeURIComponent(program.name)}`}
+                />
               }
               className="mt-2 h-10 self-start px-5 text-xs"
             >
-              {dict.common.applyTo} {text.name}
+              {dict.common.applyTo} {program.name}
               <ArrowRight data-icon="inline-end" className="size-3.5" />
             </Button>
           </div>
 
           <div className="lg:col-span-2">
-            <p className="text-sm/relaxed text-muted-foreground">{text.overview}</p>
+            <p className="text-sm/relaxed text-muted-foreground">
+              {program.overview}
+            </p>
             <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {text.highlights.map((item) => (
+              {program.highlights.map((item) => (
                 <li
                   key={item}
                   className="flex items-start gap-2.5 border border-border bg-card px-4 py-3 text-xs text-foreground"
@@ -113,18 +122,17 @@ export default async function ProgramDetailPage({
           <div className="mt-8 grid grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
             {otherPrograms.map((other) => {
               const OtherIcon = iconMap[other.icon]
-              const otherText = dict.programs[other.slug]
               return (
                 <Link
                   key={other.slug}
-                  href={programHref(other.slug as ProgramSlug)}
+                  href={programHref(other.slug)}
                   className="group flex items-center gap-3 bg-card p-5 transition-colors hover:bg-muted"
                 >
                   <span className="flex size-9 shrink-0 items-center justify-center border border-border bg-accent text-accent-foreground">
                     {OtherIcon ? <OtherIcon className="size-4" /> : null}
                   </span>
                   <span className="text-sm font-medium text-foreground group-hover:text-primary">
-                    {otherText.name}
+                    {other.name}
                   </span>
                 </Link>
               )
