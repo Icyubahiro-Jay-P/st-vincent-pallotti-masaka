@@ -7,8 +7,14 @@ import { auth } from "@/lib/auth"
 // runtime (confirmed in node_modules/next's own docs), so calling
 // getSession here (a real DB round trip, gated by Better Auth's cookie
 // cache) has no edge-runtime restrictions to work around.
+const PUBLIC_ADMIN_PATHS = new Set([
+  "/admin/login",
+  "/admin/login/forgot-password",
+  "/admin/reset-password",
+])
+
 export async function proxy(request: NextRequest) {
-  if (request.nextUrl.pathname === "/admin/login") {
+  if (PUBLIC_ADMIN_PATHS.has(request.nextUrl.pathname)) {
     return NextResponse.next()
   }
 
