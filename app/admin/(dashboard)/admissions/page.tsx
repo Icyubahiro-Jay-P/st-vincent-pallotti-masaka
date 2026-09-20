@@ -2,6 +2,7 @@ import { desc } from "drizzle-orm"
 
 import { db } from "@/lib/db"
 import { admissionsInquiries } from "@/lib/db/schema"
+import { InquiryStatusSelect } from "@/components/admin/inquiry-status-select"
 
 export default async function AdminAdmissionsPage() {
   const inquiries = await db
@@ -21,6 +22,7 @@ export default async function AdminAdmissionsPage() {
         <table className="w-full text-left text-sm">
           <thead className="bg-muted/40 text-xs tracking-wide text-muted-foreground uppercase">
             <tr>
+              <th className="px-4 py-3 font-medium">Status</th>
               <th className="px-4 py-3 font-medium">Parent</th>
               <th className="px-4 py-3 font-medium">Child</th>
               <th className="px-4 py-3 font-medium">Program</th>
@@ -33,6 +35,9 @@ export default async function AdminAdmissionsPage() {
           <tbody className="divide-y divide-border">
             {inquiries.map((inquiry) => (
               <tr key={inquiry.id}>
+                <td className="px-4 py-3">
+                  <InquiryStatusSelect id={inquiry.id} status={inquiry.status} />
+                </td>
                 <td className="px-4 py-3 text-foreground">
                   {inquiry.parentName}
                 </td>
@@ -65,7 +70,7 @@ export default async function AdminAdmissionsPage() {
             {inquiries.length === 0 && (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={8}
                   className="px-4 py-8 text-center text-muted-foreground"
                 >
                   No admissions inquiries yet.
