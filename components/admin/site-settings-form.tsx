@@ -27,6 +27,7 @@ export type SiteSettingsDefaults = {
   youtubeUrl: string
   facebookUrl: string
   xUrl: string | null
+  updatedAt: Date
 }
 
 export function SiteSettingsForm({
@@ -60,7 +61,10 @@ export function SiteSettingsForm({
         </p>
       )}
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div
+        key={defaults.updatedAt.toISOString()}
+        className="grid grid-cols-1 gap-5 sm:grid-cols-2"
+      >
         <Field
           label="Phone (display)"
           name="phoneDisplay"
