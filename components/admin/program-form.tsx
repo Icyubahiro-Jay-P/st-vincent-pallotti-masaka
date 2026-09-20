@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select"
 import { iconMap } from "@/components/icon-map"
 import { translateField } from "@/lib/translate-action"
+import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
 import {
   saveProgram,
   type ProgramFormState,
@@ -86,6 +87,7 @@ export function ProgramForm({
   defaultPosition?: number
 }) {
   const [state, formAction, pending] = useActionState(saveProgram, initialState)
+  useToastOnActionState(state.status, state.message)
 
   const name = useTranslatedPair(
     defaultProgram?.nameEn ?? "",
