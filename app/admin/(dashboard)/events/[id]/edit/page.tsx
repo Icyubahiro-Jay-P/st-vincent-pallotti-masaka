@@ -32,6 +32,7 @@ export default async function EditEventPage({
       <EventForm
         defaultEvent={{
           id: event.id,
+          slug: event.slug,
           titleEn: event.titleEn,
           titleFr: event.titleFr,
           excerptEn: event.excerptEn,
