@@ -10,6 +10,7 @@ import {
   updateSiteSettings,
   type SiteSettingsFormState,
 } from "@/app/admin/(dashboard)/settings/actions"
+import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
 
 const initialState: SiteSettingsFormState = { status: "idle" }
 
@@ -37,6 +38,7 @@ export function SiteSettingsForm({
     updateSiteSettings,
     initialState
   )
+  useToastOnActionState(state.status, state.message)
 
   return (
     <form action={formAction} noValidate className="flex flex-col gap-6">
