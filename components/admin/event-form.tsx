@@ -580,28 +580,34 @@ export function EventForm({
         </>
       )}
 
-      <div className="flex gap-3">
-        <Button
-          type="submit"
-          name="intent"
-          value="draft"
-          variant="outline"
-          disabled={pending || uploadsInFlight}
-          className="h-11 px-6 text-sm"
-        >
-          {pending ? <Loader2 className="animate-spin" /> : null}
-          Save draft
-        </Button>
-        <Button
-          type="submit"
-          name="intent"
-          value="publish"
-          disabled={pending || uploadsInFlight}
-          className="h-11 px-6 text-sm"
-        >
-          {pending ? <Loader2 className="animate-spin" /> : null}
-          Publish
-        </Button>
+      <div className="flex flex-col gap-2">
+        <div className="flex gap-3">
+          <Button
+            type="submit"
+            name="intent"
+            value="draft"
+            variant="outline"
+            disabled={pending || uploadsInFlight}
+            className="h-11 px-6 text-sm"
+          >
+            {pending ? <Loader2 className="animate-spin" /> : null}
+            Save draft
+          </Button>
+          <Button
+            type="submit"
+            name="intent"
+            value="publish"
+            disabled={pending || uploadsInFlight}
+            className="h-11 px-6 text-sm"
+          >
+            {pending ? <Loader2 className="animate-spin" /> : null}
+            Publish
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          A draft only needs a title: every other field can stay empty until
+          you&rsquo;re ready to publish.
+        </p>
       </div>
     </form>
   )
