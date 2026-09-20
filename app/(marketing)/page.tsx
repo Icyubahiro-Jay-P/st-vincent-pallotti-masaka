@@ -8,6 +8,7 @@ import { NewsTeaser } from "@/components/home/news-teaser"
 import { CtaBand } from "@/components/home/cta-band"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
+import { getPublishedPrograms } from "@/lib/programs"
 import { db } from "@/lib/db"
 import { events } from "@/lib/db/schema"
 
@@ -20,15 +21,16 @@ export default async function Page() {
     .where(eq(events.status, "published"))
     .orderBy(desc(events.publishedAt))
     .limit(3)
+  const publishedPrograms = await getPublishedPrograms(locale)
 
   return (
     <>
       <Hero dict={dict} />
       <ProgramsGrid
-        dict={dict}
         eyebrow={dict.home.programs.eyebrow}
         title={dict.home.programs.title}
         description={dict.home.programs.description}
+        items={publishedPrograms}
       />
       <Pathway dict={dict} />
       <WhyPallotti dict={dict} />
