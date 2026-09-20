@@ -24,6 +24,17 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+// Admin-authored excerpt text lands raw in this email's HTML below; escape it
+// so a stray "<"/"&" in someone's writing can't break or inject markup.
+function escapeHtml(input: string): string {
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+}
+
 export async function sendNewsletterForEvent(eventId: number) {
   const [event] = await db.select().from(events).where(eq(events.id, eventId))
   if (!event) return
@@ -59,7 +70,7 @@ export async function sendNewsletterForEvent(eventId: number) {
           to: subscriber.email,
           subject: title,
           html: `
-            <p>${excerpt}</p>
+            <p>${escapeHtml(excerpt)}</p>
             <p><a href="${siteConfig.url}/news/${event.slug}">${isFrench ? "Lire la suite" : "Read more"}</a></p>
             <hr />
             <p style="font-size:12px;color:#666"><a href="${unsubscribeUrl}">${isFrench ? "Se désabonner" : "Unsubscribe"}</a></p>
