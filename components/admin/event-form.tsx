@@ -18,6 +18,7 @@ import {
   saveEvent,
   type EventFormState,
 } from "@/app/admin/(dashboard)/events/actions"
+import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
 import { translateField } from "@/lib/translate-action"
 import { getUploadCredentials } from "@/app/admin/(dashboard)/events/upload-actions"
 import { compressImage } from "@/lib/media/compress-image"
@@ -179,6 +180,7 @@ export function EventForm({
   existingMedia?: ExistingEventMedia[]
 }) {
   const [state, formAction, pending] = useActionState(saveEvent, initialState)
+  useToastOnActionState(state.status, state.message)
 
   const [fields, setFields] = useState<LocalizedFields>({
     titleEn: defaultEvent?.titleEn ?? "",
