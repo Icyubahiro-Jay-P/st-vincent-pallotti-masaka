@@ -2,12 +2,38 @@
 
 import { revalidatePath } from "next/cache"
 import { eq } from "drizzle-orm"
+import { z } from "zod"
 
 import { db } from "@/lib/db"
 import { siteSettings } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
+import {
+  emailSchema,
+  nonEmptyString,
+  phoneSchema,
+  urlSchema,
+  zodFieldErrors,
+} from "@/lib/validation"
 
 const SETTINGS_ID = 1
+
+const settingsSchema = z.object({
+  phoneDisplay: nonEmptyString(50, "a display phone number"),
+  phoneHref: phoneSchema,
+  whatsappNumber: phoneSchema,
+  email: emailSchema,
+  mapsQuery: urlSchema,
+  location: nonEmptyString(200, "a location"),
+  motto: nonEmptyString(200, "a motto"),
+  spiritualMottoLatin: nonEmptyString(200, "the Latin motto"),
+  instagramUrl: urlSchema,
+  youtubeUrl: urlSchema,
+  facebookUrl: urlSchema,
+  // Optional: no admin has set an X account yet on many deployments, and
+  // this field was added nullable — empty string is valid ("not set"),
+  // anything non-empty must be a real URL.
+  xUrl: z.union([urlSchema, z.literal("")]),
+})
 
 export type SiteSettingsFormState = {
   status: "idle" | "error" | "success"
@@ -36,42 +62,43 @@ export async function updateSiteSettings(
 ): Promise<SiteSettingsFormState> {
   await requireAdmin()
 
-  const phoneDisplay = String(formData.get("phoneDisplay") ?? "").trim()
-  const phoneHref = String(formData.get("phoneHref") ?? "").trim()
-  const whatsappNumber = String(formData.get("whatsappNumber") ?? "").trim()
-  const email = String(formData.get("email") ?? "").trim()
-  const mapsQuery = String(formData.get("mapsQuery") ?? "").trim()
-  const location = String(formData.get("location") ?? "").trim()
-  const motto = String(formData.get("motto") ?? "").trim()
-  const spiritualMottoLatin = String(
-    formData.get("spiritualMottoLatin") ?? ""
-  ).trim()
-  const instagramUrl = String(formData.get("instagramUrl") ?? "").trim()
-  const youtubeUrl = String(formData.get("youtubeUrl") ?? "").trim()
-  const facebookUrl = String(formData.get("facebookUrl") ?? "").trim()
-  const xUrl = String(formData.get("xUrl") ?? "").trim() || null
+  const parsed = settingsSchema.safeParse({
+    phoneDisplay: String(formData.get("phoneDisplay") ?? ""),
+    phoneHref: String(formData.get("phoneHref") ?? ""),
+    whatsappNumber: String(formData.get("whatsappNumber") ?? ""),
+    email: String(formData.get("email") ?? ""),
+    mapsQuery: String(formData.get("mapsQuery") ?? ""),
+    location: String(formData.get("location") ?? ""),
+    motto: String(formData.get("motto") ?? ""),
+    spiritualMottoLatin: String(formData.get("spiritualMottoLatin") ?? ""),
+    instagramUrl: String(formData.get("instagramUrl") ?? ""),
+    youtubeUrl: String(formData.get("youtubeUrl") ?? ""),
+    facebookUrl: String(formData.get("facebookUrl") ?? ""),
+    xUrl: String(formData.get("xUrl") ?? "").trim(),
+  })
 
-  const fieldErrors: SiteSettingsFormState["fieldErrors"] = {}
-  if (!phoneDisplay) fieldErrors.phoneDisplay = "Enter a display phone number."
-  if (!phoneHref) fieldErrors.phoneHref = "Enter a tel: phone number."
-  if (!whatsappNumber) fieldErrors.whatsappNumber = "Enter a WhatsApp number."
-  if (!email) fieldErrors.email = "Enter a contact email."
-  if (!mapsQuery) fieldErrors.mapsQuery = "Enter a Google Maps link."
-  if (!location) fieldErrors.location = "Enter a location."
-  if (!motto) fieldErrors.motto = "Enter a motto."
-  if (!spiritualMottoLatin)
-    fieldErrors.spiritualMottoLatin = "Enter the Latin motto."
-  if (!instagramUrl) fieldErrors.instagramUrl = "Enter an Instagram link."
-  if (!youtubeUrl) fieldErrors.youtubeUrl = "Enter a YouTube link."
-  if (!facebookUrl) fieldErrors.facebookUrl = "Enter a Facebook link."
-
-  if (Object.keys(fieldErrors).length > 0) {
+  if (!parsed.success) {
     return {
       status: "error",
       message: "Please fix the fields below.",
-      fieldErrors,
+      fieldErrors: zodFieldErrors(parsed.error),
     }
   }
+
+  const {
+    phoneDisplay,
+    phoneHref,
+    whatsappNumber,
+    email,
+    mapsQuery,
+    location,
+    motto,
+    spiritualMottoLatin,
+    instagramUrl,
+    youtubeUrl,
+    facebookUrl,
+  } = parsed.data
+  const xUrl = parsed.data.xUrl || null
 
   await db
     .update(siteSettings)
