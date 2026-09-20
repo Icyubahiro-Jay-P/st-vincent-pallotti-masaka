@@ -1,4 +1,5 @@
 import { MilestoneForm } from "@/components/admin/milestone-form"
+import { AdminBreadcrumb } from "@/components/admin/admin-breadcrumb"
 import { db } from "@/lib/db"
 import { milestones } from "@/lib/db/schema"
 
@@ -7,6 +8,12 @@ export default async function NewMilestonePage() {
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
+      <AdminBreadcrumb
+        items={[
+          { label: "Milestones", href: "/admin/milestones" },
+          { label: "New milestone" },
+        ]}
+      />
       <h1 className="font-heading text-xl font-semibold text-foreground">
         New milestone
       </h1>
