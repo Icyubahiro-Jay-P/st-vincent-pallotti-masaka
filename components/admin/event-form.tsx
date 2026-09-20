@@ -121,7 +121,8 @@ async function uploadAndCompress(
   const credentials = await getUploadCredentials(
     compressed.name,
     compressed.type,
-    eventFolder
+    eventFolder,
+    compressed.size
   )
 
   let cloudinaryRatio = 0
