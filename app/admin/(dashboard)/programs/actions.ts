@@ -150,7 +150,7 @@ export async function saveProgram(
   revalidatePath("/tvet")
   revalidatePath("/academics/[slug]", "page")
   revalidatePath("/admissions")
-  redirect("/admin/programs")
+  redirect("/admin/programs?toast=program-saved")
 }
 
 export async function deleteProgram(formData: FormData) {
@@ -162,4 +162,5 @@ export async function deleteProgram(formData: FormData) {
   revalidatePath("/tvet")
   revalidatePath("/academics/[slug]", "page")
   revalidatePath("/admissions")
+  redirect("/admin/programs?toast=program-deleted")
 }
