@@ -16,7 +16,7 @@ export default async function MarketingLayout({
     <>
       <SiteHeader dict={dict} />
       <main className="flex-1">{children}</main>
-      <SiteFooter dict={dict} />
+      <SiteFooter dict={dict} locale={locale} />
       <WhatsAppFab dict={dict} />
     </>
   )
