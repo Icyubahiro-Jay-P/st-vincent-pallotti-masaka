@@ -40,7 +40,7 @@ export type BackupUploadCredentials = {
 const MAX_BACKUP_BYTES = 30 * 1024 * 1024 // headroom above the 25MB video ceiling
 
 // Presigned POST so the raw/original file goes straight from the admin's
-// browser into the private backup bucket — the same direct-upload pattern
+// browser into the private backup bucket, the same direct-upload pattern
 // as Cloudinary, so the file never touches our serverless function.
 export async function presignBackupUpload(
   key: string,
