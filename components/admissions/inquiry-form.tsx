@@ -18,7 +18,6 @@ import {
   submitInquiry,
   type InquiryState,
 } from "@/app/(marketing)/admissions/actions"
-import { programs } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import { cn } from "@/lib/utils"
 
@@ -26,9 +25,11 @@ const initialState: InquiryState = { status: "idle" }
 
 export function AdmissionInquiryForm({
   dict,
+  programs,
   defaultProgram,
 }: {
   dict: Dictionary
+  programs: { slug: string; name: string }[]
   defaultProgram?: string
 }) {
   const f = dict.admissions.form
@@ -37,12 +38,9 @@ export function AdmissionInquiryForm({
     initialState
   )
   const formRef = useRef<HTMLFormElement>(null)
-  const validDefaultProgram = programs.find(
-    (program) => dict.programs[program.slug].name === defaultProgram
-  )
-  const validDefaultProgramName = validDefaultProgram
-    ? dict.programs[validDefaultProgram.slug].name
-    : undefined
+  const validDefaultProgramName = programs.find(
+    (program) => program.name === defaultProgram
+  )?.name
 
   useEffect(() => {
     if (state.status === "success") {
@@ -133,11 +131,8 @@ export function AdmissionInquiryForm({
             </SelectTrigger>
             <SelectContent>
               {programs.map((program) => (
-                <SelectItem
-                  key={program.slug}
-                  value={dict.programs[program.slug].name}
-                >
-                  {dict.programs[program.slug].name}
+                <SelectItem key={program.slug} value={program.name}>
+                  {program.name}
                 </SelectItem>
               ))}
             </SelectContent>
