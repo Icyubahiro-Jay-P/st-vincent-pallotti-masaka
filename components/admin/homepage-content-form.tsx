@@ -36,6 +36,7 @@ export type HomepageContentDefaults = {
   panelEstablishedEn: string
   panelEstablishedFr: string
   stats: HomepageStat[]
+  updatedAt: Date
 }
 
 function useTranslatedPair(initialEn: string, initialFr: string) {
@@ -79,6 +80,56 @@ export function HomepageContentForm({
   )
   useToastOnActionState(state.status, state.message)
 
+  return (
+    <form action={formAction} noValidate className="flex flex-col gap-6">
+      {state.status === "error" && state.message && (
+        <p
+          role="alert"
+          className="border border-destructive/30 bg-destructive/10 px-4 py-3 text-xs text-destructive"
+        >
+          {state.message}
+        </p>
+      )}
+
+      {state.status === "success" && state.message && (
+        <p
+          role="status"
+          className="border border-primary/30 bg-primary/10 px-4 py-3 text-xs text-foreground"
+        >
+          {state.message}
+        </p>
+      )}
+
+      {/* Keyed on updatedAt so a successful save (which doesn't navigate
+          away) remounts these fields with fresh defaults instead of the
+          local useState/useTranslatedPair hooks silently keeping their
+          pre-save values. useActionState/the toast above stay outside this
+          key, so they're unaffected by the remount. */}
+      <HomepageFields
+        key={defaults.updatedAt.toISOString()}
+        defaults={defaults}
+        fieldErrors={state.fieldErrors}
+      />
+
+      <Button
+        type="submit"
+        disabled={pending}
+        className="h-11 self-start px-6 text-sm"
+      >
+        {pending ? <Loader2 className="animate-spin" /> : null}
+        Save homepage content
+      </Button>
+    </form>
+  )
+}
+
+function HomepageFields({
+  defaults,
+  fieldErrors,
+}: {
+  defaults: HomepageContentDefaults
+  fieldErrors?: HomepageContentFormState["fieldErrors"]
+}) {
   const eyebrow = useTranslatedPair(defaults.eyebrowEn, defaults.eyebrowFr)
   const headline = useTranslatedPair(defaults.headlineEn, defaults.headlineFr)
   const headlineEmphasis = useTranslatedPair(
@@ -130,25 +181,7 @@ export function HomepageContentForm({
   }
 
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-6">
-      {state.status === "error" && state.message && (
-        <p
-          role="alert"
-          className="border border-destructive/30 bg-destructive/10 px-4 py-3 text-xs text-destructive"
-        >
-          {state.message}
-        </p>
-      )}
-
-      {state.status === "success" && state.message && (
-        <p
-          role="status"
-          className="border border-primary/30 bg-primary/10 px-4 py-3 text-xs text-foreground"
-        >
-          {state.message}
-        </p>
-      )}
-
+    <>
       <TranslatedField
         label="Eyebrow"
         idPrefix="eyebrow"
@@ -246,9 +279,9 @@ export function HomepageContentForm({
             </Button>
           </div>
         ))}
-        {state.fieldErrors?.stats ? (
+        {fieldErrors?.stats ? (
           <p className="text-[0.7rem] text-destructive">
-            {state.fieldErrors.stats}
+            {fieldErrors.stats}
           </p>
         ) : null}
         <Button
@@ -262,16 +295,7 @@ export function HomepageContentForm({
           Add stat
         </Button>
       </div>
-
-      <Button
-        type="submit"
-        disabled={pending}
-        className="h-11 self-start px-6 text-sm"
-      >
-        {pending ? <Loader2 className="animate-spin" /> : null}
-        Save homepage content
-      </Button>
-    </form>
+    </>
   )
 }
 
