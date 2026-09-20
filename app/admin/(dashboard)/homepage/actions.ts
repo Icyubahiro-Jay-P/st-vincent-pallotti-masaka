@@ -2,12 +2,38 @@
 
 import { revalidatePath } from "next/cache"
 import { eq } from "drizzle-orm"
+import { z } from "zod"
 
 import { db } from "@/lib/db"
 import { homepageContent, type HomepageStat } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
+import { nonEmptyString, zodFieldErrors } from "@/lib/validation"
 
 const CONTENT_ID = 1
+
+const homepageTextSchema = z.object({
+  eyebrowEn: nonEmptyString(200, "an English eyebrow"),
+  eyebrowFr: nonEmptyString(200, "a French eyebrow"),
+  headlineEn: nonEmptyString(200, "an English headline"),
+  headlineFr: nonEmptyString(200, "a French headline"),
+  headlineEmphasisEn: nonEmptyString(200, "an English headline emphasis"),
+  headlineEmphasisFr: nonEmptyString(200, "a French headline emphasis"),
+  paragraphEn: nonEmptyString(2000, "English paragraph text"),
+  paragraphFr: nonEmptyString(2000, "French paragraph text"),
+  calloutValueEn: nonEmptyString(200, "an English callout value"),
+  calloutValueFr: nonEmptyString(200, "a French callout value"),
+  calloutTextEn: nonEmptyString(200, "English callout text"),
+  calloutTextFr: nonEmptyString(200, "French callout text"),
+  panelEstablishedEn: nonEmptyString(200, "English panel text"),
+  panelEstablishedFr: nonEmptyString(200, "French panel text"),
+})
+
+const statSchema = z.object({
+  valueEn: nonEmptyString(50, "a value"),
+  valueFr: nonEmptyString(50, "a value"),
+  labelEn: nonEmptyString(50, "a label"),
+  labelFr: nonEmptyString(50, "a label"),
+})
 
 export type HomepageContentFormState = {
   status: "idle" | "error" | "success"
@@ -67,56 +93,34 @@ export async function updateHomepageContent(
 ): Promise<HomepageContentFormState> {
   await requireAdmin()
 
-  const eyebrowEn = String(formData.get("eyebrowEn") ?? "").trim()
-  const eyebrowFr = String(formData.get("eyebrowFr") ?? "").trim()
-  const headlineEn = String(formData.get("headlineEn") ?? "").trim()
-  const headlineFr = String(formData.get("headlineFr") ?? "").trim()
-  const headlineEmphasisEn = String(
-    formData.get("headlineEmphasisEn") ?? ""
-  ).trim()
-  const headlineEmphasisFr = String(
-    formData.get("headlineEmphasisFr") ?? ""
-  ).trim()
-  const paragraphEn = String(formData.get("paragraphEn") ?? "").trim()
-  const paragraphFr = String(formData.get("paragraphFr") ?? "").trim()
-  const calloutValueEn = String(formData.get("calloutValueEn") ?? "").trim()
-  const calloutValueFr = String(formData.get("calloutValueFr") ?? "").trim()
-  const calloutTextEn = String(formData.get("calloutTextEn") ?? "").trim()
-  const calloutTextFr = String(formData.get("calloutTextFr") ?? "").trim()
-  const panelEstablishedEn = String(
-    formData.get("panelEstablishedEn") ?? ""
-  ).trim()
-  const panelEstablishedFr = String(
-    formData.get("panelEstablishedFr") ?? ""
-  ).trim()
   const stats = parseStats(formData)
 
-  const fieldErrors: HomepageContentFormState["fieldErrors"] = {}
-  if (!eyebrowEn) fieldErrors.eyebrowEn = "Enter an English eyebrow."
-  if (!eyebrowFr) fieldErrors.eyebrowFr = "Enter a French eyebrow."
-  if (!headlineEn) fieldErrors.headlineEn = "Enter an English headline."
-  if (!headlineFr) fieldErrors.headlineFr = "Enter a French headline."
-  if (!headlineEmphasisEn)
-    fieldErrors.headlineEmphasisEn = "Enter an English headline emphasis."
-  if (!headlineEmphasisFr)
-    fieldErrors.headlineEmphasisFr = "Enter a French headline emphasis."
-  if (!paragraphEn) fieldErrors.paragraphEn = "Enter English paragraph text."
-  if (!paragraphFr) fieldErrors.paragraphFr = "Enter French paragraph text."
-  if (!calloutValueEn)
-    fieldErrors.calloutValueEn = "Enter an English callout value."
-  if (!calloutValueFr)
-    fieldErrors.calloutValueFr = "Enter a French callout value."
-  if (!calloutTextEn) fieldErrors.calloutTextEn = "Enter English callout text."
-  if (!calloutTextFr) fieldErrors.calloutTextFr = "Enter French callout text."
-  if (!panelEstablishedEn)
-    fieldErrors.panelEstablishedEn = "Enter English panel text."
-  if (!panelEstablishedFr)
-    fieldErrors.panelEstablishedFr = "Enter French panel text."
-  if (stats.length === 0) fieldErrors.stats = "Add at least one stat."
-  else if (
-    stats.some((s) => !s.valueEn || !s.valueFr || !s.labelEn || !s.labelFr)
-  )
+  const parsed = homepageTextSchema.safeParse({
+    eyebrowEn: String(formData.get("eyebrowEn") ?? ""),
+    eyebrowFr: String(formData.get("eyebrowFr") ?? ""),
+    headlineEn: String(formData.get("headlineEn") ?? ""),
+    headlineFr: String(formData.get("headlineFr") ?? ""),
+    headlineEmphasisEn: String(formData.get("headlineEmphasisEn") ?? ""),
+    headlineEmphasisFr: String(formData.get("headlineEmphasisFr") ?? ""),
+    paragraphEn: String(formData.get("paragraphEn") ?? ""),
+    paragraphFr: String(formData.get("paragraphFr") ?? ""),
+    calloutValueEn: String(formData.get("calloutValueEn") ?? ""),
+    calloutValueFr: String(formData.get("calloutValueFr") ?? ""),
+    calloutTextEn: String(formData.get("calloutTextEn") ?? ""),
+    calloutTextFr: String(formData.get("calloutTextFr") ?? ""),
+    panelEstablishedEn: String(formData.get("panelEstablishedEn") ?? ""),
+    panelEstablishedFr: String(formData.get("panelEstablishedFr") ?? ""),
+  })
+
+  const fieldErrors: HomepageContentFormState["fieldErrors"] = parsed.success
+    ? {}
+    : zodFieldErrors(parsed.error)
+
+  if (stats.length === 0) {
+    fieldErrors.stats = "Add at least one stat."
+  } else if (!stats.every((s) => statSchema.safeParse(s).success)) {
     fieldErrors.stats = "Fill in every field for each stat row."
+  }
 
   if (Object.keys(fieldErrors).length > 0) {
     return {
@@ -125,6 +129,23 @@ export async function updateHomepageContent(
       fieldErrors,
     }
   }
+
+  const {
+    eyebrowEn,
+    eyebrowFr,
+    headlineEn,
+    headlineFr,
+    headlineEmphasisEn,
+    headlineEmphasisFr,
+    paragraphEn,
+    paragraphFr,
+    calloutValueEn,
+    calloutValueFr,
+    calloutTextEn,
+    calloutTextFr,
+    panelEstablishedEn,
+    panelEstablishedFr,
+  } = parsed.data!
 
   await db
     .update(homepageContent)
