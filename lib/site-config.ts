@@ -38,25 +38,12 @@ export const socialLinks = {
   facebook: "https://www.facebook.com/saintvincentpallottimasaka",
 } as const
 
-// Structural program list: slug (matches dict.programs keys) + icon name.
-// All translatable fields (name, ageRange, description, overview,
-// highlights) live in dict.programs[slug].
-export const programs = [
-  { slug: "day-care", icon: "Baby" },
-  { slug: "kindergarten", icon: "Blocks" },
-  { slug: "special-needs", icon: "HeartHandshake" },
-  { slug: "cambridge-primary", icon: "Globe2" },
-  { slug: "national-primary", icon: "BookOpen" },
-  { slug: "national-secondary", icon: "GraduationCap" },
-  { slug: "tvet", icon: "Hammer" },
-] as const
-
-export type ProgramMeta = (typeof programs)[number]
-export type ProgramSlug = ProgramMeta["slug"]
-
+// Programs now live in the `programs` DB table (see lib/programs.ts) rather
+// than a hardcoded array here. This helper stays because routing still
+// needs the same tvet special-case regardless of where the slug came from.
 // TVET already has its own full page at /tvet; every other program gets a
 // dedicated detail page at /academics/[slug].
-export function programHref(slug: ProgramSlug): string {
+export function programHref(slug: string): string {
   return slug === "tvet" ? "/tvet" : `/academics/${slug}`
 }
 
