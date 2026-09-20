@@ -1,33 +1,62 @@
 import type { Metadata } from "next"
-import {
-  Church,
-  Compass,
-  HeartHandshake,
-  Sparkles,
-  Sprout,
-  TrendingUp,
-  Building2,
-  Rocket,
-} from "lucide-react"
+import { asc, eq } from "drizzle-orm"
 
 import { PageHero } from "@/components/page-hero"
-import { siteConfig } from "@/lib/site-config"
+import { iconMap } from "@/components/icon-map"
+import { db } from "@/lib/db"
+import { milestones, values } from "@/lib/db/schema"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
+import { getSiteSettings } from "@/lib/site-settings"
+import type { Locale } from "@/lib/i18n/config"
 
-const valueIcons = [Church, Sparkles, HeartHandshake, Compass] as const
-const milestoneIcons = [Sprout, TrendingUp, Building2, Rocket] as const
+async function getPublishedMilestones(locale: Locale) {
+  const rows = await db
+    .select()
+    .from(milestones)
+    .where(eq(milestones.isPublished, true))
+    .orderBy(asc(milestones.position))
+
+  return rows.map((row) => ({
+    icon: row.icon,
+    year: locale === "en" ? row.yearEn : row.yearFr,
+    title: locale === "en" ? row.titleEn : row.titleFr,
+    description: locale === "en" ? row.descriptionEn : row.descriptionFr,
+  }))
+}
+
+async function getPublishedValues(locale: Locale) {
+  const rows = await db
+    .select()
+    .from(values)
+    .where(eq(values.isPublished, true))
+    .orderBy(asc(values.position))
+
+  return rows.map((row) => ({
+    icon: row.icon,
+    title: locale === "en" ? row.titleEn : row.titleFr,
+    description: locale === "en" ? row.descriptionEn : row.descriptionFr,
+  }))
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
   const dict = getDictionary(locale)
-  return { title: dict.meta.about.title, description: dict.meta.about.description }
+  return {
+    title: dict.meta.about.title,
+    description: dict.meta.about.description,
+  }
 }
 
 export default async function AboutPage() {
   const locale = await getLocale()
   const dict = getDictionary(locale)
   const a = dict.about
+  const [milestoneItems, valueItems, settings] = await Promise.all([
+    getPublishedMilestones(locale),
+    getPublishedValues(locale),
+    getSiteSettings(),
+  ])
 
   return (
     <>
@@ -46,7 +75,7 @@ export default async function AboutPage() {
             <h2 className="mt-3 font-heading text-[clamp(1.75rem,1.5rem+1.2vw,2.75rem)] font-semibold tracking-tight text-foreground">
               &ldquo;{a.charism.quote}&rdquo;
             </h2>
-            <p className="mt-2 text-sm italic text-muted-foreground">
+            <p className="mt-2 text-sm text-muted-foreground italic">
               {a.charism.citation}
             </p>
             <p className="mt-6 text-sm/relaxed text-muted-foreground">
@@ -59,7 +88,7 @@ export default async function AboutPage() {
             </p>
             <dl className="mt-6 flex flex-col gap-5">
               <div className="flex items-baseline justify-between border-b border-border pb-3">
-                <dt className="text-xs text-muted-foreground uppercase tracking-wide">
+                <dt className="text-xs tracking-wide text-muted-foreground uppercase">
                   {a.charism.runBy}
                 </dt>
                 <dd className="text-right text-sm font-medium text-foreground">
@@ -67,7 +96,7 @@ export default async function AboutPage() {
                 </dd>
               </div>
               <div className="flex items-baseline justify-between border-b border-border pb-3">
-                <dt className="text-xs text-muted-foreground uppercase tracking-wide">
+                <dt className="text-xs tracking-wide text-muted-foreground uppercase">
                   {a.charism.region}
                 </dt>
                 <dd className="text-sm font-medium text-foreground">
@@ -75,19 +104,19 @@ export default async function AboutPage() {
                 </dd>
               </div>
               <div className="flex items-baseline justify-between border-b border-border pb-3">
-                <dt className="text-xs text-muted-foreground uppercase tracking-wide">
+                <dt className="text-xs tracking-wide text-muted-foreground uppercase">
                   {a.charism.location}
                 </dt>
                 <dd className="text-sm font-medium text-foreground">
-                  {siteConfig.location}
+                  {settings.location}
                 </dd>
               </div>
               <div className="flex items-baseline justify-between">
-                <dt className="text-xs text-muted-foreground uppercase tracking-wide">
+                <dt className="text-xs tracking-wide text-muted-foreground uppercase">
                   {a.charism.motto}
                 </dt>
                 <dd className="text-sm font-medium text-foreground">
-                  {siteConfig.motto}
+                  {settings.motto}
                 </dd>
               </div>
             </dl>
@@ -106,15 +135,20 @@ export default async function AboutPage() {
             </h2>
           </div>
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {a.values.items.map((value, index) => {
-              const Icon = valueIcons[index]
+            {valueItems.map((value) => {
+              const Icon = iconMap[value.icon]
               return (
-                <div key={value.title} className="flex flex-col gap-4 border border-border bg-card p-6">
+                <div
+                  key={value.title}
+                  className="flex flex-col gap-4 border border-border bg-card p-6"
+                >
                   <Icon className="size-7 text-primary" />
                   <h3 className="font-heading text-base font-semibold text-foreground">
                     {value.title}
                   </h3>
-                  <p className="text-xs/relaxed text-muted-foreground">{value.description}</p>
+                  <p className="text-xs/relaxed text-muted-foreground">
+                    {value.description}
+                  </p>
                 </div>
               )
             })}
@@ -134,16 +168,22 @@ export default async function AboutPage() {
           </div>
 
           <ol className="mt-12 flex flex-col">
-            {a.milestones.items.map((milestone, index) => {
-              const Icon = milestoneIcons[index]
+            {milestoneItems.map((milestone, index) => {
+              const Icon = iconMap[milestone.icon]
               return (
-                <li key={milestone.title} className="relative flex gap-6 pb-10 last:pb-0">
+                <li
+                  key={milestone.title}
+                  className="relative flex gap-6 pb-10 last:pb-0"
+                >
                   <div className="flex flex-col items-center">
                     <span className="flex size-11 shrink-0 items-center justify-center border-2 border-primary bg-background text-primary">
                       <Icon className="size-5" />
                     </span>
-                    {index < a.milestones.items.length - 1 && (
-                      <span className="mt-1 w-px flex-1 bg-border" aria-hidden="true" />
+                    {index < milestoneItems.length - 1 && (
+                      <span
+                        className="mt-1 w-px flex-1 bg-border"
+                        aria-hidden="true"
+                      />
                     )}
                   </div>
                   <div className="pb-2">
