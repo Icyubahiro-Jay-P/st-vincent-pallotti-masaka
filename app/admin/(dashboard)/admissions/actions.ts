@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 import { eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
@@ -23,4 +24,5 @@ export async function updateInquiryStatus(formData: FormData) {
     .where(eq(admissionsInquiries.id, id))
 
   revalidatePath("/admin/admissions")
+  redirect("/admin/admissions?toast=inquiry-status-updated")
 }
