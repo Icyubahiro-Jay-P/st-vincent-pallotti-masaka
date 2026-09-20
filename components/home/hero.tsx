@@ -6,9 +6,18 @@ import { Crest } from "@/components/crest"
 import { ImigongoSpiral } from "@/components/patterns/imigongo-spiral"
 import { siteConfig } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
+import type { ResolvedHomepageContent } from "@/lib/homepage-content"
 
-export function Hero({ dict }: { dict: Dictionary }) {
-  const h = dict.home.hero
+export function Hero({
+  dict,
+  content,
+}: {
+  dict: Dictionary
+  content: ResolvedHomepageContent
+}) {
+  const h = content
+  const applyNow = dict.home.hero.applyNow
+  const ourStory = dict.home.hero.ourStory
 
   return (
     <section className="relative overflow-hidden border-b border-border bg-background">
@@ -21,7 +30,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
 
           <h1 className="mt-6 font-heading text-[clamp(2.75rem,2.1rem+3vw,5rem)] leading-[1.02] font-semibold tracking-tight text-foreground">
             {h.headline}{" "}
-            <span className="relative inline-block italic text-primary">
+            <span className="relative inline-block text-primary italic">
               {h.headlineEmphasis}
               <svg
                 viewBox="0 0 200 12"
@@ -50,7 +59,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
               render={<Link href="/admissions" />}
               className="h-11 bg-primary px-6 text-sm text-primary-foreground hover:bg-primary/85"
             >
-              {h.applyNow}
+              {applyNow}
               <ArrowRight data-icon="inline-end" />
             </Button>
             <Button
@@ -60,7 +69,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
               className="h-11 px-6 text-sm"
             >
               <PlayCircle data-icon="inline-start" />
-              {h.ourStory}
+              {ourStory}
             </Button>
           </div>
 
@@ -71,7 +80,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
                 <dd className="font-heading text-xl font-semibold text-foreground">
                   {stat.value}
                 </dd>
-                <dd className="text-[0.7rem] text-muted-foreground uppercase tracking-wide">
+                <dd className="text-[0.7rem] tracking-wide text-muted-foreground uppercase">
                   {stat.label}
                 </dd>
               </div>
