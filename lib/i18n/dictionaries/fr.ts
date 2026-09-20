@@ -589,6 +589,7 @@ const fr: Dictionary = {
       childName: "Indiquez le nom de l'élève.",
       program: "Sélectionnez un programme.",
       formError: "Veuillez corriger les champs ci-dessous et réessayer.",
+      rateLimited: "Trop de soumissions. Veuillez réessayer dans un instant.",
     },
     success:
       "Merci, {parentName}. Nous avons bien reçu votre demande pour {childName} et vous recontacterons sous 2 jours ouvrés.",
@@ -618,6 +619,7 @@ const fr: Dictionary = {
     button: "S'abonner",
     invalidEmail: "Entrez une adresse e-mail valide.",
     success: "Merci ! Vous recevrez nos prochaines actualités.",
+    rateLimited: "Trop de tentatives. Veuillez réessayer dans un instant.",
   },
 
   contact: {
