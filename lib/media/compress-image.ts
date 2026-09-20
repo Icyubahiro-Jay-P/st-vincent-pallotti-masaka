@@ -1,15 +1,13 @@
 // Client-side only. Iteratively re-encodes an image via the native Canvas
-// API (quality first, then dimensions) until it's under the target size —
-// no image-processing dependency needed for this.
+// API (quality first, then dimensions) until it's under the target size.
+// No image-processing dependency needed for this.
 const DEFAULT_MAX_BYTES = 1.35 * 1024 * 1024 // ~1.3–1.4MB, per the 1.2–1.4MB spec
 
 function canvasToBlob(
   canvas: HTMLCanvasElement,
   quality: number
 ): Promise<Blob | null> {
-  return new Promise((resolve) =>
-    canvas.toBlob(resolve, "image/jpeg", quality)
-  )
+  return new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", quality))
 }
 
 export async function compressImage(
