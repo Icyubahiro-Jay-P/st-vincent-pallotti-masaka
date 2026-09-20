@@ -6,9 +6,9 @@ import { PageHero } from "@/components/page-hero"
 import { Badge } from "@/components/ui/badge"
 import { SubscribeForm } from "@/components/newsletter/subscribe-form"
 import { InstagramGlyph, YoutubeGlyph } from "@/components/icons/social-icons"
-import { socialLinks } from "@/lib/site-config"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
+import { getSiteSettings } from "@/lib/site-settings"
 import { db } from "@/lib/db"
 import { events } from "@/lib/db/schema"
 
@@ -32,6 +32,7 @@ export default async function NewsPage() {
     .from(events)
     .where(eq(events.status, "published"))
     .orderBy(desc(events.publishedAt))
+  const settings = await getSiteSettings()
 
   return (
     <>
@@ -84,7 +85,7 @@ export default async function NewsPage() {
           </h2>
           <div className="flex items-center gap-3">
             <a
-              href={socialLinks.instagram}
+              href={settings.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 border border-border bg-card px-4 py-2.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
@@ -93,7 +94,7 @@ export default async function NewsPage() {
               {n.follow.instagram}
             </a>
             <a
-              href={socialLinks.youtube}
+              href={settings.youtubeUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 border border-border bg-card px-4 py-2.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
