@@ -5,7 +5,11 @@ import { desc, eq } from "drizzle-orm"
 import { PageHero } from "@/components/page-hero"
 import { Badge } from "@/components/ui/badge"
 import { SubscribeForm } from "@/components/newsletter/subscribe-form"
-import { InstagramGlyph, YoutubeGlyph } from "@/components/icons/social-icons"
+import {
+  InstagramGlyph,
+  YoutubeGlyph,
+  XGlyph,
+} from "@/components/icons/social-icons"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getSiteSettings } from "@/lib/site-settings"
@@ -102,6 +106,16 @@ export default async function NewsPage() {
               <YoutubeGlyph className="size-4" />
               {n.follow.youtube}
             </a>
+            {settings.xUrl && (
+              <a
+                href={settings.xUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border border-border bg-card px-4 py-2.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
+              >
+                <XGlyph className="size-4" />X
+              </a>
+            )}
           </div>
           <div className="w-full max-w-sm pt-4">
             <SubscribeForm dict={dict} />
