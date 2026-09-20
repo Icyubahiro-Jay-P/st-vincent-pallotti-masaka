@@ -15,6 +15,41 @@
       "when": 1789866193997,
       "tag": "0001_eager_chimera",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789904127927,
+      "tag": "0002_right_killraven",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789904766523,
+      "tag": "0003_wide_luckman",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789905312810,
+      "tag": "0004_worthless_sally_floyd",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1789905688576,
+      "tag": "0005_lyrical_stryfe",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1789906046960,
+      "tag": "0006_overconfident_thunderbolt_ross",
+      "breakpoints": true
     }
   ]
 }
