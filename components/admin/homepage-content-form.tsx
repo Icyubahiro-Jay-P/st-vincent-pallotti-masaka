@@ -294,7 +294,7 @@ function TranslatedField({
   const controlProps = multiline ? { rows } : {}
 
   return (
-    <div className="flex flex-col gap-5 sm:flex-row sm:[&>*]:flex-1">
+    <div className="flex flex-col gap-5 sm:flex-row sm:*:flex-1">
       <div className="flex flex-col gap-1.5">
         <Label htmlFor={`${idPrefix}En`}>{label} (English)</Label>
         <FieldControl
