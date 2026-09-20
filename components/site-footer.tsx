@@ -6,6 +6,7 @@ import {
   InstagramGlyph,
   YoutubeGlyph,
   FacebookGlyph,
+  XGlyph,
 } from "@/components/icons/social-icons"
 import { navLinks, programHref, siteConfig } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
@@ -57,6 +58,11 @@ export async function SiteFooter({
               <SocialLink href={settings.facebookUrl} label="Facebook">
                 <FacebookGlyph className="size-4" />
               </SocialLink>
+              {settings.xUrl && (
+                <SocialLink href={settings.xUrl} label="X">
+                  <XGlyph className="size-4" />
+                </SocialLink>
+              )}
             </div>
           </div>
 
