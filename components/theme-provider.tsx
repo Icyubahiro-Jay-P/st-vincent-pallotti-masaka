@@ -47,7 +47,10 @@ function ThemeHotkey() {
         return
       }
 
-      if (event.key.toLowerCase() !== "d") {
+      // event.key can be missing/empty on some synthetic or IME-composed
+      // keydown events (e.g. certain autofill or virtual-keyboard input),
+      // not just on real "d" keypresses, so it can't be called unguarded.
+      if (!event.key || event.key.toLowerCase() !== "d") {
         return
       }
 
