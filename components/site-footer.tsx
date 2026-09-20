@@ -7,17 +7,20 @@ import {
   YoutubeGlyph,
   FacebookGlyph,
 } from "@/components/icons/social-icons"
-import {
-  navLinks,
-  programHref,
-  programs,
-  siteConfig,
-  socialLinks,
-} from "@/lib/site-config"
+import { navLinks, programHref, siteConfig, socialLinks } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
+import type { Locale } from "@/lib/i18n/config"
+import { getPublishedPrograms } from "@/lib/programs"
 import { SubscribeForm } from "@/components/newsletter/subscribe-form"
 
-export function SiteFooter({ dict }: { dict: Dictionary }) {
+export async function SiteFooter({
+  dict,
+  locale,
+}: {
+  dict: Dictionary
+  locale: Locale
+}) {
+  const programs = await getPublishedPrograms(locale)
   return (
     <footer className="border-t border-white/20 bg-ink text-ink-foreground">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -82,7 +85,7 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
                     href={programHref(program.slug)}
                     className="text-xs text-ink-foreground/75 transition-colors hover:text-ink-foreground"
                   >
-                    {dict.programs[program.slug].name}
+                    {program.name}
                   </Link>
                 </li>
               ))}
