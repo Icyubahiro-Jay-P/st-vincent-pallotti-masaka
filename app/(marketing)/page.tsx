@@ -44,6 +44,7 @@ export default async function Page() {
         events={latestEvents}
         instagramUrl={settings.instagramUrl}
         youtubeUrl={settings.youtubeUrl}
+        xUrl={settings.xUrl}
       />
       <CtaBand dict={dict} whatsappNumber={settings.whatsappNumber} />
     </>
