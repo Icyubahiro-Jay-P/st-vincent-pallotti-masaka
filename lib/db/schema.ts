@@ -168,6 +168,9 @@ export const siteSettings = pgTable("site_settings", {
   instagramUrl: text("instagram_url").notNull(),
   youtubeUrl: text("youtube_url").notNull(),
   facebookUrl: text("facebook_url").notNull(),
+  // Nullable, unlike the other social links: not every school has an X
+  // account, and there's no seeded value for the existing row.
+  xUrl: text("x_url"),
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
