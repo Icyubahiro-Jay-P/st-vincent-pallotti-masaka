@@ -3,10 +3,15 @@ import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon"
-import { siteConfig } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-export function CtaBand({ dict }: { dict: Dictionary }) {
+export function CtaBand({
+  dict,
+  whatsappNumber,
+}: {
+  dict: Dictionary
+  whatsappNumber: string
+}) {
   const c = dict.home.cta
 
   return (
@@ -35,7 +40,7 @@ export function CtaBand({ dict }: { dict: Dictionary }) {
             variant="outline"
             render={
               <a
-                href={`https://wa.me/${siteConfig.whatsappNumber}`}
+                href={`https://wa.me/${whatsappNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
               />
