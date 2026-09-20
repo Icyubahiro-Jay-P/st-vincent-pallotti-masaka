@@ -87,14 +87,20 @@ export async function saveEvent(
   const coverImageBackupKey = formData.get("coverImageBackupKey")
   const galleryMedia = parseGalleryMedia(formData.get("galleryMediaJson"))
 
+  // Publishing needs a complete bilingual event; a draft only needs enough
+  // of a title to identify it later, so every other field can stay blank.
   const fieldErrors: EventFormState["fieldErrors"] = {}
-  if (!titleEn) fieldErrors.titleEn = "Enter an English title."
-  if (!titleFr) fieldErrors.titleFr = "Enter a French title."
-  if (!excerptEn) fieldErrors.excerptEn = "Enter an English excerpt."
-  if (!excerptFr) fieldErrors.excerptFr = "Enter a French excerpt."
-  if (!bodyEn) fieldErrors.bodyEn = "Enter English body text."
-  if (!bodyFr) fieldErrors.bodyFr = "Enter French body text."
-  if (!category) fieldErrors.category = "Enter a category."
+  if (intent === "publish") {
+    if (!titleEn) fieldErrors.titleEn = "Enter an English title."
+    if (!titleFr) fieldErrors.titleFr = "Enter a French title."
+    if (!excerptEn) fieldErrors.excerptEn = "Enter an English excerpt."
+    if (!excerptFr) fieldErrors.excerptFr = "Enter a French excerpt."
+    if (!bodyEn) fieldErrors.bodyEn = "Enter English body text."
+    if (!bodyFr) fieldErrors.bodyFr = "Enter French body text."
+    if (!category) fieldErrors.category = "Enter a category."
+  } else if (!titleEn && !titleFr) {
+    fieldErrors.titleEn = "Enter a title to save a draft."
+  }
 
   if (Object.keys(fieldErrors).length > 0) {
     return {
@@ -162,7 +168,7 @@ export async function saveEvent(
         .where(eq(events.id, id))
     }
   } else {
-    const slug = await generateUniqueSlug(titleEn)
+    const slug = await generateUniqueSlug(titleEn || titleFr)
     const [created] = await db
       .insert(events)
       .values({
