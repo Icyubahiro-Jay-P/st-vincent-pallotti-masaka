@@ -5,6 +5,7 @@ import {
   AdminSidebar,
   AdminSidebarProvider,
 } from "@/components/admin/admin-sidebar"
+import { AdminThemeToggle } from "@/components/admin/admin-theme-toggle"
 import { SignOutButton } from "@/components/admin/sign-out-button"
 
 export default function AdminDashboardLayout({
@@ -25,7 +26,10 @@ export default function AdminDashboardLayout({
               Pallotti Admin
             </Link>
           </div>
-          <SignOutButton />
+          <div className="flex items-center gap-2">
+            <AdminThemeToggle />
+            <SignOutButton />
+          </div>
         </header>
         <div className="flex flex-1">
           <AdminSidebar />
