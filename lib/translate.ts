@@ -30,8 +30,8 @@ export type TranslateResult = {
 }
 
 // Translates admin-authored dynamic content (event/program text) from one
-// site locale to the other. On any failure — quota exceeded, network error,
-// missing API key — this falls back to returning the source text verbatim
+// site locale to the other. On any failure (quota exceeded, network error,
+// missing API key), this falls back to returning the source text verbatim
 // rather than throwing, so a save never blanks out or breaks the other
 // language's field. Callers should set a `needsTranslationReview` flag on
 // the record when `usedFallback` is true so staff know to check it.
