@@ -280,9 +280,7 @@ function HomepageFields({
           </div>
         ))}
         {fieldErrors?.stats ? (
-          <p className="text-[0.7rem] text-destructive">
-            {fieldErrors.stats}
-          </p>
+          <p className="text-[0.7rem] text-destructive">{fieldErrors.stats}</p>
         ) : null}
         <Button
           type="button"
