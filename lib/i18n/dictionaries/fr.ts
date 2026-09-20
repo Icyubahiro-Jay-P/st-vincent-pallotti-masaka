@@ -205,23 +205,8 @@ const fr: Dictionary = {
 
   home: {
     hero: {
-      eyebrow: "Sœurs Missionnaires Pallottines · Masaka, Kigali",
-      headline: "Strive",
-      headlineEmphasis: "Beyond.",
-      paragraph:
-        "De la garderie au secondaire et à la formation professionnelle (TVET), Saint Vincent Pallotti School Masaka forme des diplômés confiants et compétents sur un nouveau campus conçu pour plus de 1 400 élèves : programmes Cambridge et national, éducation spécialisée et formation professionnelle pratique, le tout enraciné dans les valeurs catholiques.",
       applyNow: "Postuler",
       ourStory: "Notre histoire",
-      stats: [
-        { value: "1 400+", label: "Élèves" },
-        { value: "2022", label: "Nouveau campus" },
-        { value: "2", label: "Programmes" },
-        { value: "5", label: "Filières TVET" },
-      ],
-      panelEstablished: "Fondée par les Sœurs Pallottines",
-      calloutValue: "1 200+",
-      calloutText:
-        "places ajoutées à l'ouverture de notre nouveau campus, béni par le cardinal Antoine Kambanda",
     },
     programs: {
       eyebrow: "Ce que nous offrons",
@@ -333,58 +318,10 @@ const fr: Dictionary = {
     values: {
       eyebrow: "Ce que nous défendons",
       title: "Foi, excellence, inclusion, opportunité",
-      items: [
-        {
-          title: "Foi",
-          description:
-            "L'identité catholique et le charisme pallottin façonnent la vie quotidienne du campus, présents sans jamais s'imposer aux familles de tous horizons.",
-        },
-        {
-          title: "Excellence",
-          description:
-            "Des exigences élevées dans les programmes Cambridge et national, soutenues par un enseignement rigoureux et une évaluation constante.",
-        },
-        {
-          title: "Inclusion",
-          description:
-            "Notre programme dédié d'éducation spécialisée garantit à chaque élève, quel que soit son point de départ, une place pour s'épanouir et grandir.",
-        },
-        {
-          title: "Opportunité",
-          description:
-            "Des filières TVET au secondaire préparant à l'université, chaque diplômé repart avec un véritable chemin d'avenir.",
-        },
-      ],
     },
     milestones: {
       eyebrow: "Notre parcours",
       title: "Étapes clés",
-      items: [
-        {
-          year: "Fondation",
-          title: "Une mission commence",
-          description:
-            "Les Sœurs Missionnaires Pallottines de la Région Notre-Dame de Kibeho fondent une école à Masaka, Kigali, enracinée dans le charisme de saint Vincent Pallotti.",
-        },
-        {
-          year: "Croissance",
-          title: "Extension des programmes",
-          description:
-            "La garderie, la maternelle, le primaire et le secondaire nationaux, ainsi que l'éducation spécialisée, se développent avec la communauté environnante.",
-        },
-        {
-          year: "2022",
-          title: "Inauguration du nouveau campus",
-          description:
-            "Une importante extension du campus est officiellement inaugurée par le cardinal Antoine Kambanda et le ministère de l'Éducation, portant la capacité à plus de 1 200 élèves supplémentaires.",
-        },
-        {
-          year: "Aujourd'hui",
-          title: "Toujours plus loin",
-          description:
-            "Plus de 1 400 élèves étudient désormais dans les filières Cambridge, nationale et TVET sur un campus en pleine croissance.",
-        },
-      ],
     },
   },
 
