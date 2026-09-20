@@ -10,6 +10,12 @@ import {
   Scissors,
   Sparkles,
   ChefHat,
+  Sprout,
+  TrendingUp,
+  Building2,
+  Rocket,
+  Church,
+  Compass,
   type LucideIcon,
 } from "lucide-react"
 
@@ -25,4 +31,10 @@ export const iconMap: Record<string, LucideIcon> = {
   Scissors,
   Sparkles,
   ChefHat,
+  Sprout,
+  TrendingUp,
+  Building2,
+  Rocket,
+  Church,
+  Compass,
 }
