@@ -1,26 +1,36 @@
 import type { Metadata } from "next"
-import { UserPlus, CalendarCheck2, FileCheck2, ClipboardCheck, Phone, Mail } from "lucide-react"
+import {
+  UserPlus,
+  CalendarCheck2,
+  FileCheck2,
+  ClipboardCheck,
+  Phone,
+  Mail,
+} from "lucide-react"
 
 import { PageHero } from "@/components/page-hero"
 import { AdmissionInquiryForm } from "@/components/admissions/inquiry-form"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon"
 import { siteConfig } from "@/lib/site-config"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getPublishedPrograms } from "@/lib/programs"
 
-const processIcons = [UserPlus, CalendarCheck2, FileCheck2, ClipboardCheck] as const
+const processIcons = [
+  UserPlus,
+  CalendarCheck2,
+  FileCheck2,
+  ClipboardCheck,
+] as const
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
   const dict = getDictionary(locale)
-  return { title: dict.meta.admissions.title, description: dict.meta.admissions.description }
+  return {
+    title: dict.meta.admissions.title,
+    description: dict.meta.admissions.description,
+  }
 }
 
 export default async function AdmissionsPage({
@@ -94,7 +104,10 @@ export default async function AdmissionsPage({
             </p>
           </div>
 
-          <Tabs defaultValue={ad.requirements.levels[0].value} className="mt-10">
+          <Tabs
+            defaultValue={ad.requirements.levels[0].value}
+            className="mt-10"
+          >
             <TabsList className="h-auto flex-wrap justify-start gap-1 bg-transparent p-0">
               {ad.requirements.levels.map((level) => (
                 <TabsTrigger
@@ -107,7 +120,11 @@ export default async function AdmissionsPage({
               ))}
             </TabsList>
             {ad.requirements.levels.map((level) => (
-              <TabsContent key={level.value} value={level.value} className="mt-6">
+              <TabsContent
+                key={level.value}
+                value={level.value}
+                className="mt-6"
+              >
                 <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {level.items.map((item) => (
                     <li
