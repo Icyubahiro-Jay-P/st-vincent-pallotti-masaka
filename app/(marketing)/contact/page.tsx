@@ -9,6 +9,7 @@ import {
   InstagramGlyph,
   YoutubeGlyph,
   FacebookGlyph,
+  XGlyph,
 } from "@/components/icons/social-icons"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
@@ -153,6 +154,17 @@ export default async function ContactPage() {
               >
                 <FacebookGlyph className="size-4" />
               </a>
+              {settings.xUrl && (
+                <a
+                  href={settings.xUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="X"
+                  className="flex size-9 items-center justify-center border border-border text-foreground transition-colors hover:border-primary hover:text-primary"
+                >
+                  <XGlyph className="size-4" />
+                </a>
+              )}
             </div>
             <Button
               size="lg"
