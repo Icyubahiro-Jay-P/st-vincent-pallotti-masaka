@@ -87,7 +87,7 @@ export async function saveValue(
   }
 
   revalidatePath("/about")
-  redirect("/admin/values")
+  redirect("/admin/values?toast=value-saved")
 }
 
 export async function deleteValue(formData: FormData) {
@@ -96,4 +96,5 @@ export async function deleteValue(formData: FormData) {
   await db.delete(values).where(eq(values.id, id))
   revalidatePath("/admin/values")
   revalidatePath("/about")
+  redirect("/admin/values?toast=value-deleted")
 }
