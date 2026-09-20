@@ -3,6 +3,7 @@ import {
   boolean,
   index,
   integer,
+  jsonb,
   pgTable,
   serial,
   text,
@@ -100,6 +101,111 @@ export const programs = pgTable("programs", {
     .defaultNow(),
 })
 
+// Backend-driven replacement for the milestones timeline that used to be
+// hardcoded in lib/i18n/dictionaries/{en,fr}.ts's about.milestones.items.
+// No slug: milestones are only ever listed on /about, never individually
+// routed.
+export const milestones = pgTable("milestones", {
+  id: serial("id").primaryKey(),
+  icon: text("icon").notNull(), // lucide-react icon name, e.g. "Sprout"
+  position: integer("position").notNull().default(0),
+  isPublished: boolean("is_published").notNull().default(true),
+  yearEn: text("year_en").notNull(),
+  yearFr: text("year_fr").notNull(),
+  titleEn: text("title_en").notNull(),
+  titleFr: text("title_fr").notNull(),
+  descriptionEn: text("description_en").notNull(),
+  descriptionFr: text("description_fr").notNull(),
+  needsTranslationReview: boolean("needs_translation_review")
+    .notNull()
+    .default(false),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+})
+
+// Backend-driven replacement for the "What We Stand For" value cards that
+// used to be hardcoded in lib/i18n/dictionaries/{en,fr}.ts's
+// about.values.items. Same shape as `milestones` minus the year field.
+export const values = pgTable("values", {
+  id: serial("id").primaryKey(),
+  icon: text("icon").notNull(), // lucide-react icon name, e.g. "Church"
+  position: integer("position").notNull().default(0),
+  isPublished: boolean("is_published").notNull().default(true),
+  titleEn: text("title_en").notNull(),
+  titleFr: text("title_fr").notNull(),
+  descriptionEn: text("description_en").notNull(),
+  descriptionFr: text("description_fr").notNull(),
+  needsTranslationReview: boolean("needs_translation_review")
+    .notNull()
+    .default(false),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+})
+
+// Singleton settings row (always id = 1, enforced in the server action, not
+// a DB constraint) replacing the locale-independent contact/social fields
+// that used to live in lib/site-config.ts's `siteConfig`/`socialLinks`. No
+// En/Fr columns: this data doesn't vary between languages (see that file's
+// own header comment).
+export const siteSettings = pgTable("site_settings", {
+  id: integer("id").primaryKey(),
+  phoneDisplay: text("phone_display").notNull(),
+  phoneHref: text("phone_href").notNull(),
+  whatsappNumber: text("whatsapp_number").notNull(),
+  email: text("email").notNull(),
+  mapsQuery: text("maps_query").notNull(),
+  location: text("location").notNull(),
+  motto: text("motto").notNull(),
+  spiritualMottoLatin: text("spiritual_motto_latin").notNull(),
+  instagramUrl: text("instagram_url").notNull(),
+  youtubeUrl: text("youtube_url").notNull(),
+  facebookUrl: text("facebook_url").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+})
+
+export type HomepageStat = {
+  valueEn: string
+  valueFr: string
+  labelEn: string
+  labelFr: string
+}
+
+// Singleton row (always id = 1, same convention as `siteSettings`)
+// replacing the homepage hero copy and stat counters that used to live in
+// lib/i18n/dictionaries/{en,fr}.ts's home.hero. applyNow/ourStory stay in
+// the dictionary as button-label UI chrome, not admin content.
+export const homepageContent = pgTable("homepage_content", {
+  id: integer("id").primaryKey(),
+  eyebrowEn: text("eyebrow_en").notNull(),
+  eyebrowFr: text("eyebrow_fr").notNull(),
+  headlineEn: text("headline_en").notNull(),
+  headlineFr: text("headline_fr").notNull(),
+  headlineEmphasisEn: text("headline_emphasis_en").notNull(),
+  headlineEmphasisFr: text("headline_emphasis_fr").notNull(),
+  paragraphEn: text("paragraph_en").notNull(),
+  paragraphFr: text("paragraph_fr").notNull(),
+  calloutValueEn: text("callout_value_en").notNull(),
+  calloutValueFr: text("callout_value_fr").notNull(),
+  calloutTextEn: text("callout_text_en").notNull(),
+  calloutTextFr: text("callout_text_fr").notNull(),
+  panelEstablishedEn: text("panel_established_en").notNull(),
+  panelEstablishedFr: text("panel_established_fr").notNull(),
+  stats: jsonb("stats").$type<HomepageStat[]>().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+})
+
 export const newsletterSubscribers = pgTable("newsletter_subscribers", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
@@ -121,6 +227,7 @@ export const admissionsInquiries = pgTable("admissions_inquiries", {
   preferredTerm: text("preferred_term"),
   message: text("message"),
   locale: text("locale").notNull(),
+  status: text("status").notNull().default("new"), // "new" | "contacted" | "archived"
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
