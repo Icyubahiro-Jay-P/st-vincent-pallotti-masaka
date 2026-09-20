@@ -7,6 +7,7 @@ import { db } from "@/lib/db"
 import { newsletterSubscribers } from "@/lib/db/schema"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
+import { checkRateLimit, getRequestIp } from "@/lib/rate-limit"
 
 export type NewsletterState = {
   status: "idle" | "success" | "error"
@@ -23,13 +24,24 @@ export async function subscribeToNewsletter(
   const dict = getDictionary(locale)
   const n = dict.newsletter
 
-  const email = String(formData.get("email") ?? "")
+  const ip = await getRequestIp()
+  const { allowed } = await checkRateLimit(`newsletter:${ip}`, {
+    max: 5,
+    windowMs: 60 * 60 * 1000,
+  })
+  if (!allowed) {
+    return { status: "error", message: n.rateLimited }
+  }
+
+  const rawEmail = String(formData.get("email") ?? "")
     .trim()
     .toLowerCase()
 
-  if (!email || !EMAIL_PATTERN.test(email)) {
+  if (!rawEmail || rawEmail.length > 320 || !EMAIL_PATTERN.test(rawEmail)) {
     return { status: "error", message: n.invalidEmail }
   }
+
+  const email = rawEmail
 
   const [existing] = await db
     .select()
