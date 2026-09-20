@@ -13,6 +13,7 @@ import {
   updateHomepageContent,
   type HomepageContentFormState,
 } from "@/app/admin/(dashboard)/homepage/actions"
+import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
 import type { HomepageStat } from "@/lib/db/schema"
 
 const initialState: HomepageContentFormState = { status: "idle" }
@@ -76,6 +77,7 @@ export function HomepageContentForm({
     updateHomepageContent,
     initialState
   )
+  useToastOnActionState(state.status, state.message)
 
   const eyebrow = useTranslatedPair(defaults.eyebrowEn, defaults.eyebrowFr)
   const headline = useTranslatedPair(defaults.headlineEn, defaults.headlineFr)
