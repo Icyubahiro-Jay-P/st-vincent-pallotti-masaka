@@ -9,7 +9,7 @@ import {
 
 // Thin Server Action so client form components can call DeepL translation
 // directly on blur, the same way EventForm already calls the `saveEvent`
-// Server Action — no app/api route needed for this project's conventions.
+// Server Action, no app/api route needed for this project's conventions.
 export async function translateField(
   text: string,
   sourceLocale: AppLocale,
