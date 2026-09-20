@@ -49,6 +49,7 @@ export async function updateSiteSettings(
   const instagramUrl = String(formData.get("instagramUrl") ?? "").trim()
   const youtubeUrl = String(formData.get("youtubeUrl") ?? "").trim()
   const facebookUrl = String(formData.get("facebookUrl") ?? "").trim()
+  const xUrl = String(formData.get("xUrl") ?? "").trim() || null
 
   const fieldErrors: SiteSettingsFormState["fieldErrors"] = {}
   if (!phoneDisplay) fieldErrors.phoneDisplay = "Enter a display phone number."
@@ -86,6 +87,7 @@ export async function updateSiteSettings(
       instagramUrl,
       youtubeUrl,
       facebookUrl,
+      xUrl,
       updatedAt: new Date(),
     })
     .where(eq(siteSettings.id, SETTINGS_ID))
