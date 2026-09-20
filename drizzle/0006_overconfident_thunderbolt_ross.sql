@@ -1,0 +1,1 @@
+ALTER TABLE "admissions_inquiries" ADD COLUMN "status" text DEFAULT 'new' NOT NULL;
