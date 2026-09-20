@@ -1,7 +1,9 @@
 "use client"
 
+import * as React from "react"
+import Link from "next/link"
 import { useActionState } from "react"
-import { Loader2, LogIn } from "lucide-react"
+import { Eye, EyeOff, Loader2, LogIn } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,6 +14,7 @@ const initialState: LoginState = { status: "idle" }
 
 export function AdminLoginForm() {
   const [state, formAction, pending] = useActionState(signInAdmin, initialState)
+  const [showPassword, setShowPassword] = React.useState(false)
 
   return (
     <form action={formAction} noValidate className="flex flex-col gap-5">
@@ -36,14 +39,35 @@ export function AdminLoginForm() {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-        />
+        <div className="flex items-baseline justify-between gap-4">
+          <Label htmlFor="password">Password</Label>
+          <Link
+            href="/admin/login/forgot-password"
+            className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          >
+            Forgot password?
+          </Link>
+        </div>
+        <div className="relative">
+          <Input
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            required
+            className="pr-9"
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-xs"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute top-1/2 right-0 -translate-y-1/2"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? <EyeOff /> : <Eye />}
+          </Button>
+        </div>
       </div>
 
       <Button
