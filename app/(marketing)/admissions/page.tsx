@@ -13,6 +13,7 @@ import { WhatsAppIcon } from "@/components/icons/whatsapp-icon"
 import { siteConfig } from "@/lib/site-config"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
+import { getPublishedPrograms } from "@/lib/programs"
 
 const processIcons = [UserPlus, CalendarCheck2, FileCheck2, ClipboardCheck] as const
 
@@ -31,6 +32,7 @@ export default async function AdmissionsPage({
   const { program } = await searchParams
   const dict = getDictionary(locale)
   const ad = dict.admissions
+  const publishedPrograms = await getPublishedPrograms(locale)
 
   return (
     <>
@@ -136,7 +138,11 @@ export default async function AdmissionsPage({
               {ad.form.description}
             </p>
             <div className="mt-8">
-              <AdmissionInquiryForm dict={dict} defaultProgram={program} />
+              <AdmissionInquiryForm
+                dict={dict}
+                programs={publishedPrograms}
+                defaultProgram={program}
+              />
             </div>
           </div>
 
