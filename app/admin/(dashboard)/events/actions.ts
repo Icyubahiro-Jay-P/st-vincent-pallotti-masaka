@@ -149,7 +149,7 @@ export async function saveEvent(
         category,
         ...coverImageFields,
         needsTranslationReview,
-        status: intent,
+        status: intent === "publish" ? "published" : "draft",
         publishedAt:
           intent === "publish"
             ? (existing.publishedAt ?? new Date())
@@ -182,7 +182,7 @@ export async function saveEvent(
         category,
         ...coverImageFields,
         needsTranslationReview,
-        status: intent,
+        status: intent === "publish" ? "published" : "draft",
         publishedAt: intent === "publish" ? new Date() : null,
         createdBy: user.id,
       })
@@ -224,7 +224,11 @@ export async function saveEvent(
   }
 
   revalidatePath("/news")
-  redirect("/admin/events")
+  redirect(
+    intent === "publish"
+      ? "/admin/events?toast=event-published"
+      : "/admin/events?toast=event-draft-saved"
+  )
 }
 
 export async function deleteEvent(formData: FormData) {
@@ -233,4 +237,5 @@ export async function deleteEvent(formData: FormData) {
   await db.delete(events).where(eq(events.id, id))
   revalidatePath("/admin/events")
   revalidatePath("/news")
+  redirect("/admin/events?toast=event-deleted")
 }
