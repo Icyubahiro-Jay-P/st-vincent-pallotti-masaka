@@ -7,15 +7,11 @@ import {
   YoutubeGlyph,
   FacebookGlyph,
 } from "@/components/icons/social-icons"
-import {
-  navLinks,
-  programHref,
-  siteConfig,
-  socialLinks,
-} from "@/lib/site-config"
+import { navLinks, programHref, siteConfig } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import type { Locale } from "@/lib/i18n/config"
 import { getPublishedPrograms } from "@/lib/programs"
+import { getSiteSettings } from "@/lib/site-settings"
 import { SubscribeForm } from "@/components/newsletter/subscribe-form"
 
 export async function SiteFooter({
@@ -25,7 +21,10 @@ export async function SiteFooter({
   dict: Dictionary
   locale: Locale
 }) {
-  const programs = await getPublishedPrograms(locale)
+  const [programs, settings] = await Promise.all([
+    getPublishedPrograms(locale),
+    getSiteSettings(),
+  ])
   return (
     <footer className="border-t border-white/20 bg-ink text-ink-foreground">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -45,17 +44,17 @@ export async function SiteFooter({
             <p className="text-xs/relaxed text-ink-foreground/70">
               &ldquo;{dict.site.spiritualMotto}&rdquo;
               <span className="block italic">
-                {siteConfig.spiritualMottoLatin}
+                {settings.spiritualMottoLatin}
               </span>
             </p>
             <div className="flex items-center gap-3 pt-1">
-              <SocialLink href={socialLinks.instagram} label="Instagram">
+              <SocialLink href={settings.instagramUrl} label="Instagram">
                 <InstagramGlyph className="size-4" />
               </SocialLink>
-              <SocialLink href={socialLinks.youtube} label="YouTube">
+              <SocialLink href={settings.youtubeUrl} label="YouTube">
                 <YoutubeGlyph className="size-4" />
               </SocialLink>
-              <SocialLink href={socialLinks.facebook} label="Facebook">
+              <SocialLink href={settings.facebookUrl} label="Facebook">
                 <FacebookGlyph className="size-4" />
               </SocialLink>
             </div>
@@ -105,30 +104,30 @@ export async function SiteFooter({
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 size-3.5 shrink-0 text-gold" />
                 <a
-                  href={siteConfig.mapsQuery}
+                  href={settings.mapsQuery}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-ink-foreground"
                 >
-                  {siteConfig.location}
+                  {settings.location}
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="size-3.5 shrink-0 text-gold" />
                 <a
-                  href={`tel:${siteConfig.phoneHref}`}
+                  href={`tel:${settings.phoneHref}`}
                   className="hover:text-ink-foreground"
                 >
-                  {siteConfig.phoneDisplay}
+                  {settings.phoneDisplay}
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="size-3.5 shrink-0 text-gold" />
                 <a
-                  href={`mailto:${siteConfig.email}`}
+                  href={`mailto:${settings.email}`}
                   className="hover:text-ink-foreground"
                 >
-                  {siteConfig.email}
+                  {settings.email}
                 </a>
               </li>
             </ul>
@@ -154,7 +153,7 @@ export async function SiteFooter({
             &copy; {new Date().getFullYear()} {siteConfig.name}.{" "}
             {dict.footer.runByPrefix} {dict.site.foundedBy}.
           </p>
-          <p className="tracking-[0.15em] uppercase">{siteConfig.motto}</p>
+          <p className="tracking-[0.15em] uppercase">{settings.motto}</p>
         </div>
       </div>
     </footer>
