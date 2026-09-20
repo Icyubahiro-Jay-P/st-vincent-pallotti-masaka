@@ -2,7 +2,11 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import { InstagramGlyph, YoutubeGlyph } from "@/components/icons/social-icons"
+import {
+  InstagramGlyph,
+  YoutubeGlyph,
+  XGlyph,
+} from "@/components/icons/social-icons"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import type { Locale } from "@/lib/i18n/config"
 import type { events as eventsTable } from "@/lib/db/schema"
@@ -15,12 +19,14 @@ export function NewsTeaser({
   events,
   instagramUrl,
   youtubeUrl,
+  xUrl,
 }: {
   dict: Dictionary
   locale: Locale
   events: Event[]
   instagramUrl: string
   youtubeUrl: string
+  xUrl: string | null
 }) {
   const n = dict.home.news
   const isFrench = locale === "fr"
@@ -95,6 +101,17 @@ export function NewsTeaser({
             >
               <YoutubeGlyph className="size-4" />
             </a>
+            {xUrl && (
+              <a
+                href={xUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center border border-border p-2 text-foreground transition-colors hover:border-primary hover:text-primary"
+                aria-label="X"
+              >
+                <XGlyph className="size-4" />
+              </a>
+            )}
           </div>
         </div>
       </div>
