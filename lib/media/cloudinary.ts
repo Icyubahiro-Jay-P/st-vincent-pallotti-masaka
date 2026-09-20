@@ -22,9 +22,11 @@ export type CloudinaryUploadCredentials = {
 
 // Mints a short-lived signature so the admin's browser can upload directly
 // to Cloudinary (POST to https://api.cloudinary.com/v1_1/<cloud>/auto/upload)
-// without routing the file through our own serverless function — Vercel
+// without routing the file through our own serverless function: Vercel
 // caps request bodies well under the video size ceiling this feature needs.
-export function signCloudinaryUpload(folder: string): CloudinaryUploadCredentials {
+export function signCloudinaryUpload(
+  folder: string
+): CloudinaryUploadCredentials {
   const { apiKey, apiSecret, cloudName } = getConfig()
   const timestamp = Math.round(Date.now() / 1000)
   const signature = cloudinary.utils.api_sign_request(
