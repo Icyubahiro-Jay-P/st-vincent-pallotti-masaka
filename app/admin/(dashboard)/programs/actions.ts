@@ -3,11 +3,30 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { eq } from "drizzle-orm"
+import { z } from "zod"
 
 import { db } from "@/lib/db"
 import { programs } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
 import { iconMap } from "@/components/icon-map"
+import {
+  nonEmptyString,
+  positionSchema,
+  zodFieldErrors,
+} from "@/lib/validation"
+
+const programSchema = z.object({
+  nameEn: nonEmptyString(200, "an English name"),
+  nameFr: nonEmptyString(200, "a French name"),
+  ageRangeEn: nonEmptyString(100, "an English age range"),
+  ageRangeFr: nonEmptyString(100, "a French age range"),
+  descriptionEn: nonEmptyString(1000, "an English description"),
+  descriptionFr: nonEmptyString(1000, "a French description"),
+  overviewEn: nonEmptyString(5000, "English overview text"),
+  overviewFr: nonEmptyString(5000, "French overview text"),
+  icon: z.string().refine((v) => v in iconMap, "Choose an icon."),
+  position: positionSchema,
+})
 
 export type ProgramFormState = {
   status: "idle" | "error"
@@ -54,19 +73,9 @@ export async function saveProgram(
   await requireAdmin()
 
   const id = formData.get("id") ? Number(formData.get("id")) : null
-  const nameEn = String(formData.get("nameEn") ?? "").trim()
-  const nameFr = String(formData.get("nameFr") ?? "").trim()
-  const ageRangeEn = String(formData.get("ageRangeEn") ?? "").trim()
-  const ageRangeFr = String(formData.get("ageRangeFr") ?? "").trim()
-  const descriptionEn = String(formData.get("descriptionEn") ?? "").trim()
-  const descriptionFr = String(formData.get("descriptionFr") ?? "").trim()
-  const overviewEn = String(formData.get("overviewEn") ?? "").trim()
-  const overviewFr = String(formData.get("overviewFr") ?? "").trim()
-  const icon = String(formData.get("icon") ?? "").trim()
   const isPublished = formData.get("isPublished") === "true"
   const needsTranslationReview =
     formData.get("needsTranslationReview") === "true"
-  const position = Number(formData.get("position") ?? 0)
   const highlightsEn = formData
     .getAll("highlightsEn")
     .map((value) => String(value).trim())
@@ -76,25 +85,39 @@ export async function saveProgram(
     .map((value) => String(value).trim())
     .filter(Boolean)
 
-  const fieldErrors: ProgramFormState["fieldErrors"] = {}
-  if (!nameEn) fieldErrors.nameEn = "Enter an English name."
-  if (!nameFr) fieldErrors.nameFr = "Enter a French name."
-  if (!ageRangeEn) fieldErrors.ageRangeEn = "Enter an English age range."
-  if (!ageRangeFr) fieldErrors.ageRangeFr = "Enter a French age range."
-  if (!descriptionEn)
-    fieldErrors.descriptionEn = "Enter an English description."
-  if (!descriptionFr) fieldErrors.descriptionFr = "Enter a French description."
-  if (!overviewEn) fieldErrors.overviewEn = "Enter English overview text."
-  if (!overviewFr) fieldErrors.overviewFr = "Enter French overview text."
-  if (!icon || !(icon in iconMap)) fieldErrors.icon = "Choose an icon."
+  const parsed = programSchema.safeParse({
+    nameEn: String(formData.get("nameEn") ?? ""),
+    nameFr: String(formData.get("nameFr") ?? ""),
+    ageRangeEn: String(formData.get("ageRangeEn") ?? ""),
+    ageRangeFr: String(formData.get("ageRangeFr") ?? ""),
+    descriptionEn: String(formData.get("descriptionEn") ?? ""),
+    descriptionFr: String(formData.get("descriptionFr") ?? ""),
+    overviewEn: String(formData.get("overviewEn") ?? ""),
+    overviewFr: String(formData.get("overviewFr") ?? ""),
+    icon: String(formData.get("icon") ?? ""),
+    position: formData.get("position") ?? 0,
+  })
 
-  if (Object.keys(fieldErrors).length > 0) {
+  if (!parsed.success) {
     return {
       status: "error",
       message: "Please fix the fields below.",
-      fieldErrors,
+      fieldErrors: zodFieldErrors(parsed.error),
     }
   }
+
+  const {
+    nameEn,
+    nameFr,
+    ageRangeEn,
+    ageRangeFr,
+    descriptionEn,
+    descriptionFr,
+    overviewEn,
+    overviewFr,
+    icon,
+    position,
+  } = parsed.data
 
   if (id) {
     const [existing] = await db
