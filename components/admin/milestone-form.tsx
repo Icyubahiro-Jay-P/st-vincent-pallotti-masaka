@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select"
 import { iconMap } from "@/components/icon-map"
 import { translateField } from "@/lib/translate-action"
+import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
 import {
   saveMilestone,
   type MilestoneFormState,
@@ -85,6 +86,7 @@ export function MilestoneForm({
     saveMilestone,
     initialState
   )
+  useToastOnActionState(state.status, state.message)
 
   const year = useTranslatedPair(
     defaultMilestone?.yearEn ?? "",
