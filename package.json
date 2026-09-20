@@ -15,7 +15,8 @@
     "check:db": "tsx --env-file=.env.local scripts/check-db.ts",
     "check:auth": "tsx --env-file=.env.local scripts/check-auth.ts",
     "check:newsletter-batch": "tsx --env-file=.env.local scripts/check-newsletter-batch.ts",
-    "seed:admin": "tsx --env-file=.env.local scripts/seed-admin.ts"
+    "seed:admin": "tsx --env-file=.env.local scripts/seed-admin.ts",
+    "seed:programs": "tsx --env-file=.env.local scripts/seed-programs.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1136.0",
