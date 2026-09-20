@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import { eq } from "drizzle-orm"
 
 import { EventForm } from "@/components/admin/event-form"
+import { AdminBreadcrumb } from "@/components/admin/admin-breadcrumb"
 import { db } from "@/lib/db"
 import { events, eventMedia } from "@/lib/db/schema"
 
@@ -26,6 +27,12 @@ export default async function EditEventPage({
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
+      <AdminBreadcrumb
+        items={[
+          { label: "Events", href: "/admin/events" },
+          { label: "Edit event" },
+        ]}
+      />
       <h1 className="font-heading text-xl font-semibold text-foreground">
         Edit event
       </h1>
