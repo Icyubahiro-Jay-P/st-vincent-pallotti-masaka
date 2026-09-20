@@ -17,7 +17,7 @@ export default async function AdminHomepagePage() {
   }
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-6">
+    <div className="mx-auto flex max-w-5xl flex-col gap-6">
       <h1 className="font-heading text-xl font-semibold text-foreground">
         Homepage content
       </h1>
