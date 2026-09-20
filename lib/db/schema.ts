@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm"
 import {
   boolean,
   index,
+  integer,
   pgTable,
   serial,
   text,
@@ -19,10 +20,78 @@ export const events = pgTable("events", {
   bodyFr: text("body_fr").notNull(),
   category: text("category").notNull(),
   coverImageUrl: text("cover_image_url"),
+  // Set once the cover photo goes through the Cloudinary + object-storage
+  // pipeline (see lib/media/); null for older events still on @vercel/blob.
+  coverImagePublicId: text("cover_image_public_id"),
+  coverImageBackupKey: text("cover_image_backup_key"),
   status: text("status").notNull().default("draft"), // "draft" | "published"
   publishedAt: timestamp("published_at", { withTimezone: true }),
   newsletterSentAt: timestamp("newsletter_sent_at", { withTimezone: true }),
   createdBy: text("created_by"),
+  // True when a DeepL translation call failed and the FR/EN counterpart
+  // field was filled with a verbatim copy of the source text as a
+  // fallback (see lib/translate.ts) rather than an actual translation.
+  needsTranslationReview: boolean("needs_translation_review")
+    .notNull()
+    .default(false),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+})
+
+export const eventMedia = pgTable(
+  "event_media",
+  {
+    id: serial("id").primaryKey(),
+    eventId: integer("event_id")
+      .notNull()
+      .references(() => events.id, { onDelete: "cascade" }),
+    kind: text("kind").notNull(), // "photo" | "video"
+    cloudinaryPublicId: text("cloudinary_public_id").notNull(),
+    cloudinaryUrl: text("cloudinary_url").notNull(),
+    backupObjectKey: text("backup_object_key").notNull(),
+    bytes: integer("bytes"),
+    position: integer("position").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [index("event_media_eventId_idx").on(table.eventId)]
+)
+
+export const eventMediaRelations = relations(eventMedia, ({ one }) => ({
+  event: one(events, {
+    fields: [eventMedia.eventId],
+    references: [events.id],
+  }),
+}))
+
+// Backend-driven replacement for the programs that used to be hardcoded in
+// lib/site-config.ts + lib/i18n/dictionaries/{en,fr}.ts. Flat EN/FR columns
+// mirror the `events` table convention above rather than a separate
+// translations table, since there are only ever two locales.
+export const programs = pgTable("programs", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  icon: text("icon").notNull(), // lucide-react icon name, e.g. "Baby"
+  position: integer("position").notNull().default(0),
+  isPublished: boolean("is_published").notNull().default(true),
+  nameEn: text("name_en").notNull(),
+  nameFr: text("name_fr").notNull(),
+  ageRangeEn: text("age_range_en").notNull(),
+  ageRangeFr: text("age_range_fr").notNull(),
+  descriptionEn: text("description_en").notNull(),
+  descriptionFr: text("description_fr").notNull(),
+  overviewEn: text("overview_en").notNull(),
+  overviewFr: text("overview_fr").notNull(),
+  highlightsEn: text("highlights_en").array().notNull().default([]),
+  highlightsFr: text("highlights_fr").array().notNull().default([]),
+  needsTranslationReview: boolean("needs_translation_review")
+    .notNull()
+    .default(false),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
