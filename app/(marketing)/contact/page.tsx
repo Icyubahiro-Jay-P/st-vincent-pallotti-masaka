@@ -10,29 +10,56 @@ import {
   YoutubeGlyph,
   FacebookGlyph,
 } from "@/components/icons/social-icons"
-import { siteConfig, socialLinks } from "@/lib/site-config"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
+import { getSiteSettings } from "@/lib/site-settings"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
   const dict = getDictionary(locale)
-  return { title: dict.meta.contact.title, description: dict.meta.contact.description }
+  return {
+    title: dict.meta.contact.title,
+    description: dict.meta.contact.description,
+  }
 }
 
-function contactCards(dict: Dictionary) {
+function contactCards(
+  dict: Dictionary,
+  settings: Awaited<ReturnType<typeof getSiteSettings>>
+) {
   return [
-    { icon: Phone, label: dict.contact.cards.call, value: siteConfig.phoneDisplay, href: `tel:${siteConfig.phoneHref}` },
-    { icon: WhatsAppIcon, label: dict.contact.cards.whatsapp, value: dict.contact.cards.whatsappValue, href: `https://wa.me/${siteConfig.whatsappNumber}` },
-    { icon: Mail, label: dict.contact.cards.email, value: siteConfig.email, href: `mailto:${siteConfig.email}` },
-    { icon: MapPin, label: dict.contact.cards.visit, value: siteConfig.location, href: siteConfig.mapsQuery },
+    {
+      icon: Phone,
+      label: dict.contact.cards.call,
+      value: settings.phoneDisplay,
+      href: `tel:${settings.phoneHref}`,
+    },
+    {
+      icon: WhatsAppIcon,
+      label: dict.contact.cards.whatsapp,
+      value: dict.contact.cards.whatsappValue,
+      href: `https://wa.me/${settings.whatsappNumber}`,
+    },
+    {
+      icon: Mail,
+      label: dict.contact.cards.email,
+      value: settings.email,
+      href: `mailto:${settings.email}`,
+    },
+    {
+      icon: MapPin,
+      label: dict.contact.cards.visit,
+      value: settings.location,
+      href: settings.mapsQuery,
+    },
   ] as const
 }
 
 export default async function ContactPage() {
   const locale = await getLocale()
   const dict = getDictionary(locale)
+  const settings = await getSiteSettings()
   const c = dict.contact
 
   return (
@@ -46,12 +73,16 @@ export default async function ContactPage() {
       <section className="border-b border-border bg-background py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
-            {contactCards(dict).map((card) => (
+            {contactCards(dict, settings).map((card) => (
               <a
                 key={card.label}
                 href={card.href}
                 target={card.href.startsWith("http") ? "_blank" : undefined}
-                rel={card.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                rel={
+                  card.href.startsWith("http")
+                    ? "noopener noreferrer"
+                    : undefined
+                }
                 className="group flex flex-col gap-4 bg-card p-6 transition-colors hover:bg-muted"
               >
                 <card.icon className="size-7 text-primary" />
@@ -85,7 +116,9 @@ export default async function ContactPage() {
               <div className="flex items-start gap-3">
                 <Clock className="mt-0.5 size-4 shrink-0 text-teal" />
                 <div>
-                  <p className="text-sm font-medium text-foreground">{c.findUs.officeHoursTitle}</p>
+                  <p className="text-sm font-medium text-foreground">
+                    {c.findUs.officeHoursTitle}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {c.findUs.officeHoursValue}
                   </p>
@@ -94,7 +127,7 @@ export default async function ContactPage() {
             </div>
             <div className="mt-6 flex items-center gap-3">
               <a
-                href={socialLinks.instagram}
+                href={settings.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -103,7 +136,7 @@ export default async function ContactPage() {
                 <InstagramGlyph className="size-4" />
               </a>
               <a
-                href={socialLinks.youtube}
+                href={settings.youtubeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
@@ -112,7 +145,7 @@ export default async function ContactPage() {
                 <YoutubeGlyph className="size-4" />
               </a>
               <a
-                href={socialLinks.facebook}
+                href={settings.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
