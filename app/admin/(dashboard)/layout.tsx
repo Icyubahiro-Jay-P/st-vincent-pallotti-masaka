@@ -6,6 +6,7 @@ import {
   AdminSidebarProvider,
 } from "@/components/admin/admin-sidebar"
 import { AdminThemeToggle } from "@/components/admin/admin-theme-toggle"
+import { AdminToastRuntime } from "@/components/admin/admin-toast-runtime"
 import { SignOutButton } from "@/components/admin/sign-out-button"
 
 export default function AdminDashboardLayout({
@@ -15,6 +16,7 @@ export default function AdminDashboardLayout({
 }>) {
   return (
     <AdminSidebarProvider>
+      <AdminToastRuntime />
       <div className="flex min-h-svh flex-col bg-background">
         <header className="flex h-14 items-center justify-between border-b border-border px-4 sm:px-6">
           <div className="flex items-center gap-2">
