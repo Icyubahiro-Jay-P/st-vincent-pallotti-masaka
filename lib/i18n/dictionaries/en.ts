@@ -211,23 +211,8 @@ const en = {
 
   home: {
     hero: {
-      eyebrow: "Pallottine Missionary Sisters · Masaka, Kigali",
-      headline: "Strive",
-      headlineEmphasis: "Beyond.",
-      paragraph:
-        "From Day Care to Secondary and TVET, Saint Vincent Pallotti School Masaka forms confident, capable graduates on a new campus built for over 1,400 students: Cambridge and National curricula, Special Needs Education, and hands-on vocational training, all rooted in Catholic values.",
       applyNow: "Apply Now",
       ourStory: "Our Story",
-      stats: [
-        { value: "1,400+", label: "Students" },
-        { value: "2022", label: "New Campus" },
-        { value: "2", label: "Curricula" },
-        { value: "5", label: "TVET Trades" },
-      ],
-      panelEstablished: "Est. by the Pallottine Sisters",
-      calloutValue: "1,200+",
-      calloutText:
-        "seats added when our new campus opened, blessed by Cardinal Antoine Kambanda",
     },
     programs: {
       eyebrow: "What We Offer",
@@ -338,58 +323,10 @@ const en = {
     values: {
       eyebrow: "What We Stand For",
       title: "Faith, excellence, inclusion, opportunity",
-      items: [
-        {
-          title: "Faith",
-          description:
-            "Catholic identity and the Pallottine charism shape daily life on campus, present but never overwhelming for families of all backgrounds.",
-        },
-        {
-          title: "Excellence",
-          description:
-            "High expectations across Cambridge and National curricula, backed by disciplined teaching and consistent assessment.",
-        },
-        {
-          title: "Inclusion",
-          description:
-            "Dedicated Special Needs Education ensures every learner, whatever their starting point, has a place to belong and grow.",
-        },
-        {
-          title: "Opportunity",
-          description:
-            "From TVET trades to university-track Secondary, every graduate leaves with a real path forward.",
-        },
-      ],
     },
     milestones: {
       eyebrow: "Our Journey",
       title: "Milestones",
-      items: [
-        {
-          year: "Founding",
-          title: "A Mission Begins",
-          description:
-            "The Pallottine Missionary Sisters of Our Lady of Kibeho Region establish a school in Masaka, Kigali, rooted in the charism of St. Vincent Pallotti.",
-        },
-        {
-          year: "Growth",
-          title: "Expanding Programs",
-          description:
-            "Day Care, Kindergarten, National Nursery, Primary and Secondary, and Special Needs Education grow alongside the surrounding community.",
-        },
-        {
-          year: "2022",
-          title: "New Campus Inaugurated",
-          description:
-            "A major campus expansion is officially inaugurated by Cardinal Antoine Kambanda together with the Ministry of Education, adding capacity for 1,200+ students.",
-        },
-        {
-          year: "Today",
-          title: "Striving Beyond",
-          description:
-            "Over 1,400 students now study across Cambridge, National and TVET pathways on one growing campus.",
-        },
-      ],
     },
   },
 
