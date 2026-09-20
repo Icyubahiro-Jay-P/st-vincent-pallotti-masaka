@@ -8,14 +8,14 @@
 export const siteConfig = {
   name: "Saint Vincent Pallotti School Masaka",
   shortName: "Pallotti Masaka",
-  url: "https://www.pallottimasaka.org",
+  url: "https://www.stvincentpallottimasaka.com",
   motto: "Strive Beyond",
   spiritualMottoLatin: "Caritas Christi urget nos",
   location: "Masaka, Kigali, Rwanda",
-  phoneDisplay: "+250 788 000 000",
-  phoneHref: "+250788000000",
-  whatsappNumber: "250788000000",
-  email: "admissions@pallottimasaka.org",
+  phoneDisplay: "+250 788 602 647",
+  phoneHref: "+250788602647",
+  whatsappNumber: "250788602647",
+  email: "admissions@stvincentpallottimasaka.com",
   mapsQuery:
     "https://www.google.com/maps/search/?api=1&query=Saint+Vincent+Pallotti+School+Masaka+Kigali+Rwanda",
 } as const
