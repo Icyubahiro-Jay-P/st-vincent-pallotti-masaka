@@ -3,11 +3,41 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { eq } from "drizzle-orm"
+import { z } from "zod"
 
 import { db } from "@/lib/db"
 import { events, eventMedia } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
 import { sendNewsletterForEvent } from "@/lib/newsletter/send-event-newsletter"
+import { zodFieldErrors } from "@/lib/validation"
+
+// Length caps only, applied regardless of draft/publish — whether each
+// field is actually *required* still depends on intent, handled below with
+// the existing imperative logic so draft-with-just-a-title keeps working.
+const eventCapsSchema = z.object({
+  titleEn: z.string().trim().max(200, "Title must be 200 characters or fewer."),
+  titleFr: z.string().trim().max(200, "Title must be 200 characters or fewer."),
+  excerptEn: z
+    .string()
+    .trim()
+    .max(500, "Excerpt must be 500 characters or fewer."),
+  excerptFr: z
+    .string()
+    .trim()
+    .max(500, "Excerpt must be 500 characters or fewer."),
+  bodyEn: z
+    .string()
+    .trim()
+    .max(20000, "Body text must be 20,000 characters or fewer."),
+  bodyFr: z
+    .string()
+    .trim()
+    .max(20000, "Body text must be 20,000 characters or fewer."),
+  category: z
+    .string()
+    .trim()
+    .max(100, "Category must be 100 characters or fewer."),
+})
 
 export type EventFormState = {
   status: "idle" | "error"
@@ -72,13 +102,6 @@ export async function saveEvent(
   const { user } = await requireAdmin()
 
   const id = formData.get("id") ? Number(formData.get("id")) : null
-  const titleEn = String(formData.get("titleEn") ?? "").trim()
-  const titleFr = String(formData.get("titleFr") ?? "").trim()
-  const excerptEn = String(formData.get("excerptEn") ?? "").trim()
-  const excerptFr = String(formData.get("excerptFr") ?? "").trim()
-  const bodyEn = String(formData.get("bodyEn") ?? "").trim()
-  const bodyFr = String(formData.get("bodyFr") ?? "").trim()
-  const category = String(formData.get("category") ?? "").trim()
   const intent = formData.get("intent") === "publish" ? "publish" : "draft"
   const needsTranslationReview =
     formData.get("needsTranslationReview") === "true"
@@ -86,6 +109,27 @@ export async function saveEvent(
   const coverImageUrl = formData.get("coverImageUrl")
   const coverImageBackupKey = formData.get("coverImageBackupKey")
   const galleryMedia = parseGalleryMedia(formData.get("galleryMediaJson"))
+
+  const caps = eventCapsSchema.safeParse({
+    titleEn: String(formData.get("titleEn") ?? ""),
+    titleFr: String(formData.get("titleFr") ?? ""),
+    excerptEn: String(formData.get("excerptEn") ?? ""),
+    excerptFr: String(formData.get("excerptFr") ?? ""),
+    bodyEn: String(formData.get("bodyEn") ?? ""),
+    bodyFr: String(formData.get("bodyFr") ?? ""),
+    category: String(formData.get("category") ?? ""),
+  })
+
+  if (!caps.success) {
+    return {
+      status: "error",
+      message: "Please fix the fields below.",
+      fieldErrors: zodFieldErrors(caps.error),
+    }
+  }
+
+  const { titleEn, titleFr, excerptEn, excerptFr, bodyEn, bodyFr, category } =
+    caps.data
 
   // Publishing needs a complete bilingual event; a draft only needs enough
   // of a title to identify it later, so every other field can stay blank.
