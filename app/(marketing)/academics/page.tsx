@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
+import { getPublishedPrograms } from "@/lib/programs"
 
 const curriculumIcons = [Globe2, BookOpen] as const
 const subjectIcons = [Calculator, Languages, Microscope, Palette] as const
@@ -25,13 +26,17 @@ const subjectIcons = [Calculator, Languages, Microscope, Palette] as const
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
   const dict = getDictionary(locale)
-  return { title: dict.meta.academics.title, description: dict.meta.academics.description }
+  return {
+    title: dict.meta.academics.title,
+    description: dict.meta.academics.description,
+  }
 }
 
 export default async function AcademicsPage() {
   const locale = await getLocale()
   const dict = getDictionary(locale)
   const ac = dict.academics
+  const publishedPrograms = await getPublishedPrograms(locale)
 
   return (
     <>
@@ -47,7 +52,10 @@ export default async function AcademicsPage() {
             {ac.curricula.map((track, index) => {
               const Icon = curriculumIcons[index]
               return (
-                <div key={track.slug} className="flex flex-col gap-5 border border-border bg-card p-8">
+                <div
+                  key={track.slug}
+                  className="flex flex-col gap-5 border border-border bg-card p-8"
+                >
                   <div className="flex items-center justify-between">
                     <Icon className="size-9 text-primary" />
                     <Badge variant="secondary" className="uppercase">
@@ -57,7 +65,9 @@ export default async function AcademicsPage() {
                   <h2 className="font-heading text-2xl font-semibold text-foreground">
                     {track.name}
                   </h2>
-                  <p className="text-sm/relaxed text-muted-foreground">{track.description}</p>
+                  <p className="text-sm/relaxed text-muted-foreground">
+                    {track.description}
+                  </p>
                   <div className="flex flex-wrap gap-2 border-t border-border pt-5">
                     {track.subjects.map((subject) => (
                       <span
@@ -84,9 +94,14 @@ export default async function AcademicsPage() {
             {ac.subjectHighlights.map((label, index) => {
               const Icon = subjectIcons[index]
               return (
-                <div key={label} className="flex flex-col items-center gap-2 bg-card px-4 py-6 text-center">
+                <div
+                  key={label}
+                  className="flex flex-col items-center gap-2 bg-card px-4 py-6 text-center"
+                >
                   <Icon className="size-5 text-teal" />
-                  <p className="text-[0.7rem] font-medium text-foreground">{label}</p>
+                  <p className="text-[0.7rem] font-medium text-foreground">
+                    {label}
+                  </p>
                 </div>
               )
             })}
@@ -108,7 +123,10 @@ export default async function AcademicsPage() {
             </p>
             <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {ac.specialNeeds.items.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-xs text-ink-foreground/85">
+                <li
+                  key={item}
+                  className="flex items-start gap-2.5 text-xs text-ink-foreground/85"
+                >
                   <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-gold" />
                   {item}
                 </li>
@@ -126,10 +144,10 @@ export default async function AcademicsPage() {
       </section>
 
       <ProgramsGrid
-        dict={dict}
         eyebrow={ac.allPrograms.eyebrow}
         title={ac.allPrograms.title}
         description={ac.allPrograms.description}
+        items={publishedPrograms}
       />
 
       <section className="bg-background py-16 sm:py-20">
