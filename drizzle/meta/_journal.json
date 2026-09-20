@@ -57,6 +57,13 @@
       "when": 1789908293922,
       "tag": "0007_wonderful_abomination",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1789924826574,
+      "tag": "0008_calm_fabian_cortez",
+      "breakpoints": true
     }
   ]
 }
