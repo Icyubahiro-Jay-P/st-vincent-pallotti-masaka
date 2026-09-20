@@ -22,6 +22,13 @@ function getClient(config: ReturnType<typeof getConfig>) {
     client = new S3Client({
       endpoint: config.endpoint,
       region: config.region,
+      // Neon's S3-compatible endpoint only has a TLS cert for
+      // *.storage.<project>...neon.tech, one subdomain level deep. The SDK's
+      // default virtual-hosted-style addressing puts the bucket in ANOTHER
+      // subdomain level (<bucket>.<endpoint>), which doesn't match that cert
+      // and fails TLS validation. Path-style keeps the bucket in the URL
+      // path instead, matching the cert Neon actually serves.
+      forcePathStyle: true,
       credentials: {
         accessKeyId: config.accessKeyId,
         secretAccessKey: config.secretAccessKey,
