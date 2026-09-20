@@ -1,11 +1,16 @@
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon"
-import { siteConfig } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-export function WhatsAppFab({ dict }: { dict: Dictionary }) {
+export function WhatsAppFab({
+  dict,
+  whatsappNumber,
+}: {
+  dict: Dictionary
+  whatsappNumber: string
+}) {
   return (
     <a
-      href={`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
+      href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
         dict.whatsapp.prefillMessage
       )}`}
       target="_blank"
@@ -14,7 +19,7 @@ export function WhatsAppFab({ dict }: { dict: Dictionary }) {
       aria-label={dict.whatsapp.ariaLabel}
     >
       <WhatsAppIcon className="size-7" />
-      <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-none bg-ink px-2.5 py-1.5 text-xs font-medium text-ink-foreground opacity-0 shadow-md transition-opacity group-hover:opacity-100 sm:block">
+      <span className="pointer-events-none absolute right-full mr-3 hidden rounded-none bg-ink px-2.5 py-1.5 text-xs font-medium whitespace-nowrap text-ink-foreground opacity-0 shadow-md transition-opacity group-hover:opacity-100 sm:block">
         {dict.whatsapp.tooltip}
       </span>
     </a>
