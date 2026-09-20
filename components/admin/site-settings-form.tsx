@@ -25,6 +25,7 @@ export type SiteSettingsDefaults = {
   instagramUrl: string
   youtubeUrl: string
   facebookUrl: string
+  xUrl: string | null
 }
 
 export function SiteSettingsForm({
@@ -124,6 +125,11 @@ export function SiteSettingsForm({
           name="facebookUrl"
           defaultValue={defaults.facebookUrl}
           error={state.fieldErrors?.facebookUrl}
+        />
+        <Field
+          label="X (Twitter) URL (optional)"
+          name="xUrl"
+          defaultValue={defaults.xUrl ?? ""}
         />
       </div>
 
