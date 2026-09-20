@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select"
 import { iconMap } from "@/components/icon-map"
 import { translateField } from "@/lib/translate-action"
+import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
 import {
   saveValue,
   type ValueFormState,
@@ -80,6 +81,7 @@ export function ValueForm({
   defaultPosition?: number
 }) {
   const [state, formAction, pending] = useActionState(saveValue, initialState)
+  useToastOnActionState(state.status, state.message)
 
   const title = useTranslatedPair(
     defaultValue?.titleEn ?? "",
