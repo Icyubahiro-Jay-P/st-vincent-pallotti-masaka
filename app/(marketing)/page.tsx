@@ -9,6 +9,8 @@ import { CtaBand } from "@/components/home/cta-band"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getPublishedPrograms } from "@/lib/programs"
+import { getSiteSettings } from "@/lib/site-settings"
+import { getHomepageContent } from "@/lib/homepage-content"
 import { db } from "@/lib/db"
 import { events } from "@/lib/db/schema"
 
@@ -22,10 +24,12 @@ export default async function Page() {
     .orderBy(desc(events.publishedAt))
     .limit(3)
   const publishedPrograms = await getPublishedPrograms(locale)
+  const settings = await getSiteSettings()
+  const homepageContent = await getHomepageContent(locale)
 
   return (
     <>
-      <Hero dict={dict} />
+      <Hero dict={dict} content={homepageContent} />
       <ProgramsGrid
         eyebrow={dict.home.programs.eyebrow}
         title={dict.home.programs.title}
@@ -34,8 +38,14 @@ export default async function Page() {
       />
       <Pathway dict={dict} />
       <WhyPallotti dict={dict} />
-      <NewsTeaser dict={dict} locale={locale} events={latestEvents} />
-      <CtaBand dict={dict} />
+      <NewsTeaser
+        dict={dict}
+        locale={locale}
+        events={latestEvents}
+        instagramUrl={settings.instagramUrl}
+        youtubeUrl={settings.youtubeUrl}
+      />
+      <CtaBand dict={dict} whatsappNumber={settings.whatsappNumber} />
     </>
   )
 }
