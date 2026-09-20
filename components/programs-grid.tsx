@@ -2,21 +2,19 @@ import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 
 import { iconMap } from "@/components/icon-map"
-import { programs, programHref, type ProgramMeta } from "@/lib/site-config"
-import type { Dictionary } from "@/lib/i18n/get-dictionary"
+import { programHref } from "@/lib/site-config"
+import type { getPublishedPrograms } from "@/lib/programs"
 
 export function ProgramsGrid({
-  dict,
   eyebrow,
   title,
   description,
-  items = programs,
+  items,
 }: {
-  dict: Dictionary
   eyebrow: string
   title: string
   description: string
-  items?: readonly ProgramMeta[]
+  items: Awaited<ReturnType<typeof getPublishedPrograms>>
 }) {
   return (
     <section className="border-b border-border bg-background py-16 sm:py-20">
@@ -34,7 +32,6 @@ export function ProgramsGrid({
         <div className="mt-10 grid grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {items.map((program) => {
             const Icon = iconMap[program.icon]
-            const text = dict.programs[program.slug]
             return (
               <Link
                 key={program.slug}
@@ -49,14 +46,14 @@ export function ProgramsGrid({
                 </div>
                 <div>
                   <h3 className="font-heading text-base font-semibold text-foreground">
-                    {text.name}
+                    {program.name}
                   </h3>
                   <p className="mt-0.5 text-[0.7rem] font-medium tracking-wide text-teal uppercase">
-                    {text.ageRange}
+                    {program.ageRange}
                   </p>
                 </div>
                 <p className="text-xs/relaxed text-muted-foreground">
-                  {text.description}
+                  {program.description}
                 </p>
               </Link>
             )
