@@ -77,6 +77,7 @@ export default async function NewsDetailPage({
                 src={event.coverImageUrl}
                 alt={title}
                 fill
+                priority
                 className="object-cover"
                 sizes="(min-width: 1024px) 768px, 100vw"
               />
