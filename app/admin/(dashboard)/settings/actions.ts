@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
 
@@ -121,6 +121,7 @@ export async function updateSiteSettings(
 
   // Header/footer render on every public page via app/(marketing)/layout.tsx,
   // so bust that whole layout subtree rather than listing routes one by one.
+  updateTag("site-settings")
   revalidatePath("/", "layout")
 
   return { status: "success", message: "Settings saved." }
