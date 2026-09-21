@@ -42,8 +42,10 @@ export default async function AdmissionsPage({
   const { program } = await searchParams
   const dict = getDictionary(locale)
   const ad = dict.admissions
-  const publishedPrograms = await getPublishedPrograms(locale)
-  const settings = await getSiteSettings()
+  const [publishedPrograms, settings] = await Promise.all([
+    getPublishedPrograms(locale),
+    getSiteSettings(),
+  ])
 
   return (
     <>
