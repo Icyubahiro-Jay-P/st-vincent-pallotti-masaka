@@ -80,5 +80,11 @@ export const auth = betterAuth({
   user: {
     modelName: "admin",
   },
+  advanced: {
+    useSecureCookies: process.env.NODE_ENV === "production",
+    defaultCookieAttributes: {
+      sameSite: "lax",
+    },
+  },
   plugins: [nextCookies()],
 })
