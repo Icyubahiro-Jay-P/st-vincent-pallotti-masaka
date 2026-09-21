@@ -19,6 +19,7 @@ import {
   type InquiryState,
 } from "@/app/(marketing)/admissions/actions"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
+import { admissionsTermOptions } from "@/lib/admissions-terms"
 import { cn } from "@/lib/utils"
 
 const initialState: InquiryState = { status: "idle" }
@@ -144,9 +145,9 @@ export function AdmissionInquiryForm({
               <SelectValue placeholder={f.preferredTermPlaceholder} />
             </SelectTrigger>
             <SelectContent>
-              {f.terms.map((term) => (
-                <SelectItem key={term} value={term}>
-                  {term}
+              {admissionsTermOptions(dict.locale).map(({ key, label }) => (
+                <SelectItem key={key} value={key}>
+                  {label}
                 </SelectItem>
               ))}
             </SelectContent>
