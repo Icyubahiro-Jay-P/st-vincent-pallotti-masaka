@@ -1,8 +1,9 @@
 import Link from "next/link"
-import { asc } from "drizzle-orm"
+import { asc, count } from "drizzle-orm"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { PaginationNav } from "@/components/pagination-nav"
 import {
   Dialog,
   DialogClose,
@@ -16,12 +17,24 @@ import {
 import { db } from "@/lib/db"
 import { milestones } from "@/lib/db/schema"
 import { deleteMilestone } from "@/app/admin/(dashboard)/milestones/actions"
+import { PAGE_SIZE, parsePage, totalPages } from "@/lib/pagination"
 
-export default async function AdminMilestonesPage() {
-  const allMilestones = await db
-    .select()
-    .from(milestones)
-    .orderBy(asc(milestones.position))
+export default async function AdminMilestonesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const page = parsePage((await searchParams).page)
+  const [allMilestones, [{ total }]] = await Promise.all([
+    db
+      .select()
+      .from(milestones)
+      .orderBy(asc(milestones.position))
+      .limit(PAGE_SIZE)
+      .offset((page - 1) * PAGE_SIZE),
+    db.select({ total: count() }).from(milestones),
+  ])
+  const pages = totalPages(total)
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -126,6 +139,13 @@ export default async function AdminMilestonesPage() {
           </tbody>
         </table>
       </div>
+      <PaginationNav
+        page={page}
+        totalPages={pages}
+        buildHref={(p) =>
+          p <= 1 ? "/admin/milestones" : `/admin/milestones?page=${p}`
+        }
+      />
     </div>
   )
 }
