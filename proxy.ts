@@ -14,7 +14,8 @@ const PUBLIC_ADMIN_PATHS = new Set([
 ])
 
 export async function proxy(request: NextRequest) {
-  if (PUBLIC_ADMIN_PATHS.has(request.nextUrl.pathname)) {
+  const pathname = request.nextUrl.pathname.replace(/\/+$/, "") || "/"
+  if (PUBLIC_ADMIN_PATHS.has(pathname)) {
     return NextResponse.next()
   }
 
