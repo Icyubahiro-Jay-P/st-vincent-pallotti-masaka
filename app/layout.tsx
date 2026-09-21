@@ -36,6 +36,13 @@ export async function generateMetadata(): Promise<Metadata> {
       template: "%s | Saint Vincent Pallotti School Masaka",
     },
     description: dict.meta.home.description,
+    // en/fr content lives at the same URL (locale is cookie-driven, not a
+    // path segment), so this can't point each language at a distinct URL
+    // the way hreflang normally works — it just signals to crawlers that
+    // both languages exist here at all, which is better than no signal.
+    alternates: {
+      languages: { en: siteConfig.url, fr: siteConfig.url },
+    },
     keywords: [
       "Saint Vincent Pallotti School Masaka",
       "Pallotti Masaka",
