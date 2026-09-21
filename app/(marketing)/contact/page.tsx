@@ -183,6 +183,7 @@ export default async function ContactPage() {
               className="h-full min-h-80 w-full grayscale-15"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
             />
           </div>
         </div>
