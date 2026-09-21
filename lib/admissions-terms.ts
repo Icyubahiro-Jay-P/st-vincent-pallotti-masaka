@@ -30,7 +30,12 @@ export function admissionsTermOptions(
   }))
 }
 
-export function admissionsTermLabel(key: string): string {
+export function admissionsTermLabel(
+  key: string,
+  locale: string = "en"
+): string {
   const index = ADMISSIONS_TERM_KEYS.indexOf(key as AdmissionsTermKey)
-  return index === -1 ? key : LABELS.en[index]
+  if (index === -1) return key
+  const labels = LABELS[locale as Locale] ?? LABELS.en
+  return labels[index]
 }
