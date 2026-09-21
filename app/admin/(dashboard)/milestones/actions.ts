@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
@@ -124,6 +124,7 @@ export async function saveMilestone(
     })
   }
 
+  updateTag("milestones")
   revalidatePath("/about")
   redirect("/admin/milestones?toast=milestone-saved")
 }
@@ -133,6 +134,7 @@ export async function deleteMilestone(formData: FormData) {
   const id = Number(formData.get("id"))
   await db.delete(milestones).where(eq(milestones.id, id))
   revalidatePath("/admin/milestones")
+  updateTag("milestones")
   revalidatePath("/about")
   redirect("/admin/milestones?toast=milestone-deleted")
 }
