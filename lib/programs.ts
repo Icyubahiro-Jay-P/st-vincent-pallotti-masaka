@@ -1,4 +1,5 @@
-import { eq } from "drizzle-orm"
+import { cache } from "react"
+import { and, eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
 import { programs } from "@/lib/db/schema"
@@ -29,22 +30,30 @@ function resolveProgram(
   }
 }
 
-export async function getPublishedPrograms(
-  locale: Locale
-): Promise<ResolvedProgram[]> {
-  const rows = await db
-    .select()
-    .from(programs)
-    .where(eq(programs.isPublished, true))
-    .orderBy(programs.position)
+// cache() dedupes repeat calls with the same args within a single request,
+// so generateStaticParams/generateMetadata/the page component sharing this
+// function only hit the DB once per render instead of three times.
+export const getPublishedPrograms = cache(
+  async (locale: Locale): Promise<ResolvedProgram[]> => {
+    const rows = await db
+      .select()
+      .from(programs)
+      .where(eq(programs.isPublished, true))
+      .orderBy(programs.position)
 
-  return rows.map((row) => resolveProgram(row, locale))
-}
+    return rows.map((row) => resolveProgram(row, locale))
+  }
+)
 
 export async function getProgramBySlug(
   slug: string,
   locale: Locale
 ): Promise<ResolvedProgram | undefined> {
-  const published = await getPublishedPrograms(locale)
-  return published.find((program) => program.slug === slug)
+  const [row] = await db
+    .select()
+    .from(programs)
+    .where(and(eq(programs.slug, slug), eq(programs.isPublished, true)))
+    .limit(1)
+
+  return row ? resolveProgram(row, locale) : undefined
 }
