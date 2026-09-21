@@ -67,23 +67,65 @@ const galleryMediaItemSchema = z.object({
 
 type GalleryMediaInput = z.infer<typeof galleryMediaItemSchema>
 
-function parseGalleryMedia(
-  raw: FormDataEntryValue | null
-): GalleryMediaInput[] {
-  if (typeof raw !== "string" || !raw) return []
+const coverImageSchema = z.object({
+  coverImageUrl: z.string().trim().url(),
+  coverImagePublicId: z.string().trim().min(1).max(300).nullable(),
+  coverImageBackupKey: z.string().trim().min(1).max(300).nullable(),
+})
+
+// Returns null fields (not a validation error) when no cover image was
+// uploaded - the form field is optional, so an empty/malformed value here
+// means "no cover image", same as before this validation existed.
+function parseCoverImage(formData: FormData) {
+  const coverImageUrl = formData.get("coverImageUrl")
+  if (typeof coverImageUrl !== "string" || !coverImageUrl) {
+    return {
+      coverImageUrl: null,
+      coverImagePublicId: null,
+      coverImageBackupKey: null,
+    }
+  }
+
+  const coverImagePublicId = formData.get("coverImagePublicId")
+  const coverImageBackupKey = formData.get("coverImageBackupKey")
+  const result = coverImageSchema.safeParse({
+    coverImageUrl,
+    coverImagePublicId:
+      typeof coverImagePublicId === "string" ? coverImagePublicId : null,
+    coverImageBackupKey:
+      typeof coverImageBackupKey === "string" ? coverImageBackupKey : null,
+  })
+
+  return result.success
+    ? result.data
+    : {
+        coverImageUrl: null,
+        coverImagePublicId: null,
+        coverImageBackupKey: null,
+      }
+}
+
+function parseGalleryMedia(raw: FormDataEntryValue | null): {
+  items: GalleryMediaInput[]
+  droppedCount: number
+} {
+  if (typeof raw !== "string" || !raw) return { items: [], droppedCount: 0 }
   try {
     const parsed: unknown = JSON.parse(raw)
-    if (!Array.isArray(parsed)) return []
+    if (!Array.isArray(parsed)) return { items: [], droppedCount: 0 }
     // Drop any item that doesn't match the expected shape rather than
-    // rejecting the whole save — this field is populated by our own
+    // rejecting the whole save - this field is populated by our own
     // upload widget, so a malformed item means a stale/tampered payload,
-    // not a form the admin needs to be told to fix.
-    return parsed.flatMap((item) => {
+    // not a form the admin needs to be told to fix. The admin still gets
+    // a toast naming how many were skipped (see the redirect below), so
+    // it isn't a silent partial save.
+    const items = parsed.flatMap((item) => {
       const result = galleryMediaItemSchema.safeParse(item)
       return result.success ? [result.data] : []
     })
+    return { items, droppedCount: parsed.length - items.length }
   } catch {
-    return []
+    return { items: [], droppedCount: 0 }
   }
 }
 
@@ -116,10 +158,9 @@ export async function saveEvent(
   const intent = formData.get("intent") === "publish" ? "publish" : "draft"
   const needsTranslationReview =
     formData.get("needsTranslationReview") === "true"
-  const coverImagePublicId = formData.get("coverImagePublicId")
-  const coverImageUrl = formData.get("coverImageUrl")
-  const coverImageBackupKey = formData.get("coverImageBackupKey")
-  const galleryMedia = parseGalleryMedia(formData.get("galleryMediaJson"))
+  const coverImage = parseCoverImage(formData)
+  const { items: galleryMedia, droppedCount: galleryDropped } =
+    parseGalleryMedia(formData.get("galleryMediaJson"))
 
   const caps = eventCapsSchema.safeParse({
     titleEn: String(formData.get("titleEn") ?? ""),
@@ -168,18 +209,10 @@ export async function saveEvent(
   // The browser already uploaded the (compressed) file straight to
   // Cloudinary and the backup bucket via upload-actions.ts; this action
   // only ever receives the resulting URLs/keys, never the file itself.
-  const coverImageFields =
-    typeof coverImageUrl === "string" && coverImageUrl
-      ? {
-          coverImageUrl,
-          coverImagePublicId:
-            typeof coverImagePublicId === "string" ? coverImagePublicId : null,
-          coverImageBackupKey:
-            typeof coverImageBackupKey === "string"
-              ? coverImageBackupKey
-              : null,
-        }
-      : {}
+  // parseCoverImage validates the shape (real URL, bounded key lengths)
+  // and returns all-null fields if anything's missing/malformed, same
+  // as "no cover image was set".
+  const coverImageFields = coverImage.coverImageUrl ? coverImage : {}
 
   let eventId: number
 
@@ -279,11 +312,11 @@ export async function saveEvent(
   }
 
   revalidatePath("/news")
-  redirect(
-    intent === "publish"
-      ? "/admin/events?toast=event-published"
-      : "/admin/events?toast=event-draft-saved"
-  )
+  const toastKey =
+    intent === "publish" ? "event-published" : "event-draft-saved"
+  const droppedParam =
+    galleryDropped > 0 ? `&galleryDropped=${galleryDropped}` : ""
+  redirect(`/admin/events?toast=${toastKey}${droppedParam}`)
 }
 
 export async function deleteEvent(formData: FormData) {
