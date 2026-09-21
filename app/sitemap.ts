@@ -17,7 +17,15 @@ export const dynamic = "force-dynamic"
 // re-evaluated (and defeating caching) on every single request.
 const BUILD_TIME = new Date()
 
-const STATIC_ROUTES = ["", "/about", "/academics", "/tvet", "/admissions", "/news", "/contact"]
+const STATIC_ROUTES = [
+  "",
+  "/about",
+  "/academics",
+  "/tvet",
+  "/admissions",
+  "/news",
+  "/contact",
+]
 
 // Each page now has exactly one URL (language is a cookie, not a URL
 // segment), so there's only one entry per route rather than one per locale.
