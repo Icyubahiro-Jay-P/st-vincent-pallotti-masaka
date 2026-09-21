@@ -39,7 +39,10 @@ export function LanguageSwitcher({
     <Select value={dict.locale} onValueChange={switchTo}>
       <SelectTrigger
         aria-label={dict.languageSwitcher.label}
-        className={className ?? "h-9 gap-1.5 border-white/20 bg-transparent text-ink-foreground hover:bg-white/10"}
+        className={
+          className ??
+          "h-9 gap-1.5 border-white/20 bg-transparent text-ink-foreground hover:bg-white/10"
+        }
       >
         <Languages className="size-3.5" data-icon="inline-start" />
         <SelectValue>{dict.locale.toUpperCase()}</SelectValue>
