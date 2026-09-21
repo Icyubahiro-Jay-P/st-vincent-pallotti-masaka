@@ -93,6 +93,11 @@ export default async function NewsPage({
               <p className="text-sm text-muted-foreground">{n.empty}</p>
             )}
           </div>
+          <PaginationNav
+            page={page}
+            totalPages={pages}
+            buildHref={(p) => (p <= 1 ? "/news" : `/news?page=${p}`)}
+          />
         </div>
       </section>
 
