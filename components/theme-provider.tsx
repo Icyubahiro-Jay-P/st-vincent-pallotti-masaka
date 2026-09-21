@@ -43,7 +43,10 @@ function ThemeHotkey() {
         return
       }
 
-      if (event.metaKey || event.ctrlKey || event.altKey) {
+      // Requires Alt so this can't fire from a bare "d" while someone is
+      // typing prose elsewhere on the page (outside a recognized typing
+      // target, e.g. a contenteditable the isTypingTarget check misses).
+      if (!event.altKey || event.metaKey || event.ctrlKey) {
         return
       }
 
