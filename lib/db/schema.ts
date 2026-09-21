@@ -10,38 +10,44 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core"
 
-export const events = pgTable("events", {
-  id: serial("id").primaryKey(),
-  slug: text("slug").notNull().unique(),
-  titleEn: text("title_en").notNull(),
-  titleFr: text("title_fr").notNull(),
-  excerptEn: text("excerpt_en").notNull(),
-  excerptFr: text("excerpt_fr").notNull(),
-  bodyEn: text("body_en").notNull(),
-  bodyFr: text("body_fr").notNull(),
-  category: text("category").notNull(),
-  coverImageUrl: text("cover_image_url"),
-  // Set once the cover photo goes through the Cloudinary + object-storage
-  // pipeline (see lib/media/); null for older events still on @vercel/blob.
-  coverImagePublicId: text("cover_image_public_id"),
-  coverImageBackupKey: text("cover_image_backup_key"),
-  status: text("status").notNull().default("draft"), // "draft" | "published"
-  publishedAt: timestamp("published_at", { withTimezone: true }),
-  newsletterSentAt: timestamp("newsletter_sent_at", { withTimezone: true }),
-  createdBy: text("created_by"),
-  // True when a DeepL translation call failed and the FR/EN counterpart
-  // field was filled with a verbatim copy of the source text as a
-  // fallback (see lib/translate.ts) rather than an actual translation.
-  needsTranslationReview: boolean("needs_translation_review")
-    .notNull()
-    .default(false),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-})
+export const events = pgTable(
+  "events",
+  {
+    id: serial("id").primaryKey(),
+    slug: text("slug").notNull().unique(),
+    titleEn: text("title_en").notNull(),
+    titleFr: text("title_fr").notNull(),
+    excerptEn: text("excerpt_en").notNull(),
+    excerptFr: text("excerpt_fr").notNull(),
+    bodyEn: text("body_en").notNull(),
+    bodyFr: text("body_fr").notNull(),
+    category: text("category").notNull(),
+    coverImageUrl: text("cover_image_url"),
+    // Set once the cover photo goes through the Cloudinary + object-storage
+    // pipeline (see lib/media/); null for older events still on @vercel/blob.
+    coverImagePublicId: text("cover_image_public_id"),
+    coverImageBackupKey: text("cover_image_backup_key"),
+    status: text("status").notNull().default("draft"), // "draft" | "published"
+    publishedAt: timestamp("published_at", { withTimezone: true }),
+    newsletterSentAt: timestamp("newsletter_sent_at", { withTimezone: true }),
+    createdBy: text("created_by"),
+    // True when a DeepL translation call failed and the FR/EN counterpart
+    // field was filled with a verbatim copy of the source text as a
+    // fallback (see lib/translate.ts) rather than an actual translation.
+    needsTranslationReview: boolean("needs_translation_review")
+      .notNull()
+      .default(false),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index("events_status_publishedAt_idx").on(table.status, table.publishedAt),
+  ]
+)
 
 export const eventMedia = pgTable(
   "event_media",
@@ -74,81 +80,108 @@ export const eventMediaRelations = relations(eventMedia, ({ one }) => ({
 // lib/site-config.ts + lib/i18n/dictionaries/{en,fr}.ts. Flat EN/FR columns
 // mirror the `events` table convention above rather than a separate
 // translations table, since there are only ever two locales.
-export const programs = pgTable("programs", {
-  id: serial("id").primaryKey(),
-  slug: text("slug").notNull().unique(),
-  icon: text("icon").notNull(), // lucide-react icon name, e.g. "Baby"
-  position: integer("position").notNull().default(0),
-  isPublished: boolean("is_published").notNull().default(true),
-  nameEn: text("name_en").notNull(),
-  nameFr: text("name_fr").notNull(),
-  ageRangeEn: text("age_range_en").notNull(),
-  ageRangeFr: text("age_range_fr").notNull(),
-  descriptionEn: text("description_en").notNull(),
-  descriptionFr: text("description_fr").notNull(),
-  overviewEn: text("overview_en").notNull(),
-  overviewFr: text("overview_fr").notNull(),
-  highlightsEn: text("highlights_en").array().notNull().default([]),
-  highlightsFr: text("highlights_fr").array().notNull().default([]),
-  needsTranslationReview: boolean("needs_translation_review")
-    .notNull()
-    .default(false),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-})
+export const programs = pgTable(
+  "programs",
+  {
+    id: serial("id").primaryKey(),
+    slug: text("slug").notNull().unique(),
+    icon: text("icon").notNull(), // lucide-react icon name, e.g. "Baby"
+    position: integer("position").notNull().default(0),
+    isPublished: boolean("is_published").notNull().default(true),
+    nameEn: text("name_en").notNull(),
+    nameFr: text("name_fr").notNull(),
+    ageRangeEn: text("age_range_en").notNull(),
+    ageRangeFr: text("age_range_fr").notNull(),
+    descriptionEn: text("description_en").notNull(),
+    descriptionFr: text("description_fr").notNull(),
+    overviewEn: text("overview_en").notNull(),
+    overviewFr: text("overview_fr").notNull(),
+    highlightsEn: text("highlights_en").array().notNull().default([]),
+    highlightsFr: text("highlights_fr").array().notNull().default([]),
+    needsTranslationReview: boolean("needs_translation_review")
+      .notNull()
+      .default(false),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index("programs_isPublished_position_idx").on(
+      table.isPublished,
+      table.position
+    ),
+  ]
+)
 
 // Backend-driven replacement for the milestones timeline that used to be
 // hardcoded in lib/i18n/dictionaries/{en,fr}.ts's about.milestones.items.
 // No slug: milestones are only ever listed on /about, never individually
 // routed.
-export const milestones = pgTable("milestones", {
-  id: serial("id").primaryKey(),
-  icon: text("icon").notNull(), // lucide-react icon name, e.g. "Sprout"
-  position: integer("position").notNull().default(0),
-  isPublished: boolean("is_published").notNull().default(true),
-  yearEn: text("year_en").notNull(),
-  yearFr: text("year_fr").notNull(),
-  titleEn: text("title_en").notNull(),
-  titleFr: text("title_fr").notNull(),
-  descriptionEn: text("description_en").notNull(),
-  descriptionFr: text("description_fr").notNull(),
-  needsTranslationReview: boolean("needs_translation_review")
-    .notNull()
-    .default(false),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-})
+export const milestones = pgTable(
+  "milestones",
+  {
+    id: serial("id").primaryKey(),
+    icon: text("icon").notNull(), // lucide-react icon name, e.g. "Sprout"
+    position: integer("position").notNull().default(0),
+    isPublished: boolean("is_published").notNull().default(true),
+    yearEn: text("year_en").notNull(),
+    yearFr: text("year_fr").notNull(),
+    titleEn: text("title_en").notNull(),
+    titleFr: text("title_fr").notNull(),
+    descriptionEn: text("description_en").notNull(),
+    descriptionFr: text("description_fr").notNull(),
+    needsTranslationReview: boolean("needs_translation_review")
+      .notNull()
+      .default(false),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index("milestones_isPublished_position_idx").on(
+      table.isPublished,
+      table.position
+    ),
+  ]
+)
 
 // Backend-driven replacement for the "What We Stand For" value cards that
 // used to be hardcoded in lib/i18n/dictionaries/{en,fr}.ts's
 // about.values.items. Same shape as `milestones` minus the year field.
-export const values = pgTable("values", {
-  id: serial("id").primaryKey(),
-  icon: text("icon").notNull(), // lucide-react icon name, e.g. "Church"
-  position: integer("position").notNull().default(0),
-  isPublished: boolean("is_published").notNull().default(true),
-  titleEn: text("title_en").notNull(),
-  titleFr: text("title_fr").notNull(),
-  descriptionEn: text("description_en").notNull(),
-  descriptionFr: text("description_fr").notNull(),
-  needsTranslationReview: boolean("needs_translation_review")
-    .notNull()
-    .default(false),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-})
+export const values = pgTable(
+  "values",
+  {
+    id: serial("id").primaryKey(),
+    icon: text("icon").notNull(), // lucide-react icon name, e.g. "Church"
+    position: integer("position").notNull().default(0),
+    isPublished: boolean("is_published").notNull().default(true),
+    titleEn: text("title_en").notNull(),
+    titleFr: text("title_fr").notNull(),
+    descriptionEn: text("description_en").notNull(),
+    descriptionFr: text("description_fr").notNull(),
+    needsTranslationReview: boolean("needs_translation_review")
+      .notNull()
+      .default(false),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index("values_isPublished_position_idx").on(
+      table.isPublished,
+      table.position
+    ),
+  ]
+)
 
 // Singleton settings row (always id = 1, enforced in the server action, not
 // a DB constraint) replacing the locale-independent contact/social fields
