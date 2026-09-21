@@ -80,7 +80,7 @@ export default async function AdminAdmissionsPage({
                 </td>
                 <td className="px-4 py-3 text-muted-foreground">
                   {inquiry.preferredTerm
-                    ? admissionsTermLabel(inquiry.preferredTerm)
+                    ? admissionsTermLabel(inquiry.preferredTerm, inquiry.locale)
                     : "-"}
                 </td>
                 <td className="px-4 py-3 text-muted-foreground">
