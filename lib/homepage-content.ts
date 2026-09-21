@@ -1,4 +1,5 @@
 import { cache } from "react"
+import { unstable_cache } from "next/cache"
 import { eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
@@ -38,7 +39,11 @@ function resolve(
   }
 }
 
-export const getHomepageContent = cache(
+// unstable_cache persists across requests (revalidated via
+// revalidateTag('homepage-content') on save in
+// app/admin/(dashboard)/homepage/actions.ts); cache() on top dedupes
+// repeat calls within a single request.
+const getHomepageContentCached = unstable_cache(
   async (locale: Locale): Promise<ResolvedHomepageContent> => {
     const [row] = await db
       .select()
@@ -52,5 +57,9 @@ export const getHomepageContent = cache(
     }
 
     return resolve(row, locale)
-  }
+  },
+  ["homepage-content"],
+  { revalidate: 3600, tags: ["homepage-content"] }
 )
+
+export const getHomepageContent = cache(getHomepageContentCached)
