@@ -6,6 +6,8 @@ permissions:
 
 on:
   pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
 
 jobs:
   security:
@@ -16,7 +18,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 2
 
-      - uses: anthropics/claude-code-security-review@main
+      # Pinned to a commit SHA rather than @main so the action can't change
+      # behavior underneath this workflow without a deliberate version bump.
+      - uses: anthropics/claude-code-security-review@0c6a49f1fa56a1d472575da86a94dbc1edb78eda
         with:
           comment-pr: true
           claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
