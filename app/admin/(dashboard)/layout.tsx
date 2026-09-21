@@ -8,12 +8,19 @@ import {
 import { AdminThemeToggle } from "@/components/admin/admin-theme-toggle"
 import { AdminToastRuntime } from "@/components/admin/admin-toast-runtime"
 import { SignOutButton } from "@/components/admin/sign-out-button"
+import { requireAdmin } from "@/lib/require-admin"
 
-export default function AdminDashboardLayout({
+export default async function AdminDashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Defense in depth: proxy.ts already gates navigation to /admin/**, but
+  // this guarantees every page under this layout requires a session even
+  // if the proxy matcher is ever misconfigured (RSC payload fetches don't
+  // always go through the same middleware path as a full navigation).
+  await requireAdmin()
+
   return (
     <AdminSidebarProvider>
       <AdminToastRuntime />
