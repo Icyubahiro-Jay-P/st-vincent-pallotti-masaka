@@ -9,6 +9,7 @@ import { admissionsInquiries } from "@/lib/db/schema"
 import { checkRateLimit, getRequestIp } from "@/lib/rate-limit"
 import { getPublishedPrograms } from "@/lib/programs"
 import { phoneSchema } from "@/lib/validation"
+import { ADMISSIONS_TERM_KEYS } from "@/lib/admissions-terms"
 
 export type InquiryState = {
   status: "idle" | "success" | "error"
@@ -32,7 +33,7 @@ function buildInquirySchema(validProgramSlugs: Set<string>) {
     phone: phoneSchema,
     childName: z.string().trim().min(1).max(200),
     program: z.string().refine((slug) => validProgramSlugs.has(slug)),
-    preferredTerm: z.string().trim().max(100).optional(),
+    preferredTerm: z.enum(ADMISSIONS_TERM_KEYS).optional(),
     message: z.string().trim().max(2000).optional(),
   })
 }
