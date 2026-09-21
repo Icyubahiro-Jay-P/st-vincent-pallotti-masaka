@@ -1,3 +1,4 @@
+import { cache } from "react"
 import { eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
@@ -5,7 +6,9 @@ import { siteSettings } from "@/lib/db/schema"
 
 const SETTINGS_ID = 1
 
-export async function getSiteSettings() {
+// cache() dedupes repeat calls within a single request — this is fetched
+// from nearly every marketing layout/page.
+export const getSiteSettings = cache(async () => {
   const [row] = await db
     .select()
     .from(siteSettings)
@@ -18,4 +21,4 @@ export async function getSiteSettings() {
   }
 
   return row
-}
+})
