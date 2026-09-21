@@ -58,11 +58,17 @@ export async function submitInquiry(
     return { status: "error", message: errors.rateLimited }
   }
 
-  // Cap the two free-text optional fields defensively rather than reject —
-  // they have no fieldErrors slot in InquiryState to surface a rejection on.
-  const preferredTerm = String(formData.get("preferredTerm") ?? "")
-    .trim()
-    .slice(0, 100)
+  // Cap/normalize the two optional fields defensively rather than reject -
+  // they have no fieldErrors slot in InquiryState to surface a rejection
+  // on. preferredTerm is a canonical key now (not free text); an
+  // unrecognized value (stale form, tampered request) is dropped rather
+  // than stored, same as leaving the field blank.
+  const rawPreferredTerm = String(formData.get("preferredTerm") ?? "").trim()
+  const preferredTerm = (
+    ADMISSIONS_TERM_KEYS as readonly string[]
+  ).includes(rawPreferredTerm)
+    ? rawPreferredTerm
+    : undefined
   const message = String(formData.get("message") ?? "")
     .trim()
     .slice(0, 2000)
