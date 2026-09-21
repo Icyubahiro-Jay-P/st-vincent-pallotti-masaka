@@ -38,9 +38,9 @@ export function AdmissionInquiryForm({
     initialState
   )
   const formRef = useRef<HTMLFormElement>(null)
-  const validDefaultProgramName = programs.find(
-    (program) => program.name === defaultProgram
-  )?.name
+  const validDefaultProgramSlug = programs.find(
+    (program) => program.slug === defaultProgram
+  )?.slug
 
   useEffect(() => {
     if (state.status === "success") {
@@ -125,13 +125,13 @@ export function AdmissionInquiryForm({
           htmlFor="program"
           error={state.fieldErrors?.program}
         >
-          <Select name="program" defaultValue={validDefaultProgramName}>
+          <Select name="program" defaultValue={validDefaultProgramSlug}>
             <SelectTrigger id="program" className="w-full">
               <SelectValue placeholder={f.programPlaceholder} />
             </SelectTrigger>
             <SelectContent>
               {programs.map((program) => (
-                <SelectItem key={program.slug} value={program.name}>
+                <SelectItem key={program.slug} value={program.slug}>
                   {program.name}
                 </SelectItem>
               ))}
