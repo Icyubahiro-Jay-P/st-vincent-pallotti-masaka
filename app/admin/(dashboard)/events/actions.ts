@@ -75,14 +75,23 @@ const coverImageSchema = z.object({
 
 // Returns null fields (not a validation error) when no cover image was
 // uploaded - the form field is optional, so an empty/malformed value here
-// means "no cover image", same as before this validation existed.
-function parseCoverImage(formData: FormData) {
+// means "no cover image", same as before this validation existed. `dropped`
+// distinguishes that from a cover image that WAS provided but failed
+// validation, so the admin gets a toast (same pattern as gallery items)
+// instead of a silent no-op.
+function parseCoverImage(formData: FormData): {
+  coverImageUrl: string | null
+  coverImagePublicId: string | null
+  coverImageBackupKey: string | null
+  dropped: boolean
+} {
   const coverImageUrl = formData.get("coverImageUrl")
   if (typeof coverImageUrl !== "string" || !coverImageUrl) {
     return {
       coverImageUrl: null,
       coverImagePublicId: null,
       coverImageBackupKey: null,
+      dropped: false,
     }
   }
 
@@ -97,11 +106,12 @@ function parseCoverImage(formData: FormData) {
   })
 
   return result.success
-    ? result.data
+    ? { ...result.data, dropped: false }
     : {
         coverImageUrl: null,
         coverImagePublicId: null,
         coverImageBackupKey: null,
+        dropped: true,
       }
 }
 
@@ -211,8 +221,12 @@ export async function saveEvent(
   // only ever receives the resulting URLs/keys, never the file itself.
   // parseCoverImage validates the shape (real URL, bounded key lengths)
   // and returns all-null fields if anything's missing/malformed, same
-  // as "no cover image was set".
-  const coverImageFields = coverImage.coverImageUrl ? coverImage : {}
+  // as "no cover image was set". `dropped` is stripped here since it's
+  // not a DB column - it only feeds the redirect's toast param below.
+  const { dropped: coverDropped, ...coverImageParsed } = coverImage
+  const coverImageFields = coverImageParsed.coverImageUrl
+    ? coverImageParsed
+    : {}
 
   let eventId: number
 
@@ -314,9 +328,12 @@ export async function saveEvent(
   revalidatePath("/news")
   const toastKey =
     intent === "publish" ? "event-published" : "event-draft-saved"
-  const droppedParam =
+  const galleryDroppedParam =
     galleryDropped > 0 ? `&galleryDropped=${galleryDropped}` : ""
-  redirect(`/admin/events?toast=${toastKey}${droppedParam}`)
+  const coverDroppedParam = coverDropped ? "&coverDropped=1" : ""
+  redirect(
+    `/admin/events?toast=${toastKey}${galleryDroppedParam}${coverDroppedParam}`
+  )
 }
 
 export async function deleteEvent(formData: FormData) {
