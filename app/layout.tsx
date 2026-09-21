@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Fraunces, Geist_Mono, Inter } from "next/font/google"
+import { Fraunces, Inter } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -11,16 +11,12 @@ import { siteConfig } from "@/lib/site-config"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
+// Every font-heading usage in the codebase pairs it with font-semibold and
+// never italic (grep-verified), so only that one variant is loaded.
 const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "900"],
-  style: ["normal", "italic"],
+  weight: ["600"],
   variable: "--font-serif",
-})
-
-const fontMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
 })
 
 const ogLocales: Record<Locale, string> = { en: "en_RW", fr: "fr_RW" }
@@ -76,7 +72,6 @@ export default async function RootLayout({
       data-scroll-behavior="smooth"
       className={cn(
         "antialiased",
-        fontMono.variable,
         "font-sans",
         inter.variable,
         fraunces.variable
