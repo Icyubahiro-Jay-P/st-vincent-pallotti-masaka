@@ -137,7 +137,9 @@ export default async function AdminEventsPage({
       <PaginationNav
         page={page}
         totalPages={pages}
-        buildHref={(p) => (p <= 1 ? "/admin/events" : `/admin/events?page=${p}`)}
+        buildHref={(p) =>
+          p <= 1 ? "/admin/events" : `/admin/events?page=${p}`
+        }
       />
     </div>
   )
