@@ -7,6 +7,8 @@ import { getLocale } from "@/lib/i18n/get-locale"
 import { db } from "@/lib/db"
 import { admissionsInquiries } from "@/lib/db/schema"
 import { checkRateLimit, getRequestIp } from "@/lib/rate-limit"
+import { getPublishedPrograms } from "@/lib/programs"
+import { phoneSchema } from "@/lib/validation"
 
 export type InquiryState = {
   status: "idle" | "success" | "error"
@@ -20,16 +22,20 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // Length caps only — the actual displayed messages stay dictionary-driven
 // (dict.admissions.errors) since this is a bilingual public form; zod here
-// just decides which fields are invalid, not what the visitor reads.
-const inquirySchema = z.object({
-  parentName: z.string().trim().min(1).max(200),
-  email: z.string().trim().min(1).max(320).regex(EMAIL_PATTERN),
-  phone: z.string().trim().min(1).max(30),
-  childName: z.string().trim().min(1).max(200),
-  program: z.string().trim().min(1).max(100),
-  preferredTerm: z.string().trim().max(100).optional(),
-  message: z.string().trim().max(2000).optional(),
-})
+// just decides which fields are invalid, not what the visitor reads. The
+// program field is validated separately against live published slugs
+// (built dynamically below) rather than a fixed schema shape.
+function buildInquirySchema(validProgramSlugs: Set<string>) {
+  return z.object({
+    parentName: z.string().trim().min(1).max(200),
+    email: z.string().trim().min(1).max(320).regex(EMAIL_PATTERN),
+    phone: phoneSchema,
+    childName: z.string().trim().min(1).max(200),
+    program: z.string().refine((slug) => validProgramSlugs.has(slug)),
+    preferredTerm: z.string().trim().max(100).optional(),
+    message: z.string().trim().max(2000).optional(),
+  })
+}
 
 // Reads the visitor's language cookie directly (Server Actions can call
 // cookies() same as any server code) so error and success messages come
@@ -59,6 +65,11 @@ export async function submitInquiry(
   const message = String(formData.get("message") ?? "")
     .trim()
     .slice(0, 2000)
+
+  const validProgramSlugs = new Set(
+    (await getPublishedPrograms(locale)).map((program) => program.slug)
+  )
+  const inquirySchema = buildInquirySchema(validProgramSlugs)
 
   const parsed = inquirySchema.safeParse({
     parentName: String(formData.get("parentName") ?? ""),
