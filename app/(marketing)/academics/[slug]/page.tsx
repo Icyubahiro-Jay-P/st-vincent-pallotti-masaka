@@ -79,7 +79,7 @@ export default async function ProgramDetailPage({
             <Button
               render={
                 <Link
-                  href={`/admissions?program=${encodeURIComponent(program.name)}`}
+                  href={`/admissions?program=${encodeURIComponent(program.slug)}`}
                 />
               }
               className="mt-2 h-10 self-start px-5 text-xs"
