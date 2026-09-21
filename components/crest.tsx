@@ -10,10 +10,12 @@ export function Crest({
   size = 44,
   ringClassName,
   className,
+  priority = false,
 }: {
   size?: number
   ringClassName?: string
   className?: string
+  priority?: boolean
 }) {
   return (
     <span
@@ -29,7 +31,7 @@ export function Crest({
         width={size}
         height={size}
         className={cn("rounded-full object-cover p-0.5", className)}
-        priority
+        priority={priority}
       />
     </span>
   )
