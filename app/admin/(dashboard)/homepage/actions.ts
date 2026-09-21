@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
 
@@ -169,6 +169,7 @@ export async function updateHomepageContent(
     })
     .where(eq(homepageContent.id, CONTENT_ID))
 
+  updateTag("homepage-content")
   revalidatePath("/")
 
   return { status: "success", message: "Homepage content saved." }
