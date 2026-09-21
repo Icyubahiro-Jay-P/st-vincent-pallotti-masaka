@@ -1,3 +1,4 @@
+import { cache } from "react"
 import { eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
@@ -37,19 +38,19 @@ function resolve(
   }
 }
 
-export async function getHomepageContent(
-  locale: Locale
-): Promise<ResolvedHomepageContent> {
-  const [row] = await db
-    .select()
-    .from(homepageContent)
-    .where(eq(homepageContent.id, CONTENT_ID))
+export const getHomepageContent = cache(
+  async (locale: Locale): Promise<ResolvedHomepageContent> => {
+    const [row] = await db
+      .select()
+      .from(homepageContent)
+      .where(eq(homepageContent.id, CONTENT_ID))
 
-  if (!row) {
-    throw new Error(
-      "homepage_content row is missing; run `npm run seed:homepage-content`"
-    )
+    if (!row) {
+      throw new Error(
+        "homepage_content row is missing; run `npm run seed:homepage-content`"
+      )
+    }
+
+    return resolve(row, locale)
   }
-
-  return resolve(row, locale)
-}
+)
