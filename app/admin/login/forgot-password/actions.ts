@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { admin } from "@/lib/db/schema"
-import { checkRateLimit } from "@/lib/rate-limit"
+import { checkRateLimit, getRequestIp } from "@/lib/rate-limit"
 
 export type ForgotPasswordState = {
   status: "idle" | "done"
@@ -28,17 +28,23 @@ export async function requestPasswordReset(
   // account exists, a reset was actually sent, or the rate limit was hit —
   // this form must not leak account existence, and there's exactly one
   // admin account to protect.
-  if (email && email.length <= 320 && EMAIL_PATTERN.test(email)) {
+  const ip = await getRequestIp()
+  const { allowed: ipAllowed } = await checkRateLimit(
+    `forgot-password:ip:${ip}`,
+    { max: 10, windowMs: 60 * 60 * 1000 }
+  )
+
+  if (ipAllowed && email && email.length <= 320 && EMAIL_PATTERN.test(email)) {
     const [account] = await db
       .select({ id: admin.id })
       .from(admin)
       .where(eq(admin.email, email))
 
     if (account) {
-      const { allowed } = await checkRateLimit(`forgot-password:${email}`, {
-        max: 3,
-        windowMs: 60 * 60 * 1000,
-      })
+      const { allowed } = await checkRateLimit(
+        `forgot-password:email:${email}`,
+        { max: 3, windowMs: 60 * 60 * 1000 }
+      )
 
       if (allowed) {
         await auth.api.requestPasswordReset({
