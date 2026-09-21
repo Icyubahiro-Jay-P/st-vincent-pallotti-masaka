@@ -8,13 +8,12 @@ import { newsletterSubscribers } from "@/lib/db/schema"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { checkRateLimit, getRequestIp } from "@/lib/rate-limit"
+import { emailSchema } from "@/lib/validation"
 
 export type NewsletterState = {
   status: "idle" | "success" | "error"
   message?: string
 }
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export async function subscribeToNewsletter(
   _prevState: NewsletterState,
@@ -34,14 +33,12 @@ export async function subscribeToNewsletter(
   }
 
   const rawEmail = String(formData.get("email") ?? "")
-    .trim()
-    .toLowerCase()
 
-  if (!rawEmail || rawEmail.length > 320 || !EMAIL_PATTERN.test(rawEmail)) {
+  if (rawEmail.length > 320 || !emailSchema.safeParse(rawEmail).success) {
     return { status: "error", message: n.invalidEmail }
   }
 
-  const email = rawEmail
+  const email = emailSchema.parse(rawEmail)
 
   const [existing] = await db
     .select()
