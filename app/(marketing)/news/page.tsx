@@ -41,7 +41,16 @@ export default async function NewsPage({
 
   const [publishedEvents, [{ total }], settings] = await Promise.all([
     db
-      .select()
+      .select({
+        slug: events.slug,
+        category: events.category,
+        publishedAt: events.publishedAt,
+        createdAt: events.createdAt,
+        titleEn: events.titleEn,
+        titleFr: events.titleFr,
+        excerptEn: events.excerptEn,
+        excerptFr: events.excerptFr,
+      })
       .from(events)
       .where(eq(events.status, "published"))
       .orderBy(desc(events.publishedAt))
