@@ -6,6 +6,7 @@ import { InquiryStatusSelect } from "@/components/admin/inquiry-status-select"
 import { PaginationNav } from "@/components/pagination-nav"
 import { PAGE_SIZE, parsePage, totalPages } from "@/lib/pagination"
 import { getPublishedPrograms } from "@/lib/programs"
+import { admissionsTermLabel } from "@/lib/admissions-terms"
 
 export default async function AdminAdmissionsPage({
   searchParams,
@@ -78,7 +79,9 @@ export default async function AdminAdmissionsPage({
                   </div>
                 </td>
                 <td className="px-4 py-3 text-muted-foreground">
-                  {inquiry.preferredTerm ?? "-"}
+                  {inquiry.preferredTerm
+                    ? admissionsTermLabel(inquiry.preferredTerm)
+                    : "-"}
                 </td>
                 <td className="px-4 py-3 text-muted-foreground">
                   {inquiry.createdAt.toLocaleDateString()}
