@@ -1,14 +1,27 @@
-import { desc } from "drizzle-orm"
+import { count, desc } from "drizzle-orm"
 
 import { db } from "@/lib/db"
 import { admissionsInquiries } from "@/lib/db/schema"
 import { InquiryStatusSelect } from "@/components/admin/inquiry-status-select"
+import { PaginationNav } from "@/components/pagination-nav"
+import { PAGE_SIZE, parsePage, totalPages } from "@/lib/pagination"
 
-export default async function AdminAdmissionsPage() {
-  const inquiries = await db
-    .select()
-    .from(admissionsInquiries)
-    .orderBy(desc(admissionsInquiries.createdAt))
+export default async function AdminAdmissionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const page = parsePage((await searchParams).page)
+  const [inquiries, [{ total }]] = await Promise.all([
+    db
+      .select()
+      .from(admissionsInquiries)
+      .orderBy(desc(admissionsInquiries.createdAt))
+      .limit(PAGE_SIZE)
+      .offset((page - 1) * PAGE_SIZE),
+    db.select({ total: count() }).from(admissionsInquiries),
+  ])
+  const pages = totalPages(total)
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -83,6 +96,13 @@ export default async function AdminAdmissionsPage() {
           </tbody>
         </table>
       </div>
+      <PaginationNav
+        page={page}
+        totalPages={pages}
+        buildHref={(p) =>
+          p <= 1 ? "/admin/admissions" : `/admin/admissions?page=${p}`
+        }
+      />
     </div>
   )
 }
