@@ -1,8 +1,9 @@
 import Link from "next/link"
-import { desc } from "drizzle-orm"
+import { count, desc } from "drizzle-orm"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { PaginationNav } from "@/components/pagination-nav"
 import {
   Dialog,
   DialogClose,
@@ -16,12 +17,24 @@ import {
 import { db } from "@/lib/db"
 import { events } from "@/lib/db/schema"
 import { deleteEvent } from "@/app/admin/(dashboard)/events/actions"
+import { PAGE_SIZE, parsePage, totalPages } from "@/lib/pagination"
 
-export default async function AdminEventsPage() {
-  const allEvents = await db
-    .select()
-    .from(events)
-    .orderBy(desc(events.createdAt))
+export default async function AdminEventsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const page = parsePage((await searchParams).page)
+  const [allEvents, [{ total }]] = await Promise.all([
+    db
+      .select()
+      .from(events)
+      .orderBy(desc(events.createdAt))
+      .limit(PAGE_SIZE)
+      .offset((page - 1) * PAGE_SIZE),
+    db.select({ total: count() }).from(events),
+  ])
+  const pages = totalPages(total)
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -121,6 +134,11 @@ export default async function AdminEventsPage() {
           </tbody>
         </table>
       </div>
+      <PaginationNav
+        page={page}
+        totalPages={pages}
+        buildHref={(p) => (p <= 1 ? "/admin/events" : `/admin/events?page=${p}`)}
+      />
     </div>
   )
 }
