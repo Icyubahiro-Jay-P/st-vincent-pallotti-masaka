@@ -1,8 +1,9 @@
 import Link from "next/link"
-import { asc } from "drizzle-orm"
+import { asc, count } from "drizzle-orm"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { PaginationNav } from "@/components/pagination-nav"
 import {
   Dialog,
   DialogClose,
@@ -16,9 +17,24 @@ import {
 import { db } from "@/lib/db"
 import { values } from "@/lib/db/schema"
 import { deleteValue } from "@/app/admin/(dashboard)/values/actions"
+import { PAGE_SIZE, parsePage, totalPages } from "@/lib/pagination"
 
-export default async function AdminValuesPage() {
-  const allValues = await db.select().from(values).orderBy(asc(values.position))
+export default async function AdminValuesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const page = parsePage((await searchParams).page)
+  const [allValues, [{ total }]] = await Promise.all([
+    db
+      .select()
+      .from(values)
+      .orderBy(asc(values.position))
+      .limit(PAGE_SIZE)
+      .offset((page - 1) * PAGE_SIZE),
+    db.select({ total: count() }).from(values),
+  ])
+  const pages = totalPages(total)
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -109,6 +125,13 @@ export default async function AdminValuesPage() {
           </tbody>
         </table>
       </div>
+      <PaginationNav
+        page={page}
+        totalPages={pages}
+        buildHref={(p) =>
+          p <= 1 ? "/admin/values" : `/admin/values?page=${p}`
+        }
+      />
     </div>
   )
 }
