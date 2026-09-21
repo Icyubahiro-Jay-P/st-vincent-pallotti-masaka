@@ -25,7 +25,7 @@ const ALLOWED_CONTENT_TYPES = new Set([
   "video/webm",
   "video/quicktime",
 ])
-const MAX_UPLOAD_BYTES = 25 * 1024 * 1024
+export const MAX_UPLOAD_BYTES = 25 * 1024 * 1024
 
 function sanitizeFileName(fileName: string) {
   const base = fileName.toLowerCase().replace(/[^a-z0-9.]+/g, "-")
