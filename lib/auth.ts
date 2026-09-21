@@ -10,6 +10,22 @@ if (!process.env.BETTER_AUTH_SECRET) {
   throw new Error("BETTER_AUTH_SECRET is not set")
 }
 
+if (
+  process.env.NODE_ENV === "production" &&
+  !process.env.BETTER_AUTH_URL?.startsWith("https://")
+) {
+  throw new Error("BETTER_AUTH_URL must be an https:// URL in production")
+}
+
+function escapeHtml(input: string): string {
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+}
+
 // Reuses the same Resend project/env vars as
 // lib/newsletter/send-event-newsletter.ts. This app never mounts Better
 // Auth's HTTP router (see the comment below), so this only ever runs via a
@@ -37,7 +53,7 @@ async function sendResetPassword({
     subject: "Reset your Pallotti Admin password",
     html: `
       <p>A password reset was requested for this admin account.</p>
-      <p><a href="${url}">Reset your password</a></p>
+      <p><a href="${escapeHtml(url)}">Reset your password</a></p>
       <p>If you didn't request this, you can safely ignore this email.</p>
     `,
   })
