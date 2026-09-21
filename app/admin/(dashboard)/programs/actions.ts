@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
@@ -169,6 +169,7 @@ export async function saveProgram(
     })
   }
 
+  updateTag("programs")
   revalidatePath("/academics")
   revalidatePath("/tvet")
   revalidatePath("/academics/[slug]", "page")
@@ -181,6 +182,7 @@ export async function deleteProgram(formData: FormData) {
   const id = Number(formData.get("id"))
   await db.delete(programs).where(eq(programs.id, id))
   revalidatePath("/admin/programs")
+  updateTag("programs")
   revalidatePath("/academics")
   revalidatePath("/tvet")
   revalidatePath("/academics/[slug]", "page")
