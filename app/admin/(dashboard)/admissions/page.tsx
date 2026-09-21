@@ -5,6 +5,7 @@ import { admissionsInquiries } from "@/lib/db/schema"
 import { InquiryStatusSelect } from "@/components/admin/inquiry-status-select"
 import { PaginationNav } from "@/components/pagination-nav"
 import { PAGE_SIZE, parsePage, totalPages } from "@/lib/pagination"
+import { getPublishedPrograms } from "@/lib/programs"
 
 export default async function AdminAdmissionsPage({
   searchParams,
@@ -12,7 +13,7 @@ export default async function AdminAdmissionsPage({
   searchParams: Promise<{ page?: string }>
 }) {
   const page = parsePage((await searchParams).page)
-  const [inquiries, [{ total }]] = await Promise.all([
+  const [inquiries, [{ total }], programs] = await Promise.all([
     db
       .select()
       .from(admissionsInquiries)
@@ -20,8 +21,15 @@ export default async function AdminAdmissionsPage({
       .limit(PAGE_SIZE)
       .offset((page - 1) * PAGE_SIZE),
     db.select({ total: count() }).from(admissionsInquiries),
+    // Inquiries store a canonical program slug; resolve to a display name
+    // here rather than in the DB row. Falls back to the raw slug if a
+    // program was later renamed or unpublished.
+    getPublishedPrograms("en"),
   ])
   const pages = totalPages(total)
+  const programNameBySlug = new Map(
+    programs.map((program) => [program.slug, program.name])
+  )
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -61,7 +69,7 @@ export default async function AdminAdmissionsPage({
                   {inquiry.childName}
                 </td>
                 <td className="px-4 py-3 text-muted-foreground">
-                  {inquiry.program}
+                  {programNameBySlug.get(inquiry.program) ?? inquiry.program}
                 </td>
                 <td className="px-4 py-3 text-muted-foreground">
                   <div className="flex flex-col">
