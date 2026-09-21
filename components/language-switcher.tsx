@@ -30,7 +30,8 @@ export function LanguageSwitcher({
 
   function switchTo(nextLocale: string | null) {
     if (!nextLocale) return
-    document.cookie = `${LOCALE_COOKIE}=${nextLocale}; path=/; max-age=31536000; SameSite=Lax`
+    const secure = location.protocol === "https:" ? "; Secure" : ""
+    document.cookie = `${LOCALE_COOKIE}=${encodeURIComponent(nextLocale)}; path=/; max-age=31536000; SameSite=Lax${secure}`
     router.refresh()
   }
 
