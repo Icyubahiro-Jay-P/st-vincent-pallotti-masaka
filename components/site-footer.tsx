@@ -75,6 +75,7 @@ export async function SiteFooter({
                 <li key={link.key}>
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="text-xs text-ink-foreground/75 transition-colors hover:text-ink-foreground"
                   >
                     {dict.nav[link.key]}
@@ -93,6 +94,7 @@ export async function SiteFooter({
                 <li key={program.slug}>
                   <Link
                     href={programHref(program.slug)}
+                    prefetch={false}
                     className="text-xs text-ink-foreground/75 transition-colors hover:text-ink-foreground"
                   >
                     {program.name}
