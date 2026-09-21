@@ -10,6 +10,7 @@ import { events, eventMedia } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
 import { sendNewsletterForEvent } from "@/lib/newsletter/send-event-newsletter"
 import { zodFieldErrors } from "@/lib/validation"
+import { MAX_UPLOAD_BYTES } from "@/app/admin/(dashboard)/events/upload-actions"
 
 // Length caps only, applied regardless of draft/publish — whether each
 // field is actually *required* still depends on intent, handled below with
@@ -56,13 +57,15 @@ export type EventFormState = {
   >
 }
 
-type GalleryMediaInput = {
-  kind: "photo" | "video"
-  cloudinaryPublicId: string
-  cloudinaryUrl: string
-  backupObjectKey: string
-  bytes: number
-}
+const galleryMediaItemSchema = z.object({
+  kind: z.enum(["photo", "video"]),
+  cloudinaryPublicId: z.string().trim().min(1).max(300),
+  cloudinaryUrl: z.string().trim().url(),
+  backupObjectKey: z.string().trim().min(1).max(300),
+  bytes: z.number().int().nonnegative().max(MAX_UPLOAD_BYTES),
+})
+
+type GalleryMediaInput = z.infer<typeof galleryMediaItemSchema>
 
 function parseGalleryMedia(
   raw: FormDataEntryValue | null
@@ -70,7 +73,15 @@ function parseGalleryMedia(
   if (typeof raw !== "string" || !raw) return []
   try {
     const parsed: unknown = JSON.parse(raw)
-    return Array.isArray(parsed) ? (parsed as GalleryMediaInput[]) : []
+    if (!Array.isArray(parsed)) return []
+    // Drop any item that doesn't match the expected shape rather than
+    // rejecting the whole save — this field is populated by our own
+    // upload widget, so a malformed item means a stale/tampered payload,
+    // not a form the admin needs to be told to fix.
+    return parsed.flatMap((item) => {
+      const result = galleryMediaItemSchema.safeParse(item)
+      return result.success ? [result.data] : []
+    })
   } catch {
     return []
   }
