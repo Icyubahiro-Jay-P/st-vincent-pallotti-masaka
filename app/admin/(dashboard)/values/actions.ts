@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
@@ -99,6 +99,7 @@ export async function saveValue(
     })
   }
 
+  updateTag("values")
   revalidatePath("/about")
   redirect("/admin/values?toast=value-saved")
 }
@@ -108,6 +109,7 @@ export async function deleteValue(formData: FormData) {
   const id = Number(formData.get("id"))
   await db.delete(values).where(eq(values.id, id))
   revalidatePath("/admin/values")
+  updateTag("values")
   revalidatePath("/about")
   redirect("/admin/values?toast=value-deleted")
 }
