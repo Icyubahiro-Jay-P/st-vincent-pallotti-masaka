@@ -41,9 +41,10 @@ function ToastFromQuery() {
   const searchParams = useSearchParams()
   const key = searchParams.get("toast")
   const galleryDropped = searchParams.get("galleryDropped")
+  const coverDropped = searchParams.get("coverDropped")
 
   React.useEffect(() => {
-    if (!key && !galleryDropped) return
+    if (!key && !galleryDropped && !coverDropped) return
     const entry = key ? TOAST_MESSAGES[key as ToastKey] : undefined
     if (entry) toast[entry.type](entry.message)
     if (galleryDropped) {
@@ -54,6 +55,9 @@ function ToastFromQuery() {
         )
       }
     }
+    if (coverDropped) {
+      toast.warning("The cover image couldn't be saved and was skipped.")
+    }
 
     // Strip the one-shot signal(s) so a refresh doesn't replay the toast,
     // and use replace (not a full navigation) so it doesn't add a history
@@ -61,13 +65,14 @@ function ToastFromQuery() {
     const params = new URLSearchParams(searchParams)
     params.delete("toast")
     params.delete("galleryDropped")
+    params.delete("coverDropped")
     const search = params.toString()
     router.replace(`${pathname}${search ? `?${search}` : ""}`, {
       scroll: false,
     })
     // Only re-run when the signal itself changes, not on every render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, galleryDropped])
+  }, [key, galleryDropped, coverDropped])
 
   return null
 }
