@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
+import { cache } from "react"
 import { and, eq } from "drizzle-orm"
 
 import { PageHero } from "@/components/page-hero"
@@ -9,13 +10,16 @@ import { db } from "@/lib/db"
 import { events } from "@/lib/db/schema"
 import { getLocale } from "@/lib/i18n/get-locale"
 
-async function getPublishedEventBySlug(slug: string) {
+// cache() dedupes the identical call from generateMetadata and the page
+// component within one request, so this only hits the DB once per render.
+const getPublishedEventBySlug = cache(async (slug: string) => {
   const [event] = await db
     .select()
     .from(events)
     .where(and(eq(events.slug, slug), eq(events.status, "published")))
+    .limit(1)
   return event
-}
+})
 
 export async function generateMetadata({
   params,
