@@ -17,15 +17,18 @@ import { events } from "@/lib/db/schema"
 export default async function Page() {
   const locale = await getLocale()
   const dict = getDictionary(locale)
-  const latestEvents = await db
-    .select()
-    .from(events)
-    .where(eq(events.status, "published"))
-    .orderBy(desc(events.publishedAt))
-    .limit(3)
-  const publishedPrograms = await getPublishedPrograms(locale)
-  const settings = await getSiteSettings()
-  const homepageContent = await getHomepageContent(locale)
+  const [latestEvents, publishedPrograms, settings, homepageContent] =
+    await Promise.all([
+      db
+        .select()
+        .from(events)
+        .where(eq(events.status, "published"))
+        .orderBy(desc(events.publishedAt))
+        .limit(3),
+      getPublishedPrograms(locale),
+      getSiteSettings(),
+      getHomepageContent(locale),
+    ])
 
   return (
     <>
