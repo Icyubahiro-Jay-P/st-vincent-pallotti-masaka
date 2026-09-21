@@ -1,43 +1,12 @@
 import type { Metadata } from "next"
-import { asc, eq } from "drizzle-orm"
 
 import { PageHero } from "@/components/page-hero"
 import { iconMap } from "@/components/icon-map"
-import { db } from "@/lib/db"
-import { milestones, values } from "@/lib/db/schema"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getSiteSettings } from "@/lib/site-settings"
-import type { Locale } from "@/lib/i18n/config"
-
-async function getPublishedMilestones(locale: Locale) {
-  const rows = await db
-    .select()
-    .from(milestones)
-    .where(eq(milestones.isPublished, true))
-    .orderBy(asc(milestones.position))
-
-  return rows.map((row) => ({
-    icon: row.icon,
-    year: locale === "en" ? row.yearEn : row.yearFr,
-    title: locale === "en" ? row.titleEn : row.titleFr,
-    description: locale === "en" ? row.descriptionEn : row.descriptionFr,
-  }))
-}
-
-async function getPublishedValues(locale: Locale) {
-  const rows = await db
-    .select()
-    .from(values)
-    .where(eq(values.isPublished, true))
-    .orderBy(asc(values.position))
-
-  return rows.map((row) => ({
-    icon: row.icon,
-    title: locale === "en" ? row.titleEn : row.titleFr,
-    description: locale === "en" ? row.descriptionEn : row.descriptionFr,
-  }))
-}
+import { getPublishedMilestones } from "@/lib/milestones"
+import { getPublishedValues } from "@/lib/values"
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
