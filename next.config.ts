@@ -24,6 +24,18 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**.public.blob.vercel-storage.com" },
       { protocol: "https", hostname: "res.cloudinary.com" },
     ],
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 86400,
+    qualities: [75, 90],
+  },
+  // Console calls (other than console.error) only get stripped from
+  // production builds, dev keeps them - built into this Next option, no
+  // NODE_ENV check needed here.
+  compiler: {
+    removeConsole: { exclude: ["error"] },
+  },
+  experimental: {
+    optimizePackageImports: ["lucide-react", "@base-ui/react", "drizzle-orm"],
   },
   async headers() {
     return [
@@ -41,6 +53,15 @@ const nextConfig: NextConfig = {
             value: "strict-origin-when-cross-origin",
           },
           { key: "Content-Security-Policy", value: CSP },
+        ],
+      },
+      {
+        source: "/ffmpeg/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
         ],
       },
     ]
