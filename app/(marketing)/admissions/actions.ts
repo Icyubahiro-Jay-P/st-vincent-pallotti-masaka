@@ -64,9 +64,9 @@ export async function submitInquiry(
   // unrecognized value (stale form, tampered request) is dropped rather
   // than stored, same as leaving the field blank.
   const rawPreferredTerm = String(formData.get("preferredTerm") ?? "").trim()
-  const preferredTerm = (
-    ADMISSIONS_TERM_KEYS as readonly string[]
-  ).includes(rawPreferredTerm)
+  const preferredTerm = (ADMISSIONS_TERM_KEYS as readonly string[]).includes(
+    rawPreferredTerm
+  )
     ? rawPreferredTerm
     : undefined
   const message = String(formData.get("message") ?? "")
