@@ -39,7 +39,7 @@ export default async function NewsPage({
 
   const page = parsePage((await searchParams).page)
 
-  const [publishedEvents, [{ total }]] = await Promise.all([
+  const [publishedEvents, [{ total }], settings] = await Promise.all([
     db
       .select()
       .from(events)
@@ -51,8 +51,8 @@ export default async function NewsPage({
       .select({ total: count() })
       .from(events)
       .where(eq(events.status, "published")),
+    getSiteSettings(),
   ])
-  const settings = await getSiteSettings()
   const pages = totalPages(total)
 
   return (
