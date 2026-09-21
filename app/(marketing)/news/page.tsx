@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { desc, eq } from "drizzle-orm"
+import { count, desc, eq } from "drizzle-orm"
 
 import { PageHero } from "@/components/page-hero"
 import { Badge } from "@/components/ui/badge"
+import { PaginationNav } from "@/components/pagination-nav"
 import { SubscribeForm } from "@/components/newsletter/subscribe-form"
 import {
   InstagramGlyph,
@@ -15,6 +16,7 @@ import { getLocale } from "@/lib/i18n/get-locale"
 import { getSiteSettings } from "@/lib/site-settings"
 import { db } from "@/lib/db"
 import { events } from "@/lib/db/schema"
+import { PAGE_SIZE, parsePage, totalPages } from "@/lib/pagination"
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -25,18 +27,33 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function NewsPage() {
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
   const locale = await getLocale()
   const dict = getDictionary(locale)
   const n = dict.news
   const isFrench = locale === "fr"
 
-  const publishedEvents = await db
-    .select()
-    .from(events)
-    .where(eq(events.status, "published"))
-    .orderBy(desc(events.publishedAt))
+  const page = parsePage((await searchParams).page)
+
+  const [publishedEvents, [{ total }]] = await Promise.all([
+    db
+      .select()
+      .from(events)
+      .where(eq(events.status, "published"))
+      .orderBy(desc(events.publishedAt))
+      .limit(PAGE_SIZE)
+      .offset((page - 1) * PAGE_SIZE),
+    db
+      .select({ total: count() })
+      .from(events)
+      .where(eq(events.status, "published")),
+  ])
   const settings = await getSiteSettings()
+  const pages = totalPages(total)
 
   return (
     <>
