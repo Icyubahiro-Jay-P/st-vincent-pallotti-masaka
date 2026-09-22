@@ -67,6 +67,10 @@ const galleryMediaItemSchema = z.object({
 
 type GalleryMediaInput = z.infer<typeof galleryMediaItemSchema>
 
+// ponytail: hard cap so a tampered/runaway payload can't force a
+// huge single INSERT — 50 is generous for one event's gallery.
+const MAX_GALLERY_ITEMS = 50
+
 const coverImageSchema = z.object({
   coverImageUrl: z.string().trim().url(),
   coverImagePublicId: z.string().trim().min(1).max(300).nullable(),
