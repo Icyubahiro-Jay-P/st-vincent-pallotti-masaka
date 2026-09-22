@@ -5,6 +5,7 @@ import { randomUUID } from "node:crypto"
 import { requireAdmin } from "@/lib/require-admin"
 import { signCloudinaryUpload } from "@/lib/media/cloudinary"
 import { presignBackupUpload } from "@/lib/media/object-storage"
+import { MAX_UPLOAD_BYTES } from "@/lib/media/upload-limits"
 
 export type MediaUploadCredentials = {
   cloudinary: ReturnType<typeof signCloudinaryUpload>
@@ -25,7 +26,6 @@ const ALLOWED_CONTENT_TYPES = new Set([
   "video/webm",
   "video/quicktime",
 ])
-import { MAX_UPLOAD_BYTES } from "@/lib/media/upload-limits"
 
 function sanitizeFileName(fileName: string) {
   const base = fileName.toLowerCase().replace(/[^a-z0-9.]+/g, "-")
