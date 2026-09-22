@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 
 // Next's error boundary contract: this file must be a Client Component and
 // receives exactly these two props. It catches errors thrown below the root
-// layout — a root-layout error instead hits global-error.tsx, which this
+// layout  a root-layout error instead hits global-error.tsx, which this
 // can't catch (per Next's docs).
 export default function ErrorPage({
   error,
