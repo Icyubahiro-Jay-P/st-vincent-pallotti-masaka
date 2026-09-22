@@ -50,6 +50,23 @@ export function CtaBand({
             <WhatsAppIcon className="size-4" data-icon="inline-start" />
             {c.chatWhatsapp}
           </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            render={
+              <a
+                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                  dict.whatsapp.bookTourMessage
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+            }
+            className="h-11 border-white/25 bg-transparent px-6 text-sm text-ink-foreground hover:bg-white/10"
+          >
+            <WhatsAppIcon className="size-4" data-icon="inline-start" />
+            {dict.whatsapp.bookTourLabel}
+          </Button>
         </div>
       </div>
     </section>
