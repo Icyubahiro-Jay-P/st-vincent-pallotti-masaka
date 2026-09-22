@@ -21,7 +21,7 @@ export async function checkRateLimit(
   // statement still passes, so concurrent requests can't all read the same
   // pre-insert count and all squeak through.
   const result = await db.execute<{ id: number }>(sql`
-    INSERT INTO ${rateLimitAttempts} (${rateLimitAttempts.key})
+    INSERT INTO ${rateLimitAttempts} (${sql.identifier(rateLimitAttempts.key.name)})
     SELECT ${key}
     WHERE (
       SELECT count(*)::int FROM ${rateLimitAttempts}
