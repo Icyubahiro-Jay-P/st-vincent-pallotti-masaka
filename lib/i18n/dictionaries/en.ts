@@ -218,6 +218,8 @@ const en = {
     runByPrefix: "Run by the",
     privacyLink: "Privacy Policy",
     termsLink: "Terms of Service",
+    cookiePolicyLink: "Cookie Policy",
+    accessibilityLink: "Accessibility",
   },
 
   cookieConsent: {
