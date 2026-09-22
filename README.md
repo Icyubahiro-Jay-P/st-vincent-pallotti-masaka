@@ -104,8 +104,8 @@ Deploys are blue-green (see `.github/workflows/deploy.yml`): every push to `main
 
 1. Find the previous production deployment: `vercel ls stvincentpallottimasaka --token=$VERCEL_TOKEN`, or Vercel dashboard → Deployments → filter Production → the one before the current one.
 2. Roll back: `vercel rollback --token=$VERCEL_TOKEN` (go back one), or `vercel promote <deployment-url-or-id> --token=$VERCEL_TOKEN --yes` (roll back to any specific past deployment).
-3. Either way this reassigns the production alias only — no rebuild, as fast as the original promote.
-4. If the rollback was due to a schema-incompatible migration, see `MIGRATIONS.md` first — don't try to reverse the migration in a panic; expand/contract discipline should already make the rolled-back code compatible with the current schema.
+3. Either way this reassigns the production alias only no rebuild, as fast as the original promote.
+4. If the rollback was due to a schema-incompatible migration, see `MIGRATIONS.md` first don't try to reverse the migration in a panic; expand/contract discipline should already make the rolled-back code compatible with the current schema.
 
 ## Domain
 
