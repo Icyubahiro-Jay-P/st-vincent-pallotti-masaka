@@ -3,7 +3,7 @@ import type { AnyPgColumn, PgTable } from "drizzle-orm/pg-core"
 
 import { db } from "@/lib/db"
 
-// ponytail: one query per suffix collision (rare in practice — same
+// ponytail: one query per suffix collision (rare in practice  same
 // title saved twice in a row). Upgrade path if that ever matters: a
 // single query with a `LIKE 'base%'` scan, or a random suffix instead
 // of a sequential one.
