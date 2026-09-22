@@ -212,6 +212,8 @@ const fr: Dictionary = {
     runByPrefix: "Dirigée par les",
     privacyLink: "Politique de confidentialité",
     termsLink: "Conditions d'utilisation",
+    cookiePolicyLink: "Politique de cookies",
+    accessibilityLink: "Accessibilité",
   },
 
   cookieConsent: {
