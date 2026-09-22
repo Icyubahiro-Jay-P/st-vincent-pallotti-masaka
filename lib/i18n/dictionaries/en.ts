@@ -164,6 +164,16 @@ const en = {
       description:
         "The terms that govern your use of the Saint Vincent Pallotti School Masaka website.",
     },
+    cookiePolicy: {
+      title: "Cookie Policy",
+      description:
+        "The cookies used on the Saint Vincent Pallotti School Masaka website and how to control them.",
+    },
+    accessibility: {
+      title: "Accessibility Statement",
+      description:
+        "Saint Vincent Pallotti School Masaka's commitment to an accessible website and how to report issues.",
+    },
   },
 
   site: {
