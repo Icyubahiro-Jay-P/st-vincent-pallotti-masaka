@@ -7,13 +7,13 @@ import { events, eventMedia } from "@/lib/db/schema"
 import { PAGE_SIZE } from "@/lib/pagination"
 
 // Same unstable_cache(revalidate + tags) + cache() layering as
-// lib/programs.ts / lib/site-settings.ts — persists across
+// lib/programs.ts / lib/site-settings.ts  persists across
 // requests/instances, invalidated on publish/delete via
 // updateTag("events") in app/admin/(dashboard)/events/actions.ts, and
 // deduped within one render.
 //
 // unstable_cache JSON-serializes its return value, which silently turns
-// Date into a string — convert explicitly here (same fix as
+// Date into a string  convert explicitly here (same fix as
 // lib/site-settings.ts) so callers get an honest string type instead of
 // assuming publishedAt/createdAt are still Date instances.
 
@@ -108,7 +108,7 @@ export const getPublishedEventBySlug = cache(getPublishedEventBySlugCached)
 
 // eventMedia's createdAt isn't read by any caller today, so it's left
 // as-is (JSON round-trip still silently turns it into a string, same
-// caveat as above — just not one anything currently relies on).
+// caveat as above  just not one anything currently relies on).
 const getEventMediaCached = unstable_cache(
   async (eventId: number) =>
     db
