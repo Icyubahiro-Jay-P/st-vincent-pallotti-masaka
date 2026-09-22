@@ -58,9 +58,18 @@ export default async function NewsDetailPage({
   }
 
   const locale = await getLocale()
+  const dict = getDictionary(locale)
   const isFrench = locale === "fr"
   const title = isFrench ? event.titleFr : event.titleEn
   const body = isFrench ? event.bodyFr : event.bodyEn
+
+  const media = await db
+    .select()
+    .from(eventMedia)
+    .where(eq(eventMedia.eventId, event.id))
+    .orderBy(eventMedia.position)
+  const photos = media.filter((item) => item.kind === "photo")
+  const videos = media.filter((item) => item.kind === "video")
 
   return (
     <>
