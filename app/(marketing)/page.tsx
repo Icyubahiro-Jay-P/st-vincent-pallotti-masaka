@@ -1,5 +1,4 @@
 import { Suspense } from "react"
-import { desc, eq } from "drizzle-orm"
 import type { Metadata } from "next"
 
 import { Hero } from "@/components/home/hero"
@@ -14,8 +13,7 @@ import type { Locale } from "@/lib/i18n/config"
 import { getPublishedPrograms } from "@/lib/programs"
 import { getSiteSettings } from "@/lib/site-settings"
 import { getHomepageContent } from "@/lib/homepage-content"
-import { db } from "@/lib/db"
-import { events } from "@/lib/db/schema"
+import { getLatestPublishedEvents } from "@/lib/events"
 import { siteConfig } from "@/lib/site-config"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -66,12 +64,7 @@ async function NewsTeaserSection({
   youtubeUrl: string
   xUrl: string | null
 }) {
-  const latestEvents = await db
-    .select()
-    .from(events)
-    .where(eq(events.status, "published"))
-    .orderBy(desc(events.publishedAt))
-    .limit(3)
+  const latestEvents = await getLatestPublishedEvents(3)
 
   return (
     <NewsTeaser
