@@ -36,7 +36,7 @@ export type HomepageContentDefaults = {
   panelEstablishedEn: string
   panelEstablishedFr: string
   stats: HomepageStat[]
-  updatedAt: Date
+  updatedAt: string
 }
 
 function useTranslatedPair(initialEn: string, initialFr: string) {
@@ -106,7 +106,7 @@ export function HomepageContentForm({
           pre-save values. useActionState/the toast above stay outside this
           key, so they're unaffected by the remount. */}
       <HomepageFields
-        key={defaults.updatedAt.toISOString()}
+        key={defaults.updatedAt}
         defaults={defaults}
         fieldErrors={state.fieldErrors}
       />
