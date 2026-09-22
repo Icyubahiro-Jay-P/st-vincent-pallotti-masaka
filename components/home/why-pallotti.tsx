@@ -33,7 +33,12 @@ export function WhyPallotti({ dict }: { dict: Dictionary }) {
                     : "flex flex-col gap-4 bg-card p-6"
                 }
               >
-                <Icon className={size === "lg" ? "size-9 text-gold" : "size-7 text-primary"} />
+                <Icon
+                  aria-hidden="true"
+                  className={
+                    size === "lg" ? "size-9 text-gold" : "size-7 text-primary"
+                  }
+                />
                 <div>
                   <h3
                     className={
