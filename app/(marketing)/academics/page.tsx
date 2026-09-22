@@ -16,9 +16,11 @@ import { PageHero } from "@/components/page-hero"
 import { ProgramsGrid } from "@/components/programs-grid"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { JsonLd } from "@/components/json-ld"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getPublishedPrograms } from "@/lib/programs"
+import { siteConfig } from "@/lib/site-config"
 
 const curriculumIcons = [Globe2, BookOpen] as const
 const subjectIcons = [Calculator, Languages, Microscope, Palette] as const
@@ -29,7 +31,27 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: dict.meta.academics.title,
     description: dict.meta.academics.description,
+    alternates: { canonical: `${siteConfig.url}/academics` },
+    openGraph: {
+      title: dict.meta.academics.title,
+      description: dict.meta.academics.description,
+      url: `${siteConfig.url}/academics`,
+    },
   }
+}
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Academics",
+      item: `${siteConfig.url}/academics`,
+    },
+  ],
 }
 
 export default async function AcademicsPage() {
@@ -40,6 +62,7 @@ export default async function AcademicsPage() {
 
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd} />
       <PageHero
         eyebrow={ac.hero.eyebrow}
         title={ac.hero.title}
