@@ -17,6 +17,7 @@ import { getSiteSettings } from "@/lib/site-settings"
 import { db } from "@/lib/db"
 import { events } from "@/lib/db/schema"
 import { PAGE_SIZE, parsePage, totalPages } from "@/lib/pagination"
+import { siteConfig } from "@/lib/site-config"
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -24,6 +25,12 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: dict.meta.news.title,
     description: dict.meta.news.description,
+    alternates: { canonical: `${siteConfig.url}/news` },
+    openGraph: {
+      title: dict.meta.news.title,
+      description: dict.meta.news.description,
+      url: `${siteConfig.url}/news`,
+    },
   }
 }
 
