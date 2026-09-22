@@ -6,19 +6,21 @@ import { Resend } from "resend"
 import { db } from "@/lib/db"
 import * as schema from "@/lib/db/schema"
 
-if (!process.env.BETTER_AUTH_SECRET) {
-  throw new Error("BETTER_AUTH_SECRET is not set")
-}
-
 // Skipped during `next build`'s page-data collection (NEXT_PHASE is set to
 // this by Next itself) - that step imports every route's modules just to
 // analyze them, before the real production env is necessarily what it'll
 // be at runtime, so throwing here would fail the build even with a
 // correctly configured deploy. Only enforced when this module actually
 // loads in a running server.
+const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build"
+
+if (!isBuildPhase && !process.env.BETTER_AUTH_SECRET) {
+  throw new Error("BETTER_AUTH_SECRET is not set")
+}
+
 if (
+  !isBuildPhase &&
   process.env.NODE_ENV === "production" &&
-  process.env.NEXT_PHASE !== "phase-production-build" &&
   !process.env.BETTER_AUTH_URL?.startsWith("https://")
 ) {
   throw new Error("BETTER_AUTH_URL must be an https:// URL in production")
