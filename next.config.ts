@@ -7,7 +7,14 @@ import type { NextConfig } from "next"
 // a fixed provider.
 const CSP = [
   "default-src 'self'",
-  "script-src 'self'",
+  // 'unsafe-inline' is needed because next-themes injects a small inline
+  // script (sets the dark/light class before paint, to avoid a flash of
+  // the wrong theme) whose content varies with ThemeProvider's own props,
+  // so a fixed hash would break on any theme config change. A per-request
+  // nonce via proxy.ts would be the stricter fix, but that middleware
+  // currently only runs on /admin/** (see its own comment) and widening
+  // it to every route is a separate, larger change than this CSP fix.
+  "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' https: data:",
   "font-src 'self'",
