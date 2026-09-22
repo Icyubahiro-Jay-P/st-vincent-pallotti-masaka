@@ -105,6 +105,42 @@ export default async function NewsDetailPage({
               <p key={index}>{paragraph}</p>
             ))}
           </div>
+
+          {photos.length > 0 && (
+            <div className="mt-10">
+              <h2 className="font-heading text-xl font-semibold text-foreground">
+                {dict.news.galleryHeading}
+              </h2>
+              <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {photos.map((photo) => (
+                  <a
+                    key={photo.id}
+                    href={photo.cloudinaryUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative aspect-video w-full overflow-hidden border border-border"
+                  >
+                    <Image
+                      src={photo.cloudinaryUrl}
+                      alt={title}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 640px) 33vw, 50vw"
+                    />
+                  </a>
+                ))}
+                {videos.map((video) => (
+                  <video
+                    key={video.id}
+                    controls
+                    className="aspect-video w-full border border-border object-cover"
+                  >
+                    <source src={video.cloudinaryUrl} />
+                  </video>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </>
