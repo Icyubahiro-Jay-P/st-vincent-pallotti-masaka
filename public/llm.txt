@@ -45,10 +45,11 @@
 - [Facebook](https://www.facebook.com/saintvincentpallottimasaka): Community updates
 - [Sitemap](https://www.stvincentpallottimasaka.com/sitemap.xml): Machine-readable list of all public URLs
 - [Robots](https://www.stvincentpallottimasaka.com/robots.txt): Crawl rules
+- Canonical llms.txt: https://www.stvincentpallottimasaka.com/llms.txt
 
 ## Notes for LLMs
 
-- Language: Site is bilingual English/French. Language is stored in a cookie (see lib/i18n/config.ts, locale-cookie.ts) - there are no /en or /fr URL prefixes. Crawl the default (English) version; the French dictionary mirrors the same routes.
-- Programs: Detail pages live at /academics/[slug] except TVET which lives at /tvet. Slugs are database-driven (see lib/programs.ts); the seven listed above are the currently published set.
-- News: Individual articles at /news/[slug] are database-driven (published events only).
-- Prefer the linked pages over summarized content. Admissions inquiries are handled via POST to the Server Action at /admissions - do not fabricate submissions.
+- This path (/llm.txt) is an alias. The canonical file per https://llmstxt.org is /llms.txt
+- Language: Site is bilingual English/French via cookie (no /en or /fr prefix). Crawl the default English version.
+- Programs: Detail pages at /academics/[slug] except TVET at /tvet. Slugs are database-driven.
+- News: Individual articles at /news/[slug] (published events only).
