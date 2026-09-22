@@ -3,7 +3,7 @@ import { ImigongoSpiral } from "@/components/patterns/imigongo-spiral"
 import { siteConfig } from "@/lib/site-config"
 
 // Shared branded frame for /admin/login, /admin/login/forgot-password, and
-// /admin/reset-password — reuses the same crest/imigongo visual language as
+// /admin/reset-password  reuses the same crest/imigongo visual language as
 // the public site's hero panel (components/home/hero.tsx) instead of a
 // generic auth-card look.
 export function AdminAuthShell({
