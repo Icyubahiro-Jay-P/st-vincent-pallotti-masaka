@@ -136,7 +136,12 @@ export async function saveProgram(
       })
       .where(eq(programs.id, id))
   } else {
-    const slug = await generateUniqueSlug(programs, programs.slug, nameEn, "program")
+    const slug = await generateUniqueSlug(
+      programs,
+      programs.slug,
+      nameEn,
+      "program"
+    )
     await db.insert(programs).values({
       slug,
       icon,
