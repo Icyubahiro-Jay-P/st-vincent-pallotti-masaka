@@ -6,11 +6,11 @@ import { getPublishedPrograms } from "@/lib/programs"
 
 // Both queries are now unstable_cache-backed (lib/events.ts,
 // lib/programs.ts) with a 1h revalidate, so this no longer needs to hit
-// the DB on every crawl — same cache tags an admin publish/delete
+// the DB on every crawl  same cache tags an admin publish/delete
 // invalidates via updateTag().
 export const revalidate = 3600
 
-// Evaluated once when the server instance boots, not per request — a
+// Evaluated once when the server instance boots, not per request  a
 // defensible stand-in for "last modified" on routes with no real per-page
 // content-update timestamp, without falling back to `new Date()`
 // re-evaluated (and defeating caching) on every single request.
@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [publishedEvents, publishedPrograms] = await Promise.all([
     getPublishedEventSummaries(),
     // "tvet" gets its own dedicated /tvet route (already in STATIC_ROUTES)
-    // rather than /academics/tvet — same filter academics/[slug]/page.tsx
+    // rather than /academics/tvet  same filter academics/[slug]/page.tsx
     // applies, so an unpublished/renamed program can't leave a dangling
     // sitemap link.
     getPublishedPrograms("en").then((programs) =>
