@@ -25,7 +25,11 @@ const getSiteSettingsCached = unstable_cache(
       )
     }
 
-    return row
+    // unstable_cache JSON-serializes its return value, which silently
+    // turns Date into a string on the way out of the cache — convert here
+    // so the type this function returns is honest about that, instead of
+    // callers assuming updatedAt is still a Date (see site-settings-form.tsx).
+    return { ...row, updatedAt: row.updatedAt.toISOString() }
   },
   ["site-settings"],
   { revalidate: 3600, tags: ["site-settings"] }
