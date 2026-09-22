@@ -9,6 +9,9 @@ import type { Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { siteConfig } from "@/lib/site-config"
+import { JsonLd } from "@/components/json-ld"
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -56,7 +59,26 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: ogLocales[locale],
       type: "website",
     },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.meta.home.title,
+      description: dict.meta.home.ogDescription,
+    },
   }
+}
+
+const educationalOrganizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  name: siteConfig.name,
+  url: siteConfig.url,
+  logo: `${siteConfig.url}/badge.jpg`,
+  telephone: siteConfig.phoneDisplay,
+  email: siteConfig.email,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: siteConfig.location,
+  },
 }
 
 export default async function RootLayout({
@@ -80,8 +102,11 @@ export default async function RootLayout({
       )}
     >
       <body className="flex min-h-svh flex-col">
+        <JsonLd data={educationalOrganizationJsonLd} />
         <ThemeProvider>{children}</ThemeProvider>
         <CookieConsentBanner dict={dict} />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
