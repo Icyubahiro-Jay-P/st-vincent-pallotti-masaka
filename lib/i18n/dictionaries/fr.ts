@@ -229,6 +229,9 @@ const fr: Dictionary = {
     tooltip: "Discuter avec les admissions",
     prefillMessage:
       "Bonjour Saint Vincent Pallotti School Masaka, je souhaite me renseigner sur les admissions.",
+    bookTourLabel: "Réserver une visite",
+    bookTourMessage:
+      "Bonjour Saint Vincent Pallotti School Masaka, je souhaite réserver une visite de l'école.",
   },
 
   notFound: {
