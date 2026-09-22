@@ -12,10 +12,12 @@ import { PageHero } from "@/components/page-hero"
 import { AdmissionInquiryForm } from "@/components/admissions/inquiry-form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon"
+import { JsonLd } from "@/components/json-ld"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getPublishedPrograms } from "@/lib/programs"
 import { getSiteSettings } from "@/lib/site-settings"
+import { siteConfig } from "@/lib/site-config"
 
 const processIcons = [
   UserPlus,
@@ -30,7 +32,27 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: dict.meta.admissions.title,
     description: dict.meta.admissions.description,
+    alternates: { canonical: `${siteConfig.url}/admissions` },
+    openGraph: {
+      title: dict.meta.admissions.title,
+      description: dict.meta.admissions.description,
+      url: `${siteConfig.url}/admissions`,
+    },
   }
+}
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Admissions",
+      item: `${siteConfig.url}/admissions`,
+    },
+  ],
 }
 
 export default async function AdmissionsPage({
@@ -49,6 +71,7 @@ export default async function AdmissionsPage({
 
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd} />
       <PageHero
         eyebrow={ad.hero.eyebrow}
         title={ad.hero.title}
