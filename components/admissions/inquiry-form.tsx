@@ -90,6 +90,12 @@ export function AdmissionInquiryForm({
             name="parentName"
             autoComplete="name"
             placeholder={f.parentNamePlaceholder}
+            required
+            aria-required="true"
+            aria-invalid={!!state.fieldErrors?.parentName}
+            aria-describedby={
+              state.fieldErrors?.parentName ? "parentName-error" : undefined
+            }
           />
         </Field>
         <Field
@@ -101,6 +107,12 @@ export function AdmissionInquiryForm({
             id="childName"
             name="childName"
             placeholder={f.childNamePlaceholder}
+            required
+            aria-required="true"
+            aria-invalid={!!state.fieldErrors?.childName}
+            aria-describedby={
+              state.fieldErrors?.childName ? "childName-error" : undefined
+            }
           />
         </Field>
         <Field label={f.email} htmlFor="email" error={state.fieldErrors?.email}>
@@ -110,6 +122,12 @@ export function AdmissionInquiryForm({
             type="email"
             autoComplete="email"
             placeholder={f.emailPlaceholder}
+            required
+            aria-required="true"
+            aria-invalid={!!state.fieldErrors?.email}
+            aria-describedby={
+              state.fieldErrors?.email ? "email-error" : undefined
+            }
           />
         </Field>
         <Field label={f.phone} htmlFor="phone" error={state.fieldErrors?.phone}>
@@ -119,6 +137,12 @@ export function AdmissionInquiryForm({
             type="tel"
             autoComplete="tel"
             placeholder={f.phonePlaceholder}
+            required
+            aria-required="true"
+            aria-invalid={!!state.fieldErrors?.phone}
+            aria-describedby={
+              state.fieldErrors?.phone ? "phone-error" : undefined
+            }
           />
         </Field>
         <Field
@@ -204,7 +228,12 @@ function Field({
       </Label>
       {children}
       {error ? (
-        <p className={cn("text-[0.7rem] text-destructive")}>{error}</p>
+        <p
+          id={`${htmlFor}-error`}
+          className={cn("text-[0.7rem] text-destructive")}
+        >
+          {error}
+        </p>
       ) : null}
     </div>
   )
