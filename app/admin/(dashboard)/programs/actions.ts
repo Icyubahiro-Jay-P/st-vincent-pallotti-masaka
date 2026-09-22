@@ -14,6 +14,7 @@ import {
   positionSchema,
   zodFieldErrors,
 } from "@/lib/validation"
+import { generateUniqueSlug } from "@/lib/slug"
 
 const programSchema = z.object({
   nameEn: nonEmptyString(200, "an English name"),
@@ -47,25 +48,6 @@ export type ProgramFormState = {
   >
 }
 
-async function generateUniqueSlug(name: string) {
-  const base =
-    name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "") || "program"
-
-  let slug = base
-  let suffix = 1
-  while (true) {
-    const existing = await db
-      .select({ id: programs.id })
-      .from(programs)
-      .where(eq(programs.slug, slug))
-    if (existing.length === 0) return slug
-    slug = `${base}-${suffix++}`
-  }
-}
-
 export async function saveProgram(
   _prevState: ProgramFormState,
   formData: FormData
@@ -76,12 +58,17 @@ export async function saveProgram(
   const isPublished = formData.get("isPublished") === "true"
   const needsTranslationReview =
     formData.get("needsTranslationReview") === "true"
+  // ponytail: hard cap so a tampered/runaway payload can't force a
+  // huge jsonb write — 30 highlights is generous for one program.
+  const MAX_HIGHLIGHTS = 30
   const highlightsEn = formData
     .getAll("highlightsEn")
+    .slice(0, MAX_HIGHLIGHTS)
     .map((value) => String(value).trim())
     .filter(Boolean)
   const highlightsFr = formData
     .getAll("highlightsFr")
+    .slice(0, MAX_HIGHLIGHTS)
     .map((value) => String(value).trim())
     .filter(Boolean)
 
@@ -149,7 +136,7 @@ export async function saveProgram(
       })
       .where(eq(programs.id, id))
   } else {
-    const slug = await generateUniqueSlug(nameEn)
+    const slug = await generateUniqueSlug(programs, programs.slug, nameEn, "program")
     await db.insert(programs).values({
       slug,
       icon,
