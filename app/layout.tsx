@@ -3,6 +3,7 @@ import { Fraunces, Inter } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { CookieConsentBanner } from "@/components/cookie-consent-banner"
 import { cn } from "@/lib/utils"
 import type { Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
@@ -64,6 +65,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const locale = await getLocale()
+  const dict = getDictionary(locale)
 
   return (
     <html
@@ -79,6 +81,7 @@ export default async function RootLayout({
     >
       <body className="flex min-h-svh flex-col">
         <ThemeProvider>{children}</ThemeProvider>
+        <CookieConsentBanner dict={dict} />
       </body>
     </html>
   )
