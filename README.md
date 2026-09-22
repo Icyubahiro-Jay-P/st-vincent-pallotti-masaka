@@ -98,6 +98,15 @@ The admissions form (`app/admissions/actions.ts`) currently validates a submissi
 
 The site is a standard Next.js app and deploys cleanly to Vercel. Pages that read the language cookie are rendered dynamically rather than statically prerendered, which is expected and still fast.
 
+Deploys are blue-green (see `.github/workflows/deploy.yml`): every push to `main` is built once, deployed as an isolated, non-production deployment, smoke-tested (`scripts/smoke-test.mjs`), and only promoted to the production domain if that passes. The previous production deployment ("blue") stays untouched and instantly re-promotable.
+
+### Rollback
+
+1. Find the previous production deployment: `vercel ls stvincentpallottimasaka --token=$VERCEL_TOKEN`, or Vercel dashboard → Deployments → filter Production → the one before the current one.
+2. Roll back: `vercel rollback --token=$VERCEL_TOKEN` (go back one), or `vercel promote <deployment-url-or-id> --token=$VERCEL_TOKEN --yes` (roll back to any specific past deployment).
+3. Either way this reassigns the production alias only — no rebuild, as fast as the original promote.
+4. If the rollback was due to a schema-incompatible migration, see `MIGRATIONS.md` first — don't try to reverse the migration in a panic; expand/contract discipline should already make the rolled-back code compatible with the current schema.
+
 ## Domain
 
 No domain has been purchased yet. Recommended options, in order of preference: a `.org` domain, a Rwandan `.ac.rw` or `.org.rw` domain for local credibility, or a `.com` as a safe fallback.
