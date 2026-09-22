@@ -51,23 +51,23 @@ export default async function CookiePolicyPage() {
             <H2>1. What we use</H2>
             <ul>
               <li>
-                <strong>locale</strong> (cookie) — remembers whether you are
+                <strong>locale</strong> (cookie) remembers whether you are
                 viewing the site in English or French. Set as soon as you pick a
                 language or visit the site.
               </li>
               <li>
-                <strong>admin session</strong> (cookie) — keeps school staff
+                <strong>admin session</strong> (cookie) keeps school staff
                 signed in to the admin portal. This is only ever set for
                 authorized staff accounts, never for site visitors.
               </li>
               <li>
-                <strong>theme</strong> (browser local storage, not a cookie) —
+                <strong>theme</strong> (browser local storage, not a cookie)
                 remembers your light/dark mode preference on this device.
               </li>
               <li>
                 <strong>cookie-consent</strong> (browser local storage, not a
-                cookie) — remembers the choice you make in the cookie banner so
-                it doesn&rsquo;t reappear on every visit.
+                cookie) remembers the choice you make in the cookie banner so it
+                doesn&rsquo;t reappear on every visit.
               </li>
             </ul>
             <p>
