@@ -10,7 +10,7 @@ import { events, eventMedia } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
 import { sendNewsletterForEvent } from "@/lib/newsletter/send-event-newsletter"
 import { zodFieldErrors } from "@/lib/validation"
-import { MAX_UPLOAD_BYTES } from "@/app/admin/(dashboard)/events/upload-actions"
+import { MAX_UPLOAD_BYTES } from "@/lib/media/upload-limits"
 
 // Length caps only, applied regardless of draft/publish — whether each
 // field is actually *required* still depends on intent, handled below with
