@@ -60,16 +60,18 @@ export type HomepageContentFormState = {
   >
 }
 
+// ponytail: hard cap so a tampered/runaway payload can't force an
+// oversized jsonb write — 20 stats is generous for a homepage strip.
+const MAX_STATS = 20
+
 function parseStats(formData: FormData): HomepageStat[] {
   const valueEn = formData.getAll("statValueEn").map((v) => String(v).trim())
   const valueFr = formData.getAll("statValueFr").map((v) => String(v).trim())
   const labelEn = formData.getAll("statLabelEn").map((v) => String(v).trim())
   const labelFr = formData.getAll("statLabelFr").map((v) => String(v).trim())
-  const length = Math.max(
-    valueEn.length,
-    valueFr.length,
-    labelEn.length,
-    labelFr.length
+  const length = Math.min(
+    Math.max(valueEn.length, valueFr.length, labelEn.length, labelFr.length),
+    MAX_STATS
   )
 
   const stats: HomepageStat[] = []
