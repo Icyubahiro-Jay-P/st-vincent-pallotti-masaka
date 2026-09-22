@@ -127,13 +127,14 @@ function parseGalleryMedia(raw: FormDataEntryValue | null): {
   try {
     const parsed: unknown = JSON.parse(raw)
     if (!Array.isArray(parsed)) return { items: [], droppedCount: 0 }
+    const capped = parsed.slice(0, MAX_GALLERY_ITEMS)
     // Drop any item that doesn't match the expected shape rather than
     // rejecting the whole save - this field is populated by our own
     // upload widget, so a malformed item means a stale/tampered payload,
     // not a form the admin needs to be told to fix. The admin still gets
     // a toast naming how many were skipped (see the redirect below), so
     // it isn't a silent partial save.
-    const items = parsed.flatMap((item) => {
+    const items = capped.flatMap((item) => {
       const result = galleryMediaItemSchema.safeParse(item)
       return result.success ? [result.data] : []
     })
