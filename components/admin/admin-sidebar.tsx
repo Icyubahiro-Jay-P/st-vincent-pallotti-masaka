@@ -14,6 +14,8 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
+  UserCircle,
+  Users,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -35,6 +37,8 @@ const navItems = [
   { href: "/admin/homepage", label: "Homepage", icon: LayoutDashboard },
   { href: "/admin/admissions", label: "Admissions", icon: Inbox },
   { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/admin/admins", label: "Admins", icon: Users },
+  { href: "/admin/profile", label: "Profile", icon: UserCircle },
 ]
 
 const COLLAPSED_KEY = "admin-sidebar-collapsed"
