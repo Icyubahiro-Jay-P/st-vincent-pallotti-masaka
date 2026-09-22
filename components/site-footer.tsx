@@ -161,7 +161,23 @@ export async function SiteFooter({
             &copy; {new Date().getFullYear()} {siteConfig.name}.{" "}
             {dict.footer.runByPrefix} {dict.site.foundedBy}.
           </p>
-          <p className="tracking-[0.15em] uppercase">{settings.motto}</p>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/privacy-policy"
+              prefetch={false}
+              className="hover:text-ink-foreground"
+            >
+              {dict.footer.privacyLink}
+            </Link>
+            <Link
+              href="/terms-of-service"
+              prefetch={false}
+              className="hover:text-ink-foreground"
+            >
+              {dict.footer.termsLink}
+            </Link>
+            <p className="tracking-[0.15em] uppercase">{settings.motto}</p>
+          </div>
         </div>
       </div>
     </footer>
