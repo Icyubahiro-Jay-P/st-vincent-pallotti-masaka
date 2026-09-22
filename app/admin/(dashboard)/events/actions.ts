@@ -11,6 +11,7 @@ import { requireAdmin } from "@/lib/require-admin"
 import { sendNewsletterForEvent } from "@/lib/newsletter/send-event-newsletter"
 import { zodFieldErrors } from "@/lib/validation"
 import { MAX_UPLOAD_BYTES } from "@/lib/media/upload-limits"
+import { generateUniqueSlug } from "@/lib/slug"
 
 // Length caps only, applied regardless of draft/publish — whether each
 // field is actually *required* still depends on intent, handled below with
@@ -144,25 +145,6 @@ function parseGalleryMedia(raw: FormDataEntryValue | null): {
   }
 }
 
-async function generateUniqueSlug(title: string) {
-  const base =
-    title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "") || "event"
-
-  let slug = base
-  let suffix = 1
-  while (true) {
-    const existing = await db
-      .select({ id: events.id })
-      .from(events)
-      .where(eq(events.slug, slug))
-    if (existing.length === 0) return slug
-    slug = `${base}-${suffix++}`
-  }
-}
-
 export async function saveEvent(
   _prevState: EventFormState,
   formData: FormData
@@ -275,7 +257,12 @@ export async function saveEvent(
         .where(eq(events.id, id))
     }
   } else {
-    const slug = await generateUniqueSlug(titleEn || titleFr)
+    const slug = await generateUniqueSlug(
+      events,
+      events.slug,
+      titleEn || titleFr,
+      "event"
+    )
     const [created] = await db
       .insert(events)
       .values({
