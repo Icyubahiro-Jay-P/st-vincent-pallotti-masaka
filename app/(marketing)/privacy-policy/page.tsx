@@ -69,16 +69,16 @@ export default async function PrivacyPolicyPage() {
             </p>
             <ul>
               <li>
-                <strong>locale</strong> (cookie) — remembers whether you are
+                <strong>locale</strong> (cookie) remembers whether you are
                 viewing the site in English or French.
               </li>
               <li>
-                <strong>admin session</strong> (cookie) — keeps school staff
+                <strong>admin session</strong> (cookie) keeps school staff
                 signed in to the admin portal. This is only ever set for
                 authorized staff accounts, never for site visitors.
               </li>
               <li>
-                <strong>theme</strong> (browser local storage, not a cookie) —
+                <strong>theme</strong> (browser local storage, not a cookie)
                 remembers your light/dark mode preference on this device.
               </li>
             </ul>
@@ -110,19 +110,19 @@ export default async function PrivacyPolicyPage() {
             </p>
             <ul>
               <li>
-                <strong>Vercel</strong> — hosts the website and its serverless
+                <strong>Vercel</strong> hosts the website and its serverless
                 functions.
               </li>
               <li>
-                <strong>Neon</strong> — hosts our PostgreSQL database, where
-                form submissions and site content are stored.
+                <strong>Neon</strong> hosts our PostgreSQL database, where form
+                submissions and site content are stored.
               </li>
               <li>
-                <strong>Resend</strong> — delivers transactional emails
-                (password resets) and newsletter emails on our behalf.
+                <strong>Resend</strong> delivers transactional emails (password
+                resets) and newsletter emails on our behalf.
               </li>
               <li>
-                <strong>Cloudinary and related cloud storage</strong> — host
+                <strong>Cloudinary and related cloud storage</strong> host
                 photos and media that school staff publish on the site. This
                 does not involve visitor personal data.
               </li>
