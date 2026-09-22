@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { db } from "@/lib/db"
 import { events } from "@/lib/db/schema"
 import { getLocale } from "@/lib/i18n/get-locale"
+import { siteConfig } from "@/lib/site-config"
 
 // cache() dedupes the identical call from generateMetadata and the page
 // component within one request, so this only hits the DB once per render.
@@ -32,9 +33,14 @@ export async function generateMetadata({
 
   const locale = await getLocale()
   const isFrench = locale === "fr"
+  const title = isFrench ? event.titleFr : event.titleEn
+  const description = isFrench ? event.excerptFr : event.excerptEn
+  const url = `${siteConfig.url}/news/${slug}`
   return {
-    title: isFrench ? event.titleFr : event.titleEn,
-    description: isFrench ? event.excerptFr : event.excerptEn,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title, description, url },
   }
 }
 
