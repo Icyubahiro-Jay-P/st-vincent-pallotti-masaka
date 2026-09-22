@@ -1,9 +1,20 @@
-import { neon } from "@neondatabase/serverless"
+import { neon, neonConfig } from "@neondatabase/serverless"
 import { drizzle, type NeonHttpDatabase } from "drizzle-orm/neon-http"
 
 import * as schema from "./schema"
 
 type Db = NeonHttpDatabase<typeof schema>
+
+// neon-http has no built-in query timeout, so a stuck Neon endpoint would
+// hang a serverless function until the platform's own (much longer)
+// timeout. fetchOptions is a static object merged into every request and
+// can't hold a fresh AbortSignal per call, so fetchFunction (the driver's
+// documented hook for swapping in a custom fetch) is the only lever that
+// gives each query its own deadline. No retry: a query that already timed
+// out isn't safe to blindly re-send if it was a write.
+const QUERY_TIMEOUT_MS = 10_000
+neonConfig.fetchFunction = (url: string, init?: RequestInit) =>
+  fetch(url, { ...init, signal: AbortSignal.timeout(QUERY_TIMEOUT_MS) })
 
 function createDb(): Db {
   if (!process.env.DATABASE_URL) {
