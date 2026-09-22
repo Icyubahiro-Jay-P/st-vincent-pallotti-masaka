@@ -13,7 +13,7 @@ import { zodFieldErrors } from "@/lib/validation"
 import { MAX_UPLOAD_BYTES } from "@/lib/media/upload-limits"
 import { generateUniqueSlug } from "@/lib/slug"
 
-// Length caps only, applied regardless of draft/publish — whether each
+// Length caps only, applied regardless of draft/publish  whether each
 // field is actually *required* still depends on intent, handled below with
 // the existing imperative logic so draft-with-just-a-title keeps working.
 const eventCapsSchema = z.object({
@@ -69,7 +69,7 @@ const galleryMediaItemSchema = z.object({
 type GalleryMediaInput = z.infer<typeof galleryMediaItemSchema>
 
 // ponytail: hard cap so a tampered/runaway payload can't force a
-// huge single INSERT — 50 is generous for one event's gallery.
+// huge single INSERT  50 is generous for one event's gallery.
 const MAX_GALLERY_ITEMS = 50
 
 const coverImageSchema = z.object({
