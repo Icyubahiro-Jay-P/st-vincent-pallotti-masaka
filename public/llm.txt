@@ -4,47 +4,47 @@
 
 ## Core Pages
 
-- [Homepage](${siteConfig.url}/): Overview of the school, Pallotti Pathway, programs, school life news and admissions CTA
-- [About](${siteConfig.url}/about): History, Pallottine charism, values, and milestones of the school
-- [Academics](${siteConfig.url}/academics): Cambridge vs National curricula, subjects, Special Needs Education and full program directory
-- [TVET / Vocational](${siteConfig.url}/tvet): Hands-on trade training - Welding, Tailoring, Hairdressing, Carpentry and Culinary Arts
-- [Admissions](${siteConfig.url}/admissions): How to apply, document checklists by level, and the admissions inquiry form
-- [News & School Life](${siteConfig.url}/news): Published news, achievements and campus updates
-- [Contact](${siteConfig.url}/contact): Phone, WhatsApp, email, office hours and Google Maps directions to the Masaka campus
+- [Homepage](https://www.stvincentpallottimasaka.com/): Overview of the school, Pallotti Pathway, programs, school life news and admissions CTA
+- [About](https://www.stvincentpallottimasaka.com/about): History, Pallottine charism, values, and milestones of the school
+- [Academics](https://www.stvincentpallottimasaka.com/academics): Cambridge vs National curricula, subjects, Special Needs Education and full program directory
+- [TVET / Vocational](https://www.stvincentpallottimasaka.com/tvet): Hands-on trade training - Welding, Tailoring, Hairdressing, Carpentry and Culinary Arts
+- [Admissions](https://www.stvincentpallottimasaka.com/admissions): How to apply, document checklists by level, and the admissions inquiry form
+- [News & School Life](https://www.stvincentpallottimasaka.com/news): Published news, achievements and campus updates
+- [Contact](https://www.stvincentpallottimasaka.com/contact): Phone, WhatsApp, email, office hours and Google Maps directions to the Masaka campus
 
 ## Academic Programs
 
-- [Day Care](${siteConfig.url}/academics/day-care): Warm, secure nursery for 3 months - 2 years with Montessori-inspired play
-- [Kindergarten](${siteConfig.url}/academics/kindergarten): Play-based early learning for 3 - 5 years, preparing for Primary One
-- [Special Needs Education](${siteConfig.url}/academics/special-needs): Individualised, inclusive support available at every level from Day Care to Secondary
-- [Cambridge Primary](${siteConfig.url}/academics/cambridge-primary): Internationally benchmarked Cambridge Primary in English, Mathematics and Science (P1-P6)
-- [National Nursery & Primary](${siteConfig.url}/academics/national-primary): Rwandan competence-based curriculum across Nursery N1 to P6
-- [National Secondary](${siteConfig.url}/academics/national-secondary): O-Level and A-Level pathways (S1-S6) for national examinations and university entry
-- [TVET / Vocational](${siteConfig.url}/tvet): Post-S3 trade certification across five workshops (also listed under TVET)
+- [Day Care](https://www.stvincentpallottimasaka.com/academics/day-care): Warm, secure nursery for 3 months - 2 years with Montessori-inspired play
+- [Kindergarten](https://www.stvincentpallottimasaka.com/academics/kindergarten): Play-based early learning for 3 - 5 years, preparing for Primary One
+- [Special Needs Education](https://www.stvincentpallottimasaka.com/academics/special-needs): Individualised, inclusive support available at every level from Day Care to Secondary
+- [Cambridge Primary](https://www.stvincentpallottimasaka.com/academics/cambridge-primary): Internationally benchmarked Cambridge Primary in English, Mathematics and Science (P1-P6)
+- [National Nursery & Primary](https://www.stvincentpallottimasaka.com/academics/national-primary): Rwandan competence-based curriculum across Nursery N1 to P6
+- [National Secondary](https://www.stvincentpallottimasaka.com/academics/national-secondary): O-Level and A-Level pathways (S1-S6) for national examinations and university entry
+- [TVET / Vocational](https://www.stvincentpallottimasaka.com/tvet): Post-S3 trade certification across five workshops (also listed under TVET)
 
 ## TVET Trades
 
-- [Welding & Fabrication](${siteConfig.url}/tvet): Metal joining, fabrication and workshop safety toward RTB certification
-- [Tailoring & Fashion Design](${siteConfig.url}/tvet): Garment construction, pattern-making and small-business skills
-- [Hairdressing & Beauty](${siteConfig.url}/tvet): Modern salon techniques, client care and beauty business basics
-- [Carpentry & Joinery](${siteConfig.url}/tvet): Furniture-making, structural woodwork and precision tool use
-- [Culinary Arts](${siteConfig.url}/tvet): Professional kitchen practice, food safety and hospitality skills
+- [Welding & Fabrication](https://www.stvincentpallottimasaka.com/tvet): Metal joining, fabrication and workshop safety toward RTB certification
+- [Tailoring & Fashion Design](https://www.stvincentpallottimasaka.com/tvet): Garment construction, pattern-making and small-business skills
+- [Hairdressing & Beauty](https://www.stvincentpallottimasaka.com/tvet): Modern salon techniques, client care and beauty business basics
+- [Carpentry & Joinery](https://www.stvincentpallottimasaka.com/tvet): Furniture-making, structural woodwork and precision tool use
+- [Culinary Arts](https://www.stvincentpallottimasaka.com/tvet): Professional kitchen practice, food safety and hospitality skills
 
 ## Contact & Location
 
-- [Maps - Masaka, Kigali, Rwanda](${siteConfig.mapsQuery}): Open directions in Google Maps
-- Phone: ${siteConfig.phoneDisplay}
-- WhatsApp: https://wa.me/${siteConfig.whatsappNumber}
-- Email: ${siteConfig.email}
+- [Maps - Masaka, Kigali, Rwanda](https://www.google.com/maps/search/?api=1&query=Saint+Vincent+Pallotti+School+Masaka+Kigali+Rwanda): Open directions in Google Maps
+- Phone: +250 788 602 647
+- WhatsApp: https://wa.me/250788602647
+- Email: admissions@stvincentpallottimasaka.com
 - Office Hours: Monday - Friday, 7:30 AM - 4:30 PM
 
 ## Social & Updates
 
-- [Instagram](${siteConfig.url}): ${siteConfig.url} - daily campus life (see also https://www.instagram.com/saintvincentpallottimasaka)
+- [Instagram](https://www.stvincentpallottimasaka.com): https://www.stvincentpallottimasaka.com - daily campus life (see also https://www.instagram.com/saintvincentpallottimasaka)
 - [YouTube](https://www.youtube.com/@saintvincentpallottimasaka): School life videos and events
 - [Facebook](https://www.facebook.com/saintvincentpallottimasaka): Community updates
-- [Sitemap](${siteConfig.url}/sitemap.xml): Machine-readable list of all public URLs
-- [Robots](${siteConfig.url}/robots.txt): Crawl rules
+- [Sitemap](https://www.stvincentpallottimasaka.com/sitemap.xml): Machine-readable list of all public URLs
+- [Robots](https://www.stvincentpallottimasaka.com/robots.txt): Crawl rules
 
 ## Notes for LLMs
 
