@@ -235,6 +235,9 @@ const en = {
     tooltip: "Chat with Admissions",
     prefillMessage:
       "Hello Saint Vincent Pallotti School Masaka, I would like to ask about admissions.",
+    bookTourLabel: "Book a Tour",
+    bookTourMessage:
+      "Hello Saint Vincent Pallotti School Masaka, I would like to book a school tour.",
   },
 
   notFound: {
