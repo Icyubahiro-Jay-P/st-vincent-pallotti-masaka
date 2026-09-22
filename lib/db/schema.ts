@@ -270,7 +270,7 @@ export const admissionsInquiries = pgTable("admissions_inquiries", {
 })
 
 // Shared rate-limit counter for unauthenticated entry points (admin login,
-// password reset, public forms) — see lib/rate-limit.ts. Admin CRUD actions
+// password reset, public forms)  see lib/rate-limit.ts. Admin CRUD actions
 // don't use this: they already require a valid session, so the threat model
 // there is "the one trusted admin," not an anonymous attacker.
 export const rateLimitAttempts = pgTable(
