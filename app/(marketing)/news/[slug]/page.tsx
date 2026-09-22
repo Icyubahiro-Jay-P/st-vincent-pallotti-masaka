@@ -1,27 +1,13 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { cache } from "react"
-import { and, eq } from "drizzle-orm"
 
 import { PageHero } from "@/components/page-hero"
 import { Badge } from "@/components/ui/badge"
-import { db } from "@/lib/db"
-import { events, eventMedia } from "@/lib/db/schema"
+import { getPublishedEventBySlug, getEventMedia } from "@/lib/events"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { siteConfig } from "@/lib/site-config"
-
-// cache() dedupes the identical call from generateMetadata and the page
-// component within one request, so this only hits the DB once per render.
-const getPublishedEventBySlug = cache(async (slug: string) => {
-  const [event] = await db
-    .select()
-    .from(events)
-    .where(and(eq(events.slug, slug), eq(events.status, "published")))
-    .limit(1)
-  return event
-})
 
 export async function generateMetadata({
   params,
@@ -63,11 +49,7 @@ export default async function NewsDetailPage({
   const title = isFrench ? event.titleFr : event.titleEn
   const body = isFrench ? event.bodyFr : event.bodyEn
 
-  const media = await db
-    .select()
-    .from(eventMedia)
-    .where(eq(eventMedia.eventId, event.id))
-    .orderBy(eventMedia.position)
+  const media = await getEventMedia(event.id)
   const photos = media.filter((item) => item.kind === "photo")
   const videos = media.filter((item) => item.kind === "video")
 
@@ -80,10 +62,13 @@ export default async function NewsDetailPage({
           <div className="flex flex-wrap items-center gap-3">
             <Badge className="uppercase">{event.category}</Badge>
             <span className="text-xs text-muted-foreground">
-              {(event.publishedAt ?? event.createdAt).toLocaleDateString(
-                isFrench ? "fr-RW" : "en-RW",
-                { year: "numeric", month: "long", day: "numeric" }
-              )}
+              {new Date(
+                event.publishedAt ?? event.createdAt
+              ).toLocaleDateString(isFrench ? "fr-RW" : "en-RW", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </span>
           </div>
 
