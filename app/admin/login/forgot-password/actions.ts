@@ -25,7 +25,7 @@ export async function requestPasswordReset(
     .toLowerCase()
 
   // Always return the same response whether or not the email is valid, the
-  // account exists, a reset was actually sent, or the rate limit was hit —
+  // account exists, a reset was actually sent, or the rate limit was hit
   // this form must not leak account existence, and there's exactly one
   // admin account to protect.
   const ip = await getRequestIp()
