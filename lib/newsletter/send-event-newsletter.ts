@@ -82,7 +82,7 @@ export async function sendNewsletterForEvent(eventId: number) {
   let chunkIndex = 0
 
   // Pages straight from the DB (ordered by id) instead of loading every
-  // subscriber into memory up front — the subscriber table can grow well
+  // subscriber into memory up front  the subscriber table can grow well
   // past what's comfortable to hold in one array on a serverless function.
   while (true) {
     const page = await db
@@ -105,7 +105,7 @@ export async function sendNewsletterForEvent(eventId: number) {
     try {
       await resend.batch.send(payload)
     } catch (error) {
-      // One failed chunk shouldn't abort the whole send — retry once after
+      // One failed chunk shouldn't abort the whole send  retry once after
       // a longer delay, then move on and log which chunk needs a manual
       // resend rather than losing every remaining subscriber's email.
       await sleep(RETRY_DELAY_MS)
