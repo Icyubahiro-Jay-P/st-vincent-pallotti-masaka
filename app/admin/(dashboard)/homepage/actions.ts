@@ -61,7 +61,7 @@ export type HomepageContentFormState = {
 }
 
 // ponytail: hard cap so a tampered/runaway payload can't force an
-// oversized jsonb write — 20 stats is generous for a homepage strip.
+// oversized jsonb write  20 stats is generous for a homepage strip.
 const MAX_STATS = 20
 
 function parseStats(formData: FormData): HomepageStat[] {
