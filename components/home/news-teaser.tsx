@@ -9,9 +9,9 @@ import {
 } from "@/components/icons/social-icons"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import type { Locale } from "@/lib/i18n/config"
-import type { events as eventsTable } from "@/lib/db/schema"
+import type { getLatestPublishedEvents } from "@/lib/events"
 
-type Event = typeof eventsTable.$inferSelect
+type Event = Awaited<ReturnType<typeof getLatestPublishedEvents>>[number]
 
 export function NewsTeaser({
   dict,
@@ -64,10 +64,13 @@ export function NewsTeaser({
                   {event.category}
                 </Badge>
                 <span className="text-[0.7rem] text-muted-foreground">
-                  {(event.publishedAt ?? event.createdAt).toLocaleDateString(
-                    isFrench ? "fr-RW" : "en-RW",
-                    { year: "numeric", month: "short", day: "numeric" }
-                  )}
+                  {new Date(
+                    event.publishedAt ?? event.createdAt
+                  ).toLocaleDateString(isFrench ? "fr-RW" : "en-RW", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
                 </span>
               </div>
               <h3 className="font-heading text-base font-semibold text-foreground group-hover:text-primary">
