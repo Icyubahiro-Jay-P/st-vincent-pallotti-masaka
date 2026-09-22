@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// ponytail: plain fetch + exit code, no test framework — this only needs
+// ponytail: plain fetch + exit code, no test framework  this only needs
 // to fail loudly on a broken deploy, not report granular results.
 
 const baseUrl = process.argv[2]
