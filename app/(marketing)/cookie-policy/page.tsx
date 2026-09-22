@@ -52,8 +52,8 @@ export default async function CookiePolicyPage() {
             <ul>
               <li>
                 <strong>locale</strong> (cookie) — remembers whether you are
-                viewing the site in English or French. Set as soon as you
-                pick a language or visit the site.
+                viewing the site in English or French. Set as soon as you pick a
+                language or visit the site.
               </li>
               <li>
                 <strong>admin session</strong> (cookie) — keeps school staff
@@ -61,28 +61,28 @@ export default async function CookiePolicyPage() {
                 authorized staff accounts, never for site visitors.
               </li>
               <li>
-                <strong>theme</strong> (browser local storage, not a cookie)
-                — remembers your light/dark mode preference on this device.
+                <strong>theme</strong> (browser local storage, not a cookie) —
+                remembers your light/dark mode preference on this device.
               </li>
               <li>
                 <strong>cookie-consent</strong> (browser local storage, not a
-                cookie) — remembers the choice you make in the cookie banner
-                so it doesn&rsquo;t reappear on every visit.
+                cookie) — remembers the choice you make in the cookie banner so
+                it doesn&rsquo;t reappear on every visit.
               </li>
             </ul>
             <p>
-              All of the above are strictly necessary for the site to work
-              as intended, so they are set regardless of the choice you make
-              in the cookie banner.
+              All of the above are strictly necessary for the site to work as
+              intended, so they are set regardless of the choice you make in the
+              cookie banner.
             </p>
 
             <H2>2. Analytics</H2>
             <p>
               We use Vercel Analytics and Vercel Speed Insights to understand
-              how the site is used and to catch performance problems. These
-              are cookieless: they do not set any cookie or persistent
-              identifier on your device, and the data they collect is
-              aggregated rather than tied to you personally.
+              how the site is used and to catch performance problems. These are
+              cookieless: they do not set any cookie or persistent identifier on
+              your device, and the data they collect is aggregated rather than
+              tied to you personally.
             </p>
 
             <H2>3. No advertising or third-party tracking</H2>
@@ -96,10 +96,10 @@ export default async function CookiePolicyPage() {
 
             <H2>4. Controlling cookies</H2>
             <p>
-              You can choose &ldquo;Necessary only&rdquo; in the cookie
-              banner, or clear cookies and site data for this website at any
-              time through your browser&rsquo;s settings. Because the cookies
-              here are strictly necessary, turning them off may affect basic
+              You can choose &ldquo;Necessary only&rdquo; in the cookie banner,
+              or clear cookies and site data for this website at any time
+              through your browser&rsquo;s settings. Because the cookies here
+              are strictly necessary, turning them off may affect basic
               functionality such as staying signed in to the admin portal or
               keeping your language preference.
             </p>
@@ -113,8 +113,8 @@ export default async function CookiePolicyPage() {
             <H2>6. Contact us</H2>
             <p>
               Questions about this policy can be sent to{" "}
-              <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>{" "}
-              or {siteConfig.phoneDisplay}.
+              <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> or{" "}
+              {siteConfig.phoneDisplay}.
             </p>
           </Prose>
         </div>
