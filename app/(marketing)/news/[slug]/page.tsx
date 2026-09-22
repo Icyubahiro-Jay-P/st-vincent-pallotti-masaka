@@ -7,8 +7,9 @@ import { and, eq } from "drizzle-orm"
 import { PageHero } from "@/components/page-hero"
 import { Badge } from "@/components/ui/badge"
 import { db } from "@/lib/db"
-import { events } from "@/lib/db/schema"
+import { events, eventMedia } from "@/lib/db/schema"
 import { getLocale } from "@/lib/i18n/get-locale"
+import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { siteConfig } from "@/lib/site-config"
 
 // cache() dedupes the identical call from generateMetadata and the page
