@@ -88,6 +88,14 @@ export const auth = betterAuth({
   },
   user: {
     modelName: "admin",
+    // No HTTP router is mounted (see comment above), so the
+    // verification-email paths for changeEmail aren't reachable. Admins
+    // are seeded with emailVerified: false, so the immediate-update path
+    // applies instead - see scripts/seed-admin.ts.
+    changeEmail: {
+      enabled: true,
+      updateEmailWithoutVerification: true,
+    },
   },
   advanced: {
     useSecureCookies: process.env.NODE_ENV === "production",
