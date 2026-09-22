@@ -38,7 +38,11 @@ async function main() {
     id,
     name,
     email,
-    emailVerified: true,
+    // false so this admin can use auth.api.changeEmail's
+    // updateEmailWithoutVerification path later (see lib/auth.ts) - this
+    // app never mounts Better Auth's HTTP router, so the
+    // verification-email paths for a "verified" admin aren't reachable.
+    emailVerified: false,
   })
 
   await db.insert(account).values({
