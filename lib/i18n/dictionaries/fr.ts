@@ -5,6 +5,10 @@ import type { Dictionary } from "./en"
 const fr: Dictionary = {
   locale: "fr",
 
+  a11y: {
+    skipToContent: "Passer au contenu principal",
+  },
+
   programs: {
     "day-care": {
       name: "Garderie",
@@ -148,6 +152,16 @@ const fr: Dictionary = {
       title: "Politique de confidentialité",
       description:
         "Comment Saint Vincent Pallotti School Masaka collecte, utilise et protège les données personnelles soumises via ce site.",
+    },
+    cookiePolicy: {
+      title: "Politique de cookies",
+      description:
+        "Les cookies utilisés sur le site de Saint Vincent Pallotti School Masaka et comment les gérer.",
+    },
+    accessibility: {
+      title: "Déclaration d'accessibilité",
+      description:
+        "L'engagement de Saint Vincent Pallotti School Masaka pour un site accessible et comment signaler un problème.",
     },
     terms: {
       title: "Conditions d'utilisation",
@@ -623,6 +637,7 @@ const fr: Dictionary = {
         "Ce qui se passe sur le campus : programmes académiques, TVET et vie communautaire à Pallotti.",
     },
     empty: "Pas encore d'actualités, revenez bientôt.",
+    galleryHeading: "Photos",
     follow: {
       eyebrow: "Suivez-nous",
       title: "Plus de vie scolaire sur Instagram et YouTube",
