@@ -11,10 +11,12 @@ import {
   FacebookGlyph,
   XGlyph,
 } from "@/components/icons/social-icons"
+import { JsonLd } from "@/components/json-ld"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getSiteSettings } from "@/lib/site-settings"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
+import { siteConfig } from "@/lib/site-config"
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -22,7 +24,27 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: dict.meta.contact.title,
     description: dict.meta.contact.description,
+    alternates: { canonical: `${siteConfig.url}/contact` },
+    openGraph: {
+      title: dict.meta.contact.title,
+      description: dict.meta.contact.description,
+      url: `${siteConfig.url}/contact`,
+    },
   }
+}
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Contact",
+      item: `${siteConfig.url}/contact`,
+    },
+  ],
 }
 
 function contactCards(
@@ -65,6 +87,7 @@ export default async function ContactPage() {
 
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd} />
       <PageHero
         eyebrow={c.hero.eyebrow}
         title={c.hero.title}
