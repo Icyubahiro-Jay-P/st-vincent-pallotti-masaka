@@ -8,6 +8,10 @@ const en = {
   // needing a separate `locale` prop threaded down from the layout.
   locale: "en",
 
+  a11y: {
+    skipToContent: "Skip to main content",
+  },
+
   // Translatable text for the seven programs, keyed by the slug defined in
   // lib/site-config.ts (which also owns the locale-independent icon name and
   // route). Keep the keys identical across locales.
@@ -630,6 +634,7 @@ const en = {
         "What's happening on campus: academics, TVET and community life at Pallotti.",
     },
     empty: "No news yet, check back soon.",
+    galleryHeading: "Photos",
     follow: {
       eyebrow: "Follow Along",
       title: "More school life on Instagram & YouTube",
