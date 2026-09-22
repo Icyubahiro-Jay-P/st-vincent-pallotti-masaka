@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { count, desc, eq } from "drizzle-orm"
 
 import { PageHero } from "@/components/page-hero"
 import { Badge } from "@/components/ui/badge"
@@ -14,9 +13,8 @@ import {
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getSiteSettings } from "@/lib/site-settings"
-import { db } from "@/lib/db"
-import { events } from "@/lib/db/schema"
-import { PAGE_SIZE, parsePage, totalPages } from "@/lib/pagination"
+import { getPublishedEventsPage } from "@/lib/events"
+import { parsePage, totalPages } from "@/lib/pagination"
 import { siteConfig } from "@/lib/site-config"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -46,27 +44,8 @@ export default async function NewsPage({
 
   const page = parsePage((await searchParams).page)
 
-  const [publishedEvents, [{ total }], settings] = await Promise.all([
-    db
-      .select({
-        slug: events.slug,
-        category: events.category,
-        publishedAt: events.publishedAt,
-        createdAt: events.createdAt,
-        titleEn: events.titleEn,
-        titleFr: events.titleFr,
-        excerptEn: events.excerptEn,
-        excerptFr: events.excerptFr,
-      })
-      .from(events)
-      .where(eq(events.status, "published"))
-      .orderBy(desc(events.publishedAt))
-      .limit(PAGE_SIZE)
-      .offset((page - 1) * PAGE_SIZE),
-    db
-      .select({ total: count() })
-      .from(events)
-      .where(eq(events.status, "published")),
+  const [{ rows: publishedEvents, total }, settings] = await Promise.all([
+    getPublishedEventsPage(page),
     getSiteSettings(),
   ])
   const pages = totalPages(total)
@@ -91,10 +70,13 @@ export default async function NewsPage({
                 <div className="flex flex-wrap items-center gap-3">
                   <Badge className="uppercase">{event.category}</Badge>
                   <span className="text-xs text-muted-foreground">
-                    {(event.publishedAt ?? event.createdAt).toLocaleDateString(
-                      isFrench ? "fr-RW" : "en-RW",
-                      { year: "numeric", month: "long", day: "numeric" }
-                    )}
+                    {new Date(
+                      event.publishedAt ?? event.createdAt
+                    ).toLocaleDateString(isFrench ? "fr-RW" : "en-RW", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
                   </span>
                 </div>
                 <h2 className="mt-4 font-heading text-xl font-semibold text-foreground sm:text-2xl">
