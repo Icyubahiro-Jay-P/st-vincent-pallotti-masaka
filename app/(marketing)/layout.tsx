@@ -16,8 +16,13 @@ export default async function MarketingLayout({
 
   return (
     <>
+      <a href="#main-content" className="sr-only focus:not-sr-only">
+        {dict.a11y.skipToContent}
+      </a>
       <SiteHeader dict={dict} />
-      <main className="flex-1">{children}</main>
+      <main id="main-content" className="flex-1">
+        {children}
+      </main>
       <SiteFooter dict={dict} locale={locale} />
       <WhatsAppFab dict={dict} whatsappNumber={settings.whatsappNumber} />
     </>
