@@ -27,7 +27,7 @@ export type SiteSettingsDefaults = {
   youtubeUrl: string
   facebookUrl: string
   xUrl: string | null
-  updatedAt: Date
+  updatedAt: string
 }
 
 export function SiteSettingsForm({
@@ -62,7 +62,7 @@ export function SiteSettingsForm({
       )}
 
       <div
-        key={defaults.updatedAt.toISOString()}
+        key={defaults.updatedAt}
         className="grid grid-cols-1 gap-5 sm:grid-cols-2"
       >
         <Field
