@@ -3,11 +3,11 @@ import Link from "next/link"
 import {
   AdminMobileNavTrigger,
   AdminSidebar,
+  AdminSidebarCollapseToggle,
   AdminSidebarProvider,
 } from "@/components/admin/admin-sidebar"
 import { AdminThemeToggle } from "@/components/admin/admin-theme-toggle"
 import { AdminToastRuntime } from "@/components/admin/admin-toast-runtime"
-import { SignOutButton } from "@/components/admin/sign-out-button"
 import { requireAdmin } from "@/lib/require-admin"
 
 export default async function AdminDashboardLayout({
@@ -37,7 +37,7 @@ export default async function AdminDashboardLayout({
           </div>
           <div className="flex items-center gap-2">
             <AdminThemeToggle />
-            <SignOutButton />
+            <AdminSidebarCollapseToggle />
           </div>
         </header>
         <div className="flex flex-1">
