@@ -110,7 +110,10 @@ export async function SiteFooter({
             </h3>
             <ul className="mt-4 flex flex-col gap-3 text-xs text-ink-foreground/75">
               <li className="flex items-start gap-2">
-                <MapPin className="mt-0.5 size-3.5 shrink-0 text-gold" />
+                <MapPin
+                  aria-hidden="true"
+                  className="mt-0.5 size-3.5 shrink-0 text-gold"
+                />
                 <a
                   href={settings.mapsQuery}
                   target="_blank"
@@ -121,7 +124,10 @@ export async function SiteFooter({
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Phone className="size-3.5 shrink-0 text-gold" />
+                <Phone
+                  aria-hidden="true"
+                  className="size-3.5 shrink-0 text-gold"
+                />
                 <a
                   href={`tel:${settings.phoneHref}`}
                   className="hover:text-ink-foreground"
@@ -130,7 +136,10 @@ export async function SiteFooter({
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="size-3.5 shrink-0 text-gold" />
+                <Mail
+                  aria-hidden="true"
+                  className="size-3.5 shrink-0 text-gold"
+                />
                 <a
                   href={`mailto:${settings.email}`}
                   className="hover:text-ink-foreground"
