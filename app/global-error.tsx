@@ -3,7 +3,7 @@
 import "./globals.css"
 
 // Catches errors thrown in the root layout itself, which app/error.tsx
-// can't reach — per Next's contract this replaces the whole document, so it
+// can't reach  per Next's contract this replaces the whole document, so it
 // renders its own <html>/<body> and stays free of anything (fonts,
 // providers, other components) that could itself fail to load.
 export default function GlobalError({
