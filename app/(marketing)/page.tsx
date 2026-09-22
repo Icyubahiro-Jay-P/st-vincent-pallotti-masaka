@@ -1,5 +1,6 @@
 import { Suspense } from "react"
 import { desc, eq } from "drizzle-orm"
+import type { Metadata } from "next"
 
 import { Hero } from "@/components/home/hero"
 import { ProgramsGrid } from "@/components/programs-grid"
@@ -15,6 +16,22 @@ import { getSiteSettings } from "@/lib/site-settings"
 import { getHomepageContent } from "@/lib/homepage-content"
 import { db } from "@/lib/db"
 import { events } from "@/lib/db/schema"
+import { siteConfig } from "@/lib/site-config"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const dict = getDictionary(locale)
+  return {
+    title: dict.meta.home.title,
+    description: dict.meta.home.description,
+    alternates: { canonical: siteConfig.url },
+    openGraph: {
+      title: dict.meta.home.title,
+      description: dict.meta.home.ogDescription,
+      url: siteConfig.url,
+    },
+  }
+}
 
 // Split out so Suspense can actually suspend on its own query instead of
 // blocking the whole page behind the slowest of four unrelated fetches.
