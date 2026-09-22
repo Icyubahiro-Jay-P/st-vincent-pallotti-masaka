@@ -68,6 +68,54 @@ export type ChangePasswordState = {
   >
 }
 
+const emailSchema = z.object({
+  email: z.string().email("Enter a valid email address."),
+  revokeOtherSessions: z.boolean(),
+})
+
+export type ChangeEmailState = {
+  status: "idle" | "error" | "success"
+  message?: string
+  fieldErrors?: Partial<Record<"email", string>>
+}
+
+export async function changeEmail(
+  _prevState: ChangeEmailState,
+  formData: FormData
+): Promise<ChangeEmailState> {
+  await requireAdmin()
+
+  const parsed = emailSchema.safeParse({
+    email: String(formData.get("email") ?? ""),
+    revokeOtherSessions: formData.get("revokeOtherSessions") === "on",
+  })
+  if (!parsed.success) {
+    return {
+      status: "error",
+      message: "Please fix the fields below.",
+      fieldErrors: zodFieldErrors(parsed.error),
+    }
+  }
+
+  try {
+    await auth.api.changeEmail({
+      headers: await headers(),
+      body: { newEmail: parsed.data.email },
+    })
+    if (parsed.data.revokeOtherSessions) {
+      await auth.api.revokeOtherSessions({ headers: await headers() })
+    }
+  } catch (error) {
+    if (error instanceof APIError) {
+      return { status: "error", message: error.message }
+    }
+    throw error
+  }
+
+  revalidatePath("/admin/profile")
+  return { status: "success", message: "Email updated." }
+}
+
 export async function changePassword(
   _prevState: ChangePasswordState,
   formData: FormData
