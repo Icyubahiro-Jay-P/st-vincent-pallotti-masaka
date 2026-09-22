@@ -27,6 +27,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
+import { SignOutButton } from "@/components/admin/sign-out-button"
 import { cn } from "@/lib/utils"
 
 const navItems = [
@@ -43,11 +44,14 @@ const navItems = [
 
 const COLLAPSED_KEY = "admin-sidebar-collapsed"
 
-// Trigger (in the header) and content (in the sidebar) render in different
-// parts of the tree but share one open state, so they need this context.
-const MobileNavContext = React.createContext<{
+// Trigger and content for the mobile nav and the collapse toggle render in
+// different parts of the tree (header vs. sidebar) but share state, so they
+// need this context.
+const AdminSidebarContext = React.createContext<{
   open: boolean
   setOpen: (open: boolean) => void
+  collapsed: boolean
+  toggleCollapsed: () => void
 } | null>(null)
 
 export function AdminSidebarProvider({
@@ -56,23 +60,47 @@ export function AdminSidebarProvider({
   children: React.ReactNode
 }) {
   const [open, setOpen] = React.useState(false)
+  const [collapsed, setCollapsed] = React.useState(false)
+
+  React.useEffect(() => {
+    try {
+      setCollapsed(window.localStorage.getItem(COLLAPSED_KEY) === "true")
+    } catch {
+      // localStorage unavailable (private browsing), keep default
+    }
+  }, [])
+
+  function toggleCollapsed() {
+    setCollapsed((prev) => {
+      const next = !prev
+      try {
+        window.localStorage.setItem(COLLAPSED_KEY, String(next))
+      } catch {
+        // localStorage unavailable, collapsed state won't persist
+      }
+      return next
+    })
+  }
+
   return (
-    <MobileNavContext.Provider value={{ open, setOpen }}>
+    <AdminSidebarContext.Provider
+      value={{ open, setOpen, collapsed, toggleCollapsed }}
+    >
       {children}
-    </MobileNavContext.Provider>
+    </AdminSidebarContext.Provider>
   )
 }
 
-function useMobileNav() {
-  const ctx = React.useContext(MobileNavContext)
+function useAdminSidebar() {
+  const ctx = React.useContext(AdminSidebarContext)
   if (!ctx) {
-    throw new Error("useMobileNav must be used within AdminSidebarProvider")
+    throw new Error("useAdminSidebar must be used within AdminSidebarProvider")
   }
   return ctx
 }
 
 export function AdminMobileNavTrigger() {
-  const { setOpen } = useMobileNav()
+  const { setOpen } = useAdminSidebar()
   return (
     <Button
       variant="ghost"
@@ -82,6 +110,21 @@ export function AdminMobileNavTrigger() {
     >
       <Menu />
       <span className="sr-only">Open menu</span>
+    </Button>
+  )
+}
+
+export function AdminSidebarCollapseToggle() {
+  const { collapsed, toggleCollapsed } = useAdminSidebar()
+  return (
+    <Button
+      variant="ghost"
+      size="icon-sm"
+      onClick={toggleCollapsed}
+      className="hidden lg:inline-flex"
+      aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+    >
+      {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
     </Button>
   )
 }
@@ -123,28 +166,7 @@ function NavLink({
 }
 
 export function AdminSidebar() {
-  const { open, setOpen } = useMobileNav()
-  const [collapsed, setCollapsed] = React.useState(false)
-
-  React.useEffect(() => {
-    try {
-      setCollapsed(window.localStorage.getItem(COLLAPSED_KEY) === "true")
-    } catch {
-      // localStorage unavailable (private browsing), keep default
-    }
-  }, [])
-
-  function toggleCollapsed() {
-    setCollapsed((prev) => {
-      const next = !prev
-      try {
-        window.localStorage.setItem(COLLAPSED_KEY, String(next))
-      } catch {
-        // localStorage unavailable, collapsed state won't persist
-      }
-      return next
-    })
-  }
+  const { open, setOpen, collapsed } = useAdminSidebar()
 
   return (
     <>
@@ -161,15 +183,10 @@ export function AdminSidebar() {
           ))}
         </div>
         <div className="border-t border-border p-2">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={toggleCollapsed}
-            className="w-full"
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
-          </Button>
+          <SignOutButton
+            className="w-full justify-center"
+            hideLabel={collapsed}
+          />
         </div>
       </nav>
 
