@@ -30,7 +30,7 @@ const settingsSchema = z.object({
   youtubeUrl: urlSchema,
   facebookUrl: urlSchema,
   // Optional: no admin has set an X account yet on many deployments, and
-  // this field was added nullable — empty string is valid ("not set"),
+  // this field was added nullable  empty string is valid ("not set"),
   // anything non-empty must be a real URL.
   xUrl: z.union([urlSchema, z.literal("")]),
 })
