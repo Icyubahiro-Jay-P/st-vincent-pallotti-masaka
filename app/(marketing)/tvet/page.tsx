@@ -5,7 +5,8 @@ import { ArrowRight, Award, Briefcase, Wrench } from "lucide-react"
 import { PageHero } from "@/components/page-hero"
 import { Button } from "@/components/ui/button"
 import { iconMap } from "@/components/icon-map"
-import { tvetTradeIcons } from "@/lib/site-config"
+import { JsonLd } from "@/components/json-ld"
+import { tvetTradeIcons, siteConfig } from "@/lib/site-config"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 
@@ -14,7 +15,30 @@ const reasonIcons = [Wrench, Award, Briefcase] as const
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
   const dict = getDictionary(locale)
-  return { title: dict.meta.tvet.title, description: dict.meta.tvet.description }
+  return {
+    title: dict.meta.tvet.title,
+    description: dict.meta.tvet.description,
+    alternates: { canonical: `${siteConfig.url}/tvet` },
+    openGraph: {
+      title: dict.meta.tvet.title,
+      description: dict.meta.tvet.description,
+      url: `${siteConfig.url}/tvet`,
+    },
+  }
+}
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "TVET / Vocational Programs",
+      item: `${siteConfig.url}/tvet`,
+    },
+  ],
 }
 
 export default async function TvetPage() {
@@ -24,6 +48,7 @@ export default async function TvetPage() {
 
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd} />
       <PageHero
         eyebrow={t.hero.eyebrow}
         title={t.hero.title}
@@ -36,14 +61,19 @@ export default async function TvetPage() {
             {t.trades.map((trade, index) => {
               const Icon = iconMap[tvetTradeIcons[index]]
               return (
-                <div key={trade.name} className="flex flex-col gap-4 border border-border bg-card p-6">
+                <div
+                  key={trade.name}
+                  className="flex flex-col gap-4 border border-border bg-card p-6"
+                >
                   <span className="flex size-11 items-center justify-center border border-border bg-accent text-accent-foreground">
                     {Icon ? <Icon className="size-5" /> : null}
                   </span>
                   <h2 className="font-heading text-base font-semibold text-foreground">
                     {trade.name}
                   </h2>
-                  <p className="text-xs/relaxed text-muted-foreground">{trade.description}</p>
+                  <p className="text-xs/relaxed text-muted-foreground">
+                    {trade.description}
+                  </p>
                 </div>
               )
             })}
@@ -51,7 +81,9 @@ export default async function TvetPage() {
               <p className="text-xs font-semibold tracking-[0.15em] text-teal uppercase">
                 {t.enrolCard.eyebrow}
               </p>
-              <p className="text-sm/relaxed text-foreground">{t.enrolCard.paragraph}</p>
+              <p className="text-sm/relaxed text-foreground">
+                {t.enrolCard.paragraph}
+              </p>
               <Button
                 render={<Link href="/admissions" />}
                 className="mt-2 h-10 self-start px-5 text-xs"
@@ -78,10 +110,17 @@ export default async function TvetPage() {
             {t.reasons.items.map((reason, index) => {
               const Icon = reasonIcons[index]
               return (
-                <div key={reason.title} className="flex flex-col gap-4 border border-white/15 p-6">
+                <div
+                  key={reason.title}
+                  className="flex flex-col gap-4 border border-white/15 p-6"
+                >
                   <Icon className="size-7 text-gold" />
-                  <h3 className="font-heading text-base font-semibold">{reason.title}</h3>
-                  <p className="text-xs/relaxed text-ink-foreground/75">{reason.description}</p>
+                  <h3 className="font-heading text-base font-semibold">
+                    {reason.title}
+                  </h3>
+                  <p className="text-xs/relaxed text-ink-foreground/75">
+                    {reason.description}
+                  </p>
                 </div>
               )
             })}
