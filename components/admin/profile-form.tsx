@@ -14,11 +14,7 @@ import { useToastOnActionState } from "@/components/admin/use-toast-on-action-st
 
 const initialState: UpdateProfileState = { status: "idle" }
 
-export function ProfileForm({
-  defaults,
-}: {
-  defaults: { name: string; email: string }
-}) {
+export function ProfileForm({ defaults }: { defaults: { name: string } }) {
   const [state, formAction, pending] = useActionState(
     updateProfile,
     initialState
@@ -41,10 +37,6 @@ export function ProfileForm({
               {state.fieldErrors.name}
             </p>
           ) : null}
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" defaultValue={defaults.email} disabled />
         </div>
       </div>
 
