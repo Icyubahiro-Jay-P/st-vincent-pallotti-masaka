@@ -21,7 +21,9 @@ export default async function AdminHomepagePage() {
       <h1 className="font-heading text-xl font-semibold text-foreground">
         Homepage content
       </h1>
-      <HomepageContentForm defaults={content} />
+      <HomepageContentForm
+        defaults={{ ...content, updatedAt: content.updatedAt.toISOString() }}
+      />
     </div>
   )
 }
