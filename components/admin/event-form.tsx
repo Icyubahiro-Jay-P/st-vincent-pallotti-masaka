@@ -191,6 +191,22 @@ export function EventForm({
     bodyEn: defaultEvent?.bodyEn ?? "",
     bodyFr: defaultEvent?.bodyFr ?? "",
   })
+  const [category, setCategory] = useState(defaultEvent?.category ?? "")
+
+  // Snapshot of the originally-fetched values, captured once on mount and
+  // never re-synced - used to disable Save/Publish until something actually
+  // changes from what's in the database.
+  const original = useRef({
+    fields: {
+      titleEn: defaultEvent?.titleEn ?? "",
+      titleFr: defaultEvent?.titleFr ?? "",
+      excerptEn: defaultEvent?.excerptEn ?? "",
+      excerptFr: defaultEvent?.excerptFr ?? "",
+      bodyEn: defaultEvent?.bodyEn ?? "",
+      bodyFr: defaultEvent?.bodyFr ?? "",
+    },
+    category: defaultEvent?.category ?? "",
+  }).current
   const [translating, setTranslating] = useState<
     Partial<Record<keyof LocalizedFields, boolean>>
   >({})
@@ -328,6 +344,19 @@ export function EventForm({
       .map((item) => item.result as UploadedMedia)
   )
 
+  const isEditMode = Boolean(defaultEvent)
+  const isDirty =
+    fields.titleEn !== original.fields.titleEn ||
+    fields.titleFr !== original.fields.titleFr ||
+    fields.excerptEn !== original.fields.excerptEn ||
+    fields.excerptFr !== original.fields.excerptFr ||
+    fields.bodyEn !== original.fields.bodyEn ||
+    fields.bodyFr !== original.fields.bodyFr ||
+    category !== original.category ||
+    cover !== null ||
+    galleryItems.length > 0
+  const saveDisabled = pending || uploadsInFlight || (isEditMode && !isDirty)
+
   return (
     <form action={formAction} noValidate className="flex flex-col gap-6">
       {defaultEvent && (
@@ -406,7 +435,8 @@ export function EventForm({
             id="category"
             name="category"
             placeholder="School Life, Academics, TVET…"
-            defaultValue={defaultEvent?.category}
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
           />
         </Field>
 
@@ -590,7 +620,7 @@ export function EventForm({
             name="intent"
             value="draft"
             variant="outline"
-            disabled={pending || uploadsInFlight}
+            disabled={saveDisabled}
             className="h-11 px-6 text-sm"
           >
             {pending ? <Loader2 className="animate-spin" /> : null}
@@ -600,7 +630,7 @@ export function EventForm({
             type="submit"
             name="intent"
             value="publish"
-            disabled={pending || uploadsInFlight}
+            disabled={saveDisabled}
             className="h-11 px-6 text-sm"
           >
             {pending ? <Loader2 className="animate-spin" /> : null}
