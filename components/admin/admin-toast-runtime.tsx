@@ -26,6 +26,15 @@ export const TOAST_MESSAGES = {
     type: "success",
     message: "Inquiry status updated.",
   },
+  "admin-removed": { type: "warning", message: "Admin removed." },
+  "cannot-remove-self": {
+    type: "error",
+    message: "You can't remove your own admin account.",
+  },
+  "cannot-remove-last-admin": {
+    type: "error",
+    message: "At least one admin account must remain.",
+  },
 } as const satisfies Record<
   string,
   { type: "success" | "info" | "warning" | "error"; message: string }
