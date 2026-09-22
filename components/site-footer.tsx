@@ -185,6 +185,20 @@ export async function SiteFooter({
             >
               {dict.footer.termsLink}
             </Link>
+            <Link
+              href="/cookie-policy"
+              prefetch={false}
+              className="hover:text-ink-foreground"
+            >
+              {dict.footer.cookiePolicyLink}
+            </Link>
+            <Link
+              href="/accessibility"
+              prefetch={false}
+              className="hover:text-ink-foreground"
+            >
+              {dict.footer.accessibilityLink}
+            </Link>
             <p className="tracking-[0.15em] uppercase">{settings.motto}</p>
           </div>
         </div>
