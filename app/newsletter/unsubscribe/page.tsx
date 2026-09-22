@@ -2,11 +2,14 @@ import { eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
 import { newsletterSubscribers } from "@/lib/db/schema"
+import { checkRateLimit, getRequestIp } from "@/lib/rate-limit"
 
 // A GET-triggered write is the standard, accepted pattern for a one-click
 // email unsubscribe link: the token itself is the auth, and there's no
 // destructive side effect an attacker could weaponize by getting someone
 // to click it (at worst, it unsubscribes an email that wasn't theirs).
+// Still rate-limited per IP so a crawler hammering random tokens can't
+// turn this into a continuous indexed-write flood.
 export default async function UnsubscribePage({
   searchParams,
 }: {
@@ -15,13 +18,20 @@ export default async function UnsubscribePage({
   const { token } = await searchParams
 
   let unsubscribed = false
-  if (token) {
-    const result = await db
-      .update(newsletterSubscribers)
-      .set({ unsubscribedAt: new Date() })
-      .where(eq(newsletterSubscribers.unsubscribeToken, token))
-      .returning({ id: newsletterSubscribers.id })
-    unsubscribed = result.length > 0
+  if (token && token.length <= 100) {
+    const ip = await getRequestIp()
+    const { allowed } = await checkRateLimit(`unsubscribe:${ip}`, {
+      max: 20,
+      windowMs: 60 * 60 * 1000,
+    })
+    if (allowed) {
+      const result = await db
+        .update(newsletterSubscribers)
+        .set({ unsubscribedAt: new Date() })
+        .where(eq(newsletterSubscribers.unsubscribeToken, token))
+        .returning({ id: newsletterSubscribers.id })
+      unsubscribed = result.length > 0
+    }
   }
 
   return (
