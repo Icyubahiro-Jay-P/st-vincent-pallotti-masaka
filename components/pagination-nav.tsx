@@ -13,13 +13,25 @@ export function PaginationNav({
 }) {
   if (totalPages <= 1) return null
 
+  const isFirst = page <= 1
+  const isLast = page >= totalPages
+
   return (
-    <div className="flex items-center justify-center gap-3 pt-4">
+    <nav
+      aria-label="Pagination"
+      className="flex items-center justify-center gap-3 pt-4"
+    >
       <Button
-        render={<Link href={buildHref(Math.max(1, page - 1))} />}
+        render={
+          isFirst ? (
+            <span />
+          ) : (
+            <Link href={buildHref(Math.max(1, page - 1))} rel="prev" />
+          )
+        }
         variant="outline"
         size="sm"
-        disabled={page <= 1}
+        disabled={isFirst}
       >
         Previous
       </Button>
@@ -27,13 +39,19 @@ export function PaginationNav({
         Page {page} of {totalPages}
       </span>
       <Button
-        render={<Link href={buildHref(Math.min(totalPages, page + 1))} />}
+        render={
+          isLast ? (
+            <span />
+          ) : (
+            <Link href={buildHref(Math.min(totalPages, page + 1))} rel="next" />
+          )
+        }
         variant="outline"
         size="sm"
-        disabled={page >= totalPages}
+        disabled={isLast}
       >
         Next
       </Button>
-    </div>
+    </nav>
   )
 }
