@@ -16,30 +16,32 @@ export function Pathway({ dict }: { dict: Dictionary }) {
           </h2>
         </div>
 
-        <ol className="relative mt-12 grid grid-cols-1 gap-8 sm:grid-cols-5 sm:gap-4">
+        <div className="relative mt-12">
           <div
             className="absolute top-6 right-[10%] left-[10%] hidden h-px bg-border sm:block"
             aria-hidden="true"
           />
-          {p.steps.map((item, index) => (
-            <li key={item.stage} className="relative flex flex-col gap-3">
-              <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-4">
-                <span className="relative z-10 flex size-12 shrink-0 items-center justify-center border-2 border-primary bg-background font-heading text-sm font-semibold text-primary">
-                  {pathwaySteps[index]}
-                </span>
-                <h3 className="font-heading text-base font-semibold text-foreground sm:mt-1">
-                  {item.stage}
-                </h3>
-              </div>
-              <p className="text-[0.7rem] font-medium tracking-wide text-teal uppercase">
-                {item.range}
-              </p>
-              <p className="text-xs/relaxed text-muted-foreground">
-                {item.description}
-              </p>
-            </li>
-          ))}
-        </ol>
+          <ol className="grid grid-cols-1 gap-8 sm:grid-cols-5 sm:gap-4">
+            {p.steps.map((item, index) => (
+              <li key={item.stage} className="relative flex flex-col gap-3">
+                <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-4">
+                  <span className="relative z-10 flex size-12 shrink-0 items-center justify-center border-2 border-primary bg-background font-heading text-sm font-semibold text-primary">
+                    {pathwaySteps[index]}
+                  </span>
+                  <h3 className="font-heading text-base font-semibold text-foreground sm:mt-1">
+                    {item.stage}
+                  </h3>
+                </div>
+                <p className="text-[0.7rem] font-medium tracking-wide text-teal uppercase">
+                  {item.range}
+                </p>
+                <p className="text-xs/relaxed text-muted-foreground">
+                  {item.description}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   )
