@@ -144,6 +144,16 @@ const fr: Dictionary = {
       description:
         "Contactez Saint Vincent Pallotti School Masaka : téléphone, WhatsApp, e-mail et localisation du campus à Masaka, Kigali.",
     },
+    privacy: {
+      title: "Politique de confidentialité",
+      description:
+        "Comment Saint Vincent Pallotti School Masaka collecte, utilise et protège les données personnelles soumises via ce site.",
+    },
+    terms: {
+      title: "Conditions d'utilisation",
+      description:
+        "Les conditions qui régissent votre utilisation du site de Saint Vincent Pallotti School Masaka.",
+    },
   },
 
   site: {
@@ -186,6 +196,16 @@ const fr: Dictionary = {
     programsHeading: "Programmes",
     contactHeading: "Contact",
     runByPrefix: "Dirigée par les",
+    privacyLink: "Politique de confidentialité",
+    termsLink: "Conditions d'utilisation",
+  },
+
+  cookieConsent: {
+    message:
+      "Nous utilisons uniquement des cookies strictement nécessaires pour mémoriser votre langue et sécuriser le portail d'administration. Nous n'utilisons aucun cookie d'analyse ou publicitaire.",
+    acceptAll: "Accepter",
+    necessaryOnly: "Nécessaires uniquement",
+    privacyLink: "Politique de confidentialité",
   },
 
   whatsapp: {
