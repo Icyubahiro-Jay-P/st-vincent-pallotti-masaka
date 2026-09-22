@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
@@ -317,6 +317,7 @@ export async function saveEvent(
     )
   }
 
+  updateTag("events")
   revalidatePath("/news")
   const toastKey =
     intent === "publish" ? "event-published" : "event-draft-saved"
@@ -332,6 +333,7 @@ export async function deleteEvent(formData: FormData) {
   await requireAdmin()
   const id = Number(formData.get("id"))
   await db.delete(events).where(eq(events.id, id))
+  updateTag("events")
   revalidatePath("/admin/events")
   revalidatePath("/news")
   redirect("/admin/events?toast=event-deleted")
