@@ -2,11 +2,13 @@ import type { Metadata } from "next"
 
 import { PageHero } from "@/components/page-hero"
 import { iconMap } from "@/components/icon-map"
+import { JsonLd } from "@/components/json-ld"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getSiteSettings } from "@/lib/site-settings"
 import { getPublishedMilestones } from "@/lib/milestones"
 import { getPublishedValues } from "@/lib/values"
+import { siteConfig } from "@/lib/site-config"
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -14,7 +16,27 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: dict.meta.about.title,
     description: dict.meta.about.description,
+    alternates: { canonical: `${siteConfig.url}/about` },
+    openGraph: {
+      title: dict.meta.about.title,
+      description: dict.meta.about.description,
+      url: `${siteConfig.url}/about`,
+    },
   }
+}
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "About Us",
+      item: `${siteConfig.url}/about`,
+    },
+  ],
 }
 
 export default async function AboutPage() {
@@ -29,6 +51,7 @@ export default async function AboutPage() {
 
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd} />
       <PageHero
         eyebrow={a.hero.eyebrow}
         title={a.hero.title}
