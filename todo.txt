@@ -1,0 +1,55 @@
+# St. Vincent Pallotti Masaka -- Backlog (post Phase-1)
+# Grouped by theme. Each item: one line description + why it's deferred.
+# See /home/jay-p/.claude/plans/pasted-content-id-5807-st-vincent-merry-kitten.md
+# for the full Phase-1 plan this backlog was split from.
+
+## SEO / i18n INFRASTRUCTURE (code-heavy, no new content needed)
+- Add `Vary: Cookie` header in next.config.ts headers() -- technically
+  correct for cookie-based locale on dynamic pages, but touches shared
+  infra for every route and could affect CDN/edge cache hit rates.
+  Deferred pending explicit confirmation of caching setup.
+- Migrate to path-based i18n (/en/, /fr/) so alternates.languages can
+  point to real distinct URLs instead of the same URL for both locales.
+  Needs routing overhaul, middleware changes, locale-aware Links. Large.
+- Public breadcrumb component (adapt components/admin/admin-breadcrumb.tsx
+  for marketing pages) -- JSON-LD BreadcrumbList ships in Phase 1 without it.
+- NewsArticle JSON-LD on /news/[slug] (needs author/date policy decision).
+- Course/FAQPage JSON-LD (needs FAQ content to exist first -- see below).
+- Standalone /gallery page aggregating eventMedia across all events
+  (aggregation query + page + dictionary strings + likely lightbox dep).
+- Image sitemap entries in app/sitemap.ts for eventMedia photos.
+- Video rendering in news gallery, if cloudinaryUrl isn't directly
+  embeddable (Phase 1 spot-check will determine this).
+
+## CONTENT REQUIRING SCHOOL-SUPPLIED INFORMATION
+- Real fees page with actual tuition/fee numbers (currently only one
+  vague sentence in admissions/page.tsx dict). Do not fabricate figures.
+- Kinyarwanda locale: full translation of lib/i18n/dictionaries into a
+  third rw.ts file (681 lines in en.ts alone) -- needs a translator.
+- Staff/faculty directory page -- needs schema AND real staff bios/photos.
+- Per-trade TVET detail pages (/tvet/[trade]) -- needs real per-trade
+  content (curriculum, instructors, equipment photos), not just routing.
+- Academic/term calendar -- needs real term dates from school admin.
+- OG image asset (1200x630 branded image) for openGraph/twitter cards --
+  none exists yet, deferred rather than shipping a placeholder.
+
+## NEW SCHEMA + ADMIN CRUD FEATURES (DB migrations required)
+- Fees table + admin CRUD + public fees page (depends on content above).
+- Calendar/term-dates table + admin CRUD + public calendar page.
+- FAQ table + admin CRUD + public FAQ page (unlocks FAQPage JSON-LD).
+- Staff/faculty table + admin CRUD (pairs with staff directory above).
+
+## BOOKING / SCHEDULING SYSTEM
+- Real "Book a Tour" calendar/scheduling flow (beyond the Phase-1
+  WhatsApp-link CTA) -- needs availability logic, confirmation emails
+  (resend already installed, reusable), possibly a booking table.
+
+## PAYMENTS / PORTALS / INTEGRATIONS (heaviest, most API-demanding)
+- Online fee payment integration (MTN MoMo / card processor) -- needs
+  merchant account, PCI-adjacent considerations, real fee schedule first.
+- Parent/student portal with authentication -- needs session/auth
+  architecture decision, likely new schema for accounts.
+- Admissions funnel redesign: multi-step form with document upload
+  (uses existing @vercel/blob dependency, but needs new form state
+  design, validation, storage wiring, full UX rework of
+  components/admissions/inquiry-form.tsx).
