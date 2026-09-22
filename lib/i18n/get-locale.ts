@@ -5,7 +5,7 @@ import { LOCALE_COOKIE } from "./locale-cookie"
 
 // Picks the first Accept-Language entry (already sent in q-weighted order
 // by the browser) whose base language we support. Used only as a fallback
-// for visitors with no locale cookie yet — bots and first-time visits that
+// for visitors with no locale cookie yet  bots and first-time visits that
 // never run the client-side language switcher.
 function localeFromAcceptLanguage(header: string | null): Locale | null {
   if (!header) return null
