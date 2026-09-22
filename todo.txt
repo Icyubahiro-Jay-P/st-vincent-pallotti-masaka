@@ -44,6 +44,34 @@
   WhatsApp-link CTA) -- needs availability logic, confirmation emails
   (resend already installed, reusable), possibly a booking table.
 
+## RELIABILITY / ABUSE-RESISTANCE (needs an external service, not just code)
+# From an `open code` audit (2026-09-22). The code-only items from that
+# audit (cache news/sitemap queries, rate-limit unsubscribe, cap
+# unbounded form arrays, dedupe slug-collision loops, DB query timeout)
+# are already implemented -- see lib/events.ts, lib/slug.ts, lib/db/index.ts.
+# These four need picking/provisioning a third-party service first.
+- Move the admin-publish newsletter send (lib/newsletter/send-event-newsletter.ts,
+  called synchronously from saveEvent in
+  app/admin/(dashboard)/events/actions.ts) off the request path via a
+  queue (Vercel Queues or Inngest) -- today a single publish click blocks
+  the response on 100+ DB reads + Resend API calls for large subscriber
+  lists. Needs picking and provisioning a queue provider.
+- Replace the DB-backed checkRateLimit (lib/rate-limit.ts) with an edge
+  KV/Redis-backed limiter (Vercel KV or Upstash) so a GET flood can't add
+  DB write pressure by way of the rate limiter itself. Needs provisioning
+  that service.
+- Add a vercel.json Firewall/WAF config (rate limits, bot rules) -- none
+  exists today. Needs Vercel Firewall setup/API access.
+- Decouple getLocale() (lib/i18n/get-locale.ts) from its unconditional
+  cookies()/headers() call so marketing pages can go static/ISR with a
+  real Cache-Control: s-maxage instead of rendering dynamically on every
+  request. This is a site-wide i18n architecture change (affects
+  app/layout.tsx for every route, not just marketing) -- needs a design
+  decision before touching it, not a drive-by fix. Related: proxy.ts's
+  matcher only covers /admin/:path* and does a DB-backed session check on
+  every unauthenticated admin request; widening it needs the same kind of
+  sitewide decision.
+
 ## PAYMENTS / PORTALS / INTEGRATIONS (heaviest, most API-demanding)
 - Online fee payment integration (MTN MoMo / card processor) -- needs
   merchant account, PCI-adjacent considerations, real fee schedule first.
