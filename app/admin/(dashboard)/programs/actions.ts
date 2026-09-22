@@ -59,7 +59,7 @@ export async function saveProgram(
   const needsTranslationReview =
     formData.get("needsTranslationReview") === "true"
   // ponytail: hard cap so a tampered/runaway payload can't force a
-  // huge jsonb write — 30 highlights is generous for one program.
+  // huge jsonb write  30 highlights is generous for one program.
   const MAX_HIGHLIGHTS = 30
   const highlightsEn = formData
     .getAll("highlightsEn")
