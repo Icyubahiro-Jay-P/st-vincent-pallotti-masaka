@@ -1,15 +1,14 @@
 import type { MetadataRoute } from "next"
-import { eq } from "drizzle-orm"
 
 import { siteConfig } from "@/lib/site-config"
-import { db } from "@/lib/db"
-import { events } from "@/lib/db/schema"
+import { getPublishedEventSummaries } from "@/lib/events"
 import { getPublishedPrograms } from "@/lib/programs"
 
-// Queries the DB, so this must not be statically prerendered at build
-// time (a build shouldn't fail just because the DB is briefly unreachable
-// during a deploy). Defer the query to request time instead.
-export const dynamic = "force-dynamic"
+// Both queries are now unstable_cache-backed (lib/events.ts,
+// lib/programs.ts) with a 1h revalidate, so this no longer needs to hit
+// the DB on every crawl — same cache tags an admin publish/delete
+// invalidates via updateTag().
+export const revalidate = 3600
 
 // Evaluated once when the server instance boots, not per request — a
 // defensible stand-in for "last modified" on routes with no real per-page
@@ -34,10 +33,7 @@ const STATIC_ROUTES = [
 // not using locale-prefixed URLs.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [publishedEvents, publishedPrograms] = await Promise.all([
-    db
-      .select({ slug: events.slug, publishedAt: events.publishedAt })
-      .from(events)
-      .where(eq(events.status, "published")),
+    getPublishedEventSummaries(),
     // "tvet" gets its own dedicated /tvet route (already in STATIC_ROUTES)
     // rather than /academics/tvet — same filter academics/[slug]/page.tsx
     // applies, so an unpublished/renamed program can't leave a dangling
@@ -61,7 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const eventEntries = publishedEvents.map((event) => ({
     url: `${siteConfig.url}/news/${event.slug}`,
-    lastModified: event.publishedAt ?? new Date(),
+    lastModified: event.publishedAt ? new Date(event.publishedAt) : BUILD_TIME,
     changeFrequency: "monthly" as const,
     priority: 0.5,
   }))
