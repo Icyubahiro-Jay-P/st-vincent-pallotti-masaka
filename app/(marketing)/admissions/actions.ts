@@ -21,7 +21,7 @@ export type InquiryState = {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-// Length caps only — the actual displayed messages stay dictionary-driven
+// Length caps only  the actual displayed messages stay dictionary-driven
 // (dict.admissions.errors) since this is a bilingual public form; zod here
 // just decides which fields are invalid, not what the visitor reads. The
 // program field is validated separately against live published slugs
