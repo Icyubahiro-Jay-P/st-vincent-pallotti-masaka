@@ -3,16 +3,15 @@
 import { LogOut } from "lucide-react"
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { signOutAdmin } from "@/app/admin/actions"
@@ -25,8 +24,8 @@ export function SignOutButton({
   hideLabel?: boolean
 }) {
   return (
-    <AlertDialog>
-      <AlertDialogTrigger
+    <Dialog>
+      <DialogTrigger
         render={
           <Button
             variant="outline"
@@ -37,21 +36,19 @@ export function SignOutButton({
       >
         <span className={cn(hideLabel && "sr-only")}>Sign out</span>
         <LogOut data-icon="inline-end" className="size-3.5" />
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Sign out?</AlertDialogTitle>
-          <AlertDialogDescription>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Sign out?</DialogTitle>
+          <DialogDescription>
             You&rsquo;ll need to log in again to access the admin dashboard.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => signOutAdmin()}>
-            Sign out
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+          <Button onClick={() => signOutAdmin()}>Sign out</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
