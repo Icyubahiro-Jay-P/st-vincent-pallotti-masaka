@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 
 import { PageHero } from "@/components/page-hero"
 import { iconMap } from "@/components/icon-map"
@@ -38,6 +39,12 @@ const breadcrumbJsonLd = {
     },
   ],
 }
+
+// Deterministic URL written by scripts/import-assets.ts (npm run import:assets).
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME
+const HEADMISTRESS_PHOTO_URL = cloudName
+  ? `https://res.cloudinary.com/${cloudName}/image/upload/about/headmistress/EK4A0573.jpg`
+  : null
 
 export default async function AboutPage() {
   const locale = await getLocale()
@@ -193,6 +200,32 @@ export default async function AboutPage() {
               )
             })}
           </ol>
+        </div>
+      </section>
+      <section className="border-t border-border bg-muted/40 py-16 sm:py-20">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+          {HEADMISTRESS_PHOTO_URL && (
+            <div className="relative aspect-4/5 overflow-hidden border border-border bg-card">
+              <Image
+                src={HEADMISTRESS_PHOTO_URL}
+                alt={a.headmistress.photoAlt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
+          )}
+          <div>
+            <p className="text-xs font-semibold tracking-[0.2em] text-teal uppercase">
+              {a.headmistress.eyebrow}
+            </p>
+            <h2 className="mt-3 font-heading text-[clamp(1.75rem,1.5rem+1.2vw,2.75rem)] font-semibold tracking-tight text-foreground">
+              {a.headmistress.title}
+            </h2>
+            <p className="mt-6 text-sm/relaxed text-muted-foreground">
+              {a.headmistress.message}
+            </p>
+          </div>
         </div>
       </section>
     </>
