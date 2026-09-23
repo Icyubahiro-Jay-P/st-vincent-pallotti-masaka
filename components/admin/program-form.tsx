@@ -18,6 +18,8 @@ import {
 import { iconMap } from "@/components/icon-map"
 import { translateField } from "@/lib/translate-action"
 import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
+import { programSchema } from "@/app/admin/(dashboard)/programs/schema"
+import { useFormValid } from "@/hooks/use-form-valid"
 import {
   saveProgram,
   type ProgramFormState,
@@ -88,6 +90,10 @@ export function ProgramForm({
 }) {
   const [state, formAction, pending] = useActionState(saveProgram, initialState)
   useToastOnActionState(state.status, state.message)
+  const { formRef, valid, onChange } = useFormValid(programSchema)
+  // Controlled so a pick re-renders and re-runs the validity check (the
+  // Select's hidden input doesn't fire a change event).
+  const [icon, setIcon] = useState<string | null>(defaultProgram?.icon ?? null)
 
   const name = useTranslatedPair(
     defaultProgram?.nameEn ?? "",
@@ -142,7 +148,13 @@ export function ProgramForm({
   }
 
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-6">
+    <form
+      ref={formRef}
+      action={formAction}
+      onChange={onChange}
+      noValidate
+      className="flex flex-col gap-6"
+    >
       {defaultProgram && (
         <input type="hidden" name="id" value={defaultProgram.id} />
       )}
@@ -258,7 +270,7 @@ export function ProgramForm({
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
         <Field label="Icon" htmlFor="icon" error={state.fieldErrors?.icon}>
-          <Select name="icon" defaultValue={defaultProgram?.icon}>
+          <Select name="icon" value={icon} onValueChange={setIcon}>
             <SelectTrigger id="icon" className="w-full">
               <SelectValue placeholder="Choose an icon" />
             </SelectTrigger>
@@ -306,7 +318,7 @@ export function ProgramForm({
 
       <Button
         type="submit"
-        disabled={pending}
+        disabled={pending || !valid}
         className="h-11 self-start px-6 text-sm"
       >
         {pending ? <Loader2 className="animate-spin" /> : null}
