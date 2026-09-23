@@ -54,7 +54,7 @@ const fr: Dictionary = {
     },
     "cambridge-primary": {
       name: "Primaire Cambridge",
-      ageRange: "P1 – P6",
+      ageRange: "1re – 8e année",
       description:
         "Un programme reconnu à l'international, en anglais, mathématiques et sciences, pour les familles tournées vers le monde.",
       overview:
@@ -63,7 +63,7 @@ const fr: Dictionary = {
         "Anglais, mathématiques et sciences du programme Cambridge Primary",
         "Évaluation reconnue à l'international",
         "Classes à effectif réduit et enseignants dédiés par matière",
-        "Un chemin clair vers le secondaire Cambridge",
+        "Du primaire au premier cycle du secondaire, de la 1re à la 8e année",
       ],
     },
     "national-primary": {
@@ -81,16 +81,16 @@ const fr: Dictionary = {
       ],
     },
     "national-secondary": {
-      name: "Secondaire national",
-      ageRange: "S1 – S6",
+      name: "Tronc commun (O'Level)",
+      ageRange: "S1 – S3",
       description:
-        "Les filières O-Level et A-Level qui préparent les élèves aux examens nationaux et à l'entrée à l'université.",
+        "Trois années de premier cycle du secondaire selon le programme national rwandais, menant aux examens nationaux de l'O'Level.",
       overview:
-        "Le secondaire national accompagne les élèves à travers les études O-Level et A-Level, les préparant aux examens nationaux, à l'entrée à l'université et au monde du travail par une formation académique rigoureuse et la formation du caractère.",
+        "Notre programme O'Level accompagne les élèves de la Senior 1 à la Senior 3 selon le programme rwandais basé sur les compétences, les préparant aux examens nationaux de l'O'Level et à leur prochaine étape, poursuite d'études ou TVET, par une formation académique rigoureuse et la formation du caractère.",
       highlights: [
-        "Filières O-Level et A-Level",
-        "Préparation aux examens nationaux",
-        "Orientation universitaire et professionnelle",
+        "De la Senior 1 à la Senior 3 (S1 – S3)",
+        "Préparation aux examens nationaux de l'O'Level",
+        "Orientation vers la poursuite d'études ou la TVET",
         "Formation au leadership et au caractère",
       ],
     },
@@ -271,21 +271,21 @@ const fr: Dictionary = {
         },
         {
           stage: "Primaire",
-          range: "P1 – P6",
+          range: "P1 – P6 · 1re – 8e année",
           description:
             "Programme Cambridge ou national, construisant des bases académiques solides.",
         },
         {
           stage: "Secondaire",
-          range: "S1 – S6",
+          range: "S1 – S3",
           description:
-            "Études O-Level et A-Level, formation du caractère et du leadership.",
+            "Études du tronc commun (O'Level), formation du caractère et du leadership.",
         },
         {
           stage: "TVET et au-delà",
           range: "Après la S3",
           description:
-            "Une certification professionnelle ou un diplômé prêt pour l'université, préparé à aller plus loin.",
+            "Une certification professionnelle ou une base solide pour la poursuite d'études, préparé à aller plus loin.",
         },
       ],
     },
@@ -383,6 +383,7 @@ const fr: Dictionary = {
         slug: "cambridge-primary",
         name: "Programme Cambridge",
         tagline: "Reconnu à l'international",
+        range: "1re – 8e année",
         description:
           "Notre filière Cambridge suit le programme Cambridge Primary en anglais, mathématiques et sciences, préparant les élèves à une progression reconnue à l'international.",
         subjects: [
@@ -397,6 +398,7 @@ const fr: Dictionary = {
         slug: "national-primary",
         name: "Programme national",
         tagline: "Le programme rwandais basé sur les compétences",
+        range: "Maternelle – S3",
         description:
           "La maternelle, le primaire et le secondaire nationaux suivent le programme officiel rwandais basé sur les compétences, enseigné dans une classe disciplinée et fondée sur des valeurs.",
         subjects: [
@@ -568,7 +570,7 @@ const fr: Dictionary = {
         },
         {
           value: "secondary",
-          label: "Secondaire (O-Level et A-Level)",
+          label: "Secondaire (O'Level, S1 – S3)",
           items: [
             "Certificat de fin de primaire / de l'école précédente",
             "Bulletin ou relevé de notes le plus récent",
