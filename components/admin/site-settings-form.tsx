@@ -10,7 +10,9 @@ import {
   updateSiteSettings,
   type SiteSettingsFormState,
 } from "@/app/admin/(dashboard)/settings/actions"
+import { settingsSchema } from "@/app/admin/(dashboard)/settings/schema"
 import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
+import { useFormValid } from "@/hooks/use-form-valid"
 
 const initialState: SiteSettingsFormState = { status: "idle" }
 
@@ -40,9 +42,16 @@ export function SiteSettingsForm({
     initialState
   )
   useToastOnActionState(state.status, state.message)
+  const { formRef, valid, onChange } = useFormValid(settingsSchema)
 
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-6">
+    <form
+      ref={formRef}
+      action={formAction}
+      onChange={onChange}
+      noValidate
+      className="flex flex-col gap-6"
+    >
       {state.status === "error" && state.message && (
         <p
           role="alert"
@@ -141,7 +150,7 @@ export function SiteSettingsForm({
 
       <Button
         type="submit"
-        disabled={pending}
+        disabled={pending || !valid}
         className="h-11 self-start px-6 text-sm"
       >
         {pending ? <Loader2 className="animate-spin" /> : null}
