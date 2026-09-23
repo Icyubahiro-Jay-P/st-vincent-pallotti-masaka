@@ -10,36 +10,9 @@ import { events, eventMedia } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
 import { sendNewsletterForEvent } from "@/lib/newsletter/send-event-newsletter"
 import { zodFieldErrors } from "@/lib/validation"
+import { eventCapsSchema } from "@/app/admin/(dashboard)/events/schema"
 import { MAX_UPLOAD_BYTES } from "@/lib/media/upload-limits"
 import { generateUniqueSlug } from "@/lib/slug"
-
-// Length caps only, applied regardless of draft/publish  whether each
-// field is actually *required* still depends on intent, handled below with
-// the existing imperative logic so draft-with-just-a-title keeps working.
-const eventCapsSchema = z.object({
-  titleEn: z.string().trim().max(200, "Title must be 200 characters or fewer."),
-  titleFr: z.string().trim().max(200, "Title must be 200 characters or fewer."),
-  excerptEn: z
-    .string()
-    .trim()
-    .max(500, "Excerpt must be 500 characters or fewer."),
-  excerptFr: z
-    .string()
-    .trim()
-    .max(500, "Excerpt must be 500 characters or fewer."),
-  bodyEn: z
-    .string()
-    .trim()
-    .max(20000, "Body text must be 20,000 characters or fewer."),
-  bodyFr: z
-    .string()
-    .trim()
-    .max(20000, "Body text must be 20,000 characters or fewer."),
-  category: z
-    .string()
-    .trim()
-    .max(100, "Category must be 100 characters or fewer."),
-})
 
 export type EventFormState = {
   status: "idle" | "error"
