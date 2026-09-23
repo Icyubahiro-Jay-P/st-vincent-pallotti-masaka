@@ -279,7 +279,7 @@ const en = {
           stage: "Primary",
           range: "P1 – P6 · Grade 1 – 8",
           description:
-            "Cambridge or National curriculum, building strong academic fundamentals.",
+            "Cambridge (Grade 1 – 8) or National (P1 – P6) curriculum, building strong academic fundamentals.",
         },
         {
           stage: "Secondary",
