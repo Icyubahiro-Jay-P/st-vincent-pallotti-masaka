@@ -2,38 +2,17 @@
 
 import { revalidatePath, updateTag } from "next/cache"
 import { eq } from "drizzle-orm"
-import { z } from "zod"
 
 import { db } from "@/lib/db"
 import { homepageContent, type HomepageStat } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
-import { nonEmptyString, zodFieldErrors } from "@/lib/validation"
+import { zodFieldErrors } from "@/lib/validation"
+import {
+  homepageTextSchema,
+  statsError,
+} from "@/app/admin/(dashboard)/homepage/schema"
 
 const CONTENT_ID = 1
-
-const homepageTextSchema = z.object({
-  eyebrowEn: nonEmptyString(200, "an English eyebrow"),
-  eyebrowFr: nonEmptyString(200, "a French eyebrow"),
-  headlineEn: nonEmptyString(200, "an English headline"),
-  headlineFr: nonEmptyString(200, "a French headline"),
-  headlineEmphasisEn: nonEmptyString(200, "an English headline emphasis"),
-  headlineEmphasisFr: nonEmptyString(200, "a French headline emphasis"),
-  paragraphEn: nonEmptyString(2000, "English paragraph text"),
-  paragraphFr: nonEmptyString(2000, "French paragraph text"),
-  calloutValueEn: nonEmptyString(200, "an English callout value"),
-  calloutValueFr: nonEmptyString(200, "a French callout value"),
-  calloutTextEn: nonEmptyString(200, "English callout text"),
-  calloutTextFr: nonEmptyString(200, "French callout text"),
-  panelEstablishedEn: nonEmptyString(200, "English panel text"),
-  panelEstablishedFr: nonEmptyString(200, "French panel text"),
-})
-
-const statSchema = z.object({
-  valueEn: nonEmptyString(50, "a value"),
-  valueFr: nonEmptyString(50, "a value"),
-  labelEn: nonEmptyString(50, "a label"),
-  labelFr: nonEmptyString(50, "a label"),
-})
 
 export type HomepageContentFormState = {
   status: "idle" | "error" | "success"
@@ -118,11 +97,8 @@ export async function updateHomepageContent(
     ? {}
     : zodFieldErrors(parsed.error)
 
-  if (stats.length === 0) {
-    fieldErrors.stats = "Add at least one stat."
-  } else if (!stats.every((s) => statSchema.safeParse(s).success)) {
-    fieldErrors.stats = "Fill in every field for each stat row."
-  }
+  const statsMessage = statsError(stats)
+  if (statsMessage) fieldErrors.stats = statsMessage
 
   if (Object.keys(fieldErrors).length > 0) {
     return {
