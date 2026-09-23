@@ -12,13 +12,12 @@ export default async function AdminProfilePage() {
         <h1 className="font-heading text-xl font-semibold text-foreground">
           Profile
         </h1>
-        <ProfileForm defaults={{ name: user.name }} />
-      </div>
-      <div className="flex flex-col gap-5">
-        <h2 className="font-heading text-lg font-semibold text-foreground">
-          Change email
-        </h2>
-        <ChangeEmailForm defaultEmail={user.email} />
+        {/* Separate forms (email change has its own server flow), laid out
+            as one row. */}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <ProfileForm defaults={{ name: user.name }} />
+          <ChangeEmailForm defaultEmail={user.email} />
+        </div>
       </div>
       <div className="flex flex-col gap-5">
         <h2 className="font-heading text-lg font-semibold text-foreground">
