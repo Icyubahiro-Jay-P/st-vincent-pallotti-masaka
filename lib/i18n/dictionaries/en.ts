@@ -363,6 +363,13 @@ const en = {
       eyebrow: "What We Stand For",
       title: "Faith, excellence, inclusion, opportunity",
     },
+    headmistress: {
+      eyebrow: "Leadership",
+      title: "Message from the Headmistress",
+      message:
+        "Welcome to Saint Vincent Pallotti School Masaka. Together with our Sisters, staff and families, we walk with every child in faith, learning and service.",
+      photoAlt: "The Headmistress of Saint Vincent Pallotti School Masaka",
+    },
     milestones: {
       eyebrow: "Our Journey",
       title: "Milestones",
@@ -650,11 +657,18 @@ const en = {
     },
     empty: "No news yet, check back soon.",
     galleryHeading: "Photos",
+    backToNews: "Back to News",
+    galleryCarousel: "Event photos",
+    galleryPrev: "Previous photo",
+    galleryNext: "Next photo",
+    galleryGoTo: "Go to photo {n}",
+    gallerySlideOf: "{n} of {total}",
     follow: {
       eyebrow: "Follow Along",
       title: "More school life on Instagram & YouTube",
       instagram: "Instagram",
       youtube: "YouTube",
+      facebook: "Facebook",
     },
   },
 
