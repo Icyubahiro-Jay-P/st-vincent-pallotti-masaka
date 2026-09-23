@@ -13,19 +13,28 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary"
 // state is already meaningful instead of retrofitted.
 const STORAGE_KEY = "cookie-consent"
 
-export function CookieConsentBanner({ dict }: { dict: Dictionary }) {
-  const [visible, setVisible] = React.useState(false)
-  const c = dict.cookieConsent
+const noopSubscribe = () => () => {}
 
-  React.useEffect(() => {
-    try {
-      setVisible(!window.localStorage.getItem(STORAGE_KEY))
-    } catch {
-      // Private browsing / blocked storage: default to showing the notice
-      // rather than crashing the banner.
-      setVisible(true)
-    }
-  }, [])
+function readNeedsChoice() {
+  try {
+    return !window.localStorage.getItem(STORAGE_KEY)
+  } catch {
+    // Private browsing / blocked storage: default to showing the notice
+    // rather than crashing the banner.
+    return true
+  }
+}
+
+export function CookieConsentBanner({ dict }: { dict: Dictionary }) {
+  // Read after hydration (server snapshot hides the banner).
+  const needsChoice = React.useSyncExternalStore(
+    noopSubscribe,
+    readNeedsChoice,
+    () => false
+  )
+  const [dismissed, setDismissed] = React.useState(false)
+  const visible = needsChoice && !dismissed
+  const c = dict.cookieConsent
 
   function choose(value: "accepted" | "necessary-only") {
     try {
@@ -33,7 +42,7 @@ export function CookieConsentBanner({ dict }: { dict: Dictionary }) {
     } catch {
       // Storage blocked - nothing to persist, just dismiss for this visit.
     }
-    setVisible(false)
+    setDismissed(true)
   }
 
   if (!visible) return null
