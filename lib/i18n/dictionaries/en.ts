@@ -60,7 +60,7 @@ const en = {
     },
     "cambridge-primary": {
       name: "Cambridge Primary",
-      ageRange: "P1 – P6",
+      ageRange: "Grade 1 – Grade 8",
       description:
         "An internationally benchmarked curriculum in English, Mathematics and Science for globally minded families.",
       overview:
@@ -69,7 +69,7 @@ const en = {
         "Cambridge Primary English, Mathematics and Science",
         "Internationally benchmarked assessment",
         "Small class sizes and dedicated subject teachers",
-        "A clear pathway into Cambridge Secondary",
+        "Primary through Lower Secondary, Grade 1 to Grade 8",
       ],
     },
     "national-primary": {
@@ -87,16 +87,16 @@ const en = {
       ],
     },
     "national-secondary": {
-      name: "National Secondary",
-      ageRange: "S1 – S6",
+      name: "Ordinary Level (O'Level)",
+      ageRange: "S1 – S3",
       description:
-        "O-Level and A-Level pathways that prepare students for national examinations and university entry.",
+        "Three years of lower secondary on Rwanda's national curriculum, building toward the O'Level national examinations.",
       overview:
-        "National Secondary carries students through O-Level and A-Level study, preparing them for national examinations, university entry and the working world through rigorous academics and character formation.",
+        "Our Ordinary Level (O'Level) program carries students from Senior 1 to Senior 3 on Rwanda's competence-based curriculum, preparing them for the O'Level national examinations and their next step, whether further study or TVET, through rigorous academics and character formation.",
       highlights: [
-        "O-Level and A-Level pathways",
-        "Preparation for national examinations",
-        "University and career guidance",
+        "Senior 1 to Senior 3 (S1 – S3)",
+        "Preparation for the O'Level national examinations",
+        "Guidance toward further study or TVET",
         "Leadership and character formation",
       ],
     },
@@ -277,21 +277,21 @@ const en = {
         },
         {
           stage: "Primary",
-          range: "P1 – P6",
+          range: "P1 – P6 · Grade 1 – 8",
           description:
             "Cambridge or National curriculum, building strong academic fundamentals.",
         },
         {
           stage: "Secondary",
-          range: "S1 – S6",
+          range: "S1 – S3",
           description:
-            "O-Level and A-Level study, character formation and leadership.",
+            "Ordinary Level (O'Level) study, character formation and leadership.",
         },
         {
           stage: "TVET & Beyond",
           range: "Post-S3",
           description:
-            "A trade certification or university-ready graduate, prepared to strive beyond.",
+            "A trade certification or a strong foundation for further study, prepared to strive beyond.",
         },
       ],
     },
@@ -388,6 +388,7 @@ const en = {
         slug: "cambridge-primary",
         name: "Cambridge Curriculum",
         tagline: "Internationally benchmarked",
+        range: "Grade 1 – Grade 8",
         description:
           "Our Cambridge stream follows the Cambridge Primary framework in English, Mathematics and Science, preparing students for globally recognised progression.",
         subjects: [
@@ -402,6 +403,7 @@ const en = {
         slug: "national-primary",
         name: "National Curriculum",
         tagline: "Rwanda's competence-based curriculum",
+        range: "Nursery – S3",
         description:
           "National Nursery, Primary and Secondary follow Rwanda's official competence-based curriculum, taught in a disciplined, values-led classroom.",
         subjects: [
@@ -573,7 +575,7 @@ const en = {
         },
         {
           value: "secondary",
-          label: "Secondary (O-Level & A-Level)",
+          label: "Secondary (O'Level, S1 – S3)",
           items: [
             "Primary Leaving / previous school certificate",
             "Most recent report card or transcript",
