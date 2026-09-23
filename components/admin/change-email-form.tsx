@@ -1,6 +1,6 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useMemo } from "react"
 import { Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -10,17 +10,35 @@ import {
   changeEmail,
   type ChangeEmailState,
 } from "@/app/admin/(dashboard)/profile/actions"
+import { changeEmailSchema } from "@/app/admin/(dashboard)/profile/schema"
 import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
+import { useFormValid } from "@/hooks/use-form-valid"
 
 const initialState: ChangeEmailState = { status: "idle" }
 
 export function ChangeEmailForm({ defaultEmail }: { defaultEmail: string }) {
   const [state, formAction, pending] = useActionState(changeEmail, initialState)
   useToastOnActionState(state.status, state.message)
+  // Same valid-and-changed rule as ProfileForm; defaultEmail updates after a
+  // successful change since the action revalidates this page.
+  const schema = useMemo(
+    () =>
+      changeEmailSchema.refine(
+        (data) => data.email.trim() !== defaultEmail.trim()
+      ),
+    [defaultEmail]
+  )
+  const { formRef, valid, onChange } = useFormValid(schema)
 
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-5">
-      <div className="flex flex-col gap-1.5 sm:max-w-xs">
+    <form
+      ref={formRef}
+      action={formAction}
+      onChange={onChange}
+      noValidate
+      className="flex flex-col gap-5"
+    >
+      <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
@@ -50,7 +68,7 @@ export function ChangeEmailForm({ defaultEmail }: { defaultEmail: string }) {
 
       <Button
         type="submit"
-        disabled={pending}
+        disabled={pending || !valid}
         className="h-11 self-start px-6 text-sm"
       >
         {pending ? <Loader2 className="animate-spin" /> : null}
