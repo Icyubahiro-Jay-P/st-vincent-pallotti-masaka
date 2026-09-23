@@ -44,6 +44,17 @@ const navItems = [
 
 const COLLAPSED_KEY = "admin-sidebar-collapsed"
 
+const noopSubscribe = () => () => {}
+
+function readStoredCollapsed() {
+  try {
+    return window.localStorage.getItem(COLLAPSED_KEY) === "true"
+  } catch {
+    // localStorage unavailable (private browsing), keep default
+    return false
+  }
+}
+
 // Trigger and content for the mobile nav and the collapse toggle render in
 // different parts of the tree (header vs. sidebar) but share state, so they
 // need this context.
@@ -60,26 +71,24 @@ export function AdminSidebarProvider({
   children: React.ReactNode
 }) {
   const [open, setOpen] = React.useState(false)
-  const [collapsed, setCollapsed] = React.useState(false)
-
-  React.useEffect(() => {
-    try {
-      setCollapsed(window.localStorage.getItem(COLLAPSED_KEY) === "true")
-    } catch {
-      // localStorage unavailable (private browsing), keep default
-    }
-  }, [])
+  // Stored preference is read after hydration (server snapshot is false);
+  // a toggle in this session overrides it.
+  const storedCollapsed = React.useSyncExternalStore(
+    noopSubscribe,
+    readStoredCollapsed,
+    () => false
+  )
+  const [override, setOverride] = React.useState<boolean | null>(null)
+  const collapsed = override ?? storedCollapsed
 
   function toggleCollapsed() {
-    setCollapsed((prev) => {
-      const next = !prev
-      try {
-        window.localStorage.setItem(COLLAPSED_KEY, String(next))
-      } catch {
-        // localStorage unavailable, collapsed state won't persist
-      }
-      return next
-    })
+    const next = !collapsed
+    try {
+      window.localStorage.setItem(COLLAPSED_KEY, String(next))
+    } catch {
+      // localStorage unavailable, collapsed state won't persist
+    }
+    setOverride(next)
   }
 
   return (
@@ -129,6 +138,17 @@ export function AdminSidebarCollapseToggle() {
   )
 }
 
+// Longest-prefix match so nested routes (e.g. /admin/events/new) resolve
+// to their section's label.
+export function AdminPageTitle({ className }: { className?: string }) {
+  const pathname = usePathname()
+  const item = navItems
+    .filter((i) => pathname.startsWith(i.href))
+    .sort((a, b) => b.href.length - a.href.length)[0]
+  if (!item) return null
+  return <span className={className}>{item.label}</span>
+}
+
 function useActivePath(href: string) {
   const pathname = usePathname()
   return pathname.startsWith(href)
@@ -173,11 +193,19 @@ export function AdminSidebar() {
       <nav
         aria-label="Admin"
         className={cn(
-          "hidden shrink-0 flex-col border-r border-border bg-background transition-[width] duration-200 lg:flex",
+          "hidden min-h-0 shrink-0 flex-col border-r border-border bg-background transition-[width] duration-200 lg:flex",
           collapsed ? "w-14" : "w-56"
         )}
       >
-        <div className="flex flex-1 flex-col gap-1 py-4">
+        <div
+          className={cn(
+            "flex px-2 pt-2",
+            collapsed ? "justify-center" : "justify-end"
+          )}
+        >
+          <AdminSidebarCollapseToggle />
+        </div>
+        <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto pb-4">
           {navItems.map((item) => (
             <NavLink key={item.href} {...item} collapsed={collapsed} />
           ))}
