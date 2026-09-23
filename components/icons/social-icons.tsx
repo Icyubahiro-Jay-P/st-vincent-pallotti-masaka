@@ -69,19 +69,29 @@ export function FacebookGlyph({ className }: { className?: string }) {
   )
 }
 
-export function XGlyph({ className }: { className?: string }) {
+// Official X logo (from icons/x.svg). Mirrors lucide's API: size, color,
+// className and any other SVG prop, currentColor fill, decorative by default.
+export function XLogo({
+  size = 24,
+  color = "currentColor",
+  className,
+  ...props
+}: React.ComponentProps<"svg"> & { size?: number | string }) {
   return (
     <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 1024 1024"
+      fill={color}
+      fillRule="evenodd"
       aria-hidden="true"
+      className={["lucide lucide-x-logo", className].filter(Boolean).join(" ")}
+      {...props}
     >
       <path
-        d="M5 5l14 14M19 5 5 19"
-        stroke="currentColor"
-        strokeWidth="2.25"
-        strokeLinecap="round"
+        d="M818 800 498.11 333.745l.546.437L787.084 0h-96.385L455.738 272 269.15 0H16.367l298.648 435.31-.036-.037L0 800h96.385l261.222-302.618L565.217 800zM230.96 72.727l448.827 654.546h-76.38L154.217 72.727z"
+        transform="translate(103 112)"
       />
     </svg>
   )
