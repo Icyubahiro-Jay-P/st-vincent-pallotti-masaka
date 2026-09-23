@@ -13,7 +13,12 @@ import {
   updateHomepageContent,
   type HomepageContentFormState,
 } from "@/app/admin/(dashboard)/homepage/actions"
+import {
+  homepageTextSchema,
+  statsError,
+} from "@/app/admin/(dashboard)/homepage/schema"
 import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
+import { useFormValid } from "@/hooks/use-form-valid"
 import type { HomepageStat } from "@/lib/db/schema"
 
 const initialState: HomepageContentFormState = { status: "idle" }
@@ -80,56 +85,38 @@ export function HomepageContentForm({
   )
   useToastOnActionState(state.status, state.message)
 
+  // Keyed on updatedAt so a successful save (which doesn't navigate away)
+  // remounts the form with fresh defaults instead of the local
+  // useState/useTranslatedPair hooks silently keeping their pre-save
+  // values. useActionState/the toast above stay outside this key, so
+  // they're unaffected by the remount.
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-6">
-      {state.status === "error" && state.message && (
-        <p
-          role="alert"
-          className="border border-destructive/30 bg-destructive/10 px-4 py-3 text-xs text-destructive"
-        >
-          {state.message}
-        </p>
-      )}
-
-      {state.status === "success" && state.message && (
-        <p
-          role="status"
-          className="border border-primary/30 bg-primary/10 px-4 py-3 text-xs text-foreground"
-        >
-          {state.message}
-        </p>
-      )}
-
-      {/* Keyed on updatedAt so a successful save (which doesn't navigate
-          away) remounts these fields with fresh defaults instead of the
-          local useState/useTranslatedPair hooks silently keeping their
-          pre-save values. useActionState/the toast above stay outside this
-          key, so they're unaffected by the remount. */}
-      <HomepageFields
-        key={defaults.updatedAt}
-        defaults={defaults}
-        fieldErrors={state.fieldErrors}
-      />
-
-      <Button
-        type="submit"
-        disabled={pending}
-        className="h-11 self-start px-6 text-sm"
-      >
-        {pending ? <Loader2 className="animate-spin" /> : null}
-        Save homepage content
-      </Button>
-    </form>
+    <HomepageFields
+      key={defaults.updatedAt}
+      defaults={defaults}
+      state={state}
+      formAction={formAction}
+      pending={pending}
+    />
   )
 }
 
 function HomepageFields({
   defaults,
-  fieldErrors,
+  state,
+  formAction,
+  pending,
 }: {
   defaults: HomepageContentDefaults
-  fieldErrors?: HomepageContentFormState["fieldErrors"]
+  state: HomepageContentFormState
+  formAction: (formData: FormData) => void
+  pending: boolean
 }) {
+  const fieldErrors = state.fieldErrors
+  // The fields live in this component's state, so the every-render check in
+  // useFormValid sees translations and stat edits; stats are repeated fields
+  // FormData can't express as an object, so they're checked from state.
+  const { formRef, valid, onChange } = useFormValid(homepageTextSchema)
   const eyebrow = useTranslatedPair(defaults.eyebrowEn, defaults.eyebrowFr)
   const headline = useTranslatedPair(defaults.headlineEn, defaults.headlineFr)
   const headlineEmphasis = useTranslatedPair(
@@ -180,8 +167,34 @@ function HomepageFields({
     setStats((rows) => rows.filter((_, i) => i !== index))
   }
 
+  const statsValid = statsError(stats) === undefined
+
   return (
-    <>
+    <form
+      ref={formRef}
+      action={formAction}
+      onChange={onChange}
+      noValidate
+      className="flex flex-col gap-6"
+    >
+      {state.status === "error" && state.message && (
+        <p
+          role="alert"
+          className="border border-destructive/30 bg-destructive/10 px-4 py-3 text-xs text-destructive"
+        >
+          {state.message}
+        </p>
+      )}
+
+      {state.status === "success" && state.message && (
+        <p
+          role="status"
+          className="border border-primary/30 bg-primary/10 px-4 py-3 text-xs text-foreground"
+        >
+          {state.message}
+        </p>
+      )}
+
       <TranslatedField
         label="Eyebrow"
         idPrefix="eyebrow"
@@ -293,7 +306,16 @@ function HomepageFields({
           Add stat
         </Button>
       </div>
-    </>
+
+      <Button
+        type="submit"
+        disabled={pending || !valid || !statsValid}
+        className="h-11 self-start px-6 text-sm"
+      >
+        {pending ? <Loader2 className="animate-spin" /> : null}
+        Save homepage content
+      </Button>
+    </form>
   )
 }
 
