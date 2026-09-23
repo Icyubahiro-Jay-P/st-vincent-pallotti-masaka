@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useActionState } from "react"
 import { ArrowLeft, Loader2, Mail } from "lucide-react"
+import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,14 +12,20 @@ import {
   requestPasswordReset,
   type ForgotPasswordState,
 } from "@/app/admin/login/forgot-password/actions"
+import { emailSchema } from "@/lib/validation"
+import { useFormValid } from "@/hooks/use-form-valid"
 
 const initialState: ForgotPasswordState = { status: "idle" }
+
+// Same rule requestPasswordReset checks before sending anything.
+const forgotPasswordSchema = z.object({ email: emailSchema.max(320) })
 
 export function ForgotPasswordForm() {
   const [state, formAction, pending] = useActionState(
     requestPasswordReset,
     initialState
   )
+  const { formRef, valid, onChange } = useFormValid(forgotPasswordSchema)
 
   if (state.status === "done") {
     return (
@@ -41,7 +48,13 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-5">
+    <form
+      ref={formRef}
+      action={formAction}
+      onChange={onChange}
+      noValidate
+      className="flex flex-col gap-5"
+    >
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">Email</Label>
         <Input
@@ -56,7 +69,7 @@ export function ForgotPasswordForm() {
       <Button
         type="submit"
         size="lg"
-        disabled={pending}
+        disabled={pending || !valid}
         className="h-11 px-6 text-sm"
       >
         {pending ? (
