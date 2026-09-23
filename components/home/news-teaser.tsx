@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import {
   InstagramGlyph,
   YoutubeGlyph,
-  XGlyph,
+  XLogo,
 } from "@/components/icons/social-icons"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import type { Locale } from "@/lib/i18n/config"
@@ -112,7 +112,7 @@ export function NewsTeaser({
                 className="inline-flex items-center justify-center border border-border p-2 text-foreground transition-colors hover:border-primary hover:text-primary"
                 aria-label="X"
               >
-                <XGlyph className="size-4" />
+                <XLogo className="size-4" />
               </a>
             )}
           </div>
