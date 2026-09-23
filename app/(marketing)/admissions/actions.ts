@@ -1,15 +1,13 @@
 "use server"
 
-import { z } from "zod"
-
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { db } from "@/lib/db"
 import { admissionsInquiries } from "@/lib/db/schema"
 import { checkRateLimit, getRequestIp } from "@/lib/rate-limit"
 import { getPublishedPrograms } from "@/lib/programs"
-import { phoneSchema } from "@/lib/validation"
 import { ADMISSIONS_TERM_KEYS } from "@/lib/admissions-terms"
+import { buildInquirySchema } from "@/app/(marketing)/admissions/schema"
 
 export type InquiryState = {
   status: "idle" | "success" | "error"
@@ -17,25 +15,6 @@ export type InquiryState = {
   fieldErrors?: Partial<
     Record<"parentName" | "email" | "phone" | "childName" | "program", string>
   >
-}
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-// Length caps only  the actual displayed messages stay dictionary-driven
-// (dict.admissions.errors) since this is a bilingual public form; zod here
-// just decides which fields are invalid, not what the visitor reads. The
-// program field is validated separately against live published slugs
-// (built dynamically below) rather than a fixed schema shape.
-function buildInquirySchema(validProgramSlugs: Set<string>) {
-  return z.object({
-    parentName: z.string().trim().min(1).max(200),
-    email: z.string().trim().min(1).max(320).regex(EMAIL_PATTERN),
-    phone: phoneSchema,
-    childName: z.string().trim().min(1).max(200),
-    program: z.string().refine((slug) => validProgramSlugs.has(slug)),
-    preferredTerm: z.enum(ADMISSIONS_TERM_KEYS).optional(),
-    message: z.string().trim().max(2000).optional(),
-  })
 }
 
 // Reads the visitor's language cookie directly (Server Actions can call
