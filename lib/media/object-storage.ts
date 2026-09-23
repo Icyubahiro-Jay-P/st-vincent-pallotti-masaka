@@ -66,3 +66,9 @@ export async function presignBackupUpload(
   })
   return { url, fields, key }
 }
+
+// For server-side scripts that PutObject directly (e.g. scripts/import-assets.ts).
+export function getBackupStorage() {
+  const config = getConfig()
+  return { client: getClient(config), bucket: config.bucket }
+}
