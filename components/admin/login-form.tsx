@@ -1,23 +1,31 @@
 "use client"
 
-import * as React from "react"
 import Link from "next/link"
 import { useActionState } from "react"
-import { Eye, EyeOff, Loader2, LogIn } from "lucide-react"
+import { Loader2, LogIn } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { signInAdmin, type LoginState } from "@/app/admin/login/actions"
+import { loginSchema } from "@/app/admin/login/schema"
+import { PasswordInput } from "@/components/admin/password-input"
+import { useFormValid } from "@/hooks/use-form-valid"
 
 const initialState: LoginState = { status: "idle" }
 
 export function AdminLoginForm() {
   const [state, formAction, pending] = useActionState(signInAdmin, initialState)
-  const [showPassword, setShowPassword] = React.useState(false)
+  const { formRef, valid, onChange } = useFormValid(loginSchema)
 
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-5">
+    <form
+      ref={formRef}
+      action={formAction}
+      onChange={onChange}
+      noValidate
+      className="flex flex-col gap-5"
+    >
       {state.status === "error" && state.message && (
         <p
           role="alert"
@@ -48,32 +56,18 @@ export function AdminLoginForm() {
             Forgot password?
           </Link>
         </div>
-        <div className="relative">
-          <Input
-            id="password"
-            name="password"
-            type={showPassword ? "text" : "password"}
-            autoComplete="current-password"
-            required
-            className="pr-9"
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-xs"
-            onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute top-1/2 right-0 -translate-y-1/2"
-            aria-label={showPassword ? "Hide password" : "Show password"}
-          >
-            {showPassword ? <EyeOff /> : <Eye />}
-          </Button>
-        </div>
+        <PasswordInput
+          id="password"
+          name="password"
+          autoComplete="current-password"
+          required
+        />
       </div>
 
       <Button
         type="submit"
         size="lg"
-        disabled={pending}
+        disabled={pending || !valid}
         className="h-11 px-6 text-sm"
       >
         {pending ? (
