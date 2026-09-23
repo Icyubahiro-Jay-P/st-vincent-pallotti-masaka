@@ -1,45 +1,47 @@
 "use client"
 
-import { useActionState, useEffect, useRef } from "react"
+import { useActionState, useEffect } from "react"
 import { Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
   changePassword,
   type ChangePasswordState,
 } from "@/app/admin/(dashboard)/profile/actions"
+import { passwordSchema } from "@/app/admin/(dashboard)/profile/schema"
+import { PasswordInput } from "@/components/admin/password-input"
 import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
+import { useFormValid } from "@/hooks/use-form-valid"
 
 const initialState: ChangePasswordState = { status: "idle" }
 
 export function ChangePasswordForm() {
-  const formRef = useRef<HTMLFormElement>(null)
   const [state, formAction, pending] = useActionState(
     changePassword,
     initialState
   )
   useToastOnActionState(state.status, state.message)
+  const { formRef, valid, onChange, reset } = useFormValid(passwordSchema)
 
   useEffect(() => {
-    if (state.status === "success") formRef.current?.reset()
-  }, [state])
+    if (state.status === "success") reset()
+  }, [state, reset])
 
   return (
     <form
       ref={formRef}
       action={formAction}
+      onChange={onChange}
       noValidate
       className="flex flex-col gap-5"
     >
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5 sm:col-span-2">
           <Label htmlFor="currentPassword">Current password</Label>
-          <Input
+          <PasswordInput
             id="currentPassword"
             name="currentPassword"
-            type="password"
             autoComplete="current-password"
           />
           {state.fieldErrors?.currentPassword ? (
@@ -50,10 +52,9 @@ export function ChangePasswordForm() {
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="newPassword">New password</Label>
-          <Input
+          <PasswordInput
             id="newPassword"
             name="newPassword"
-            type="password"
             autoComplete="new-password"
           />
           {state.fieldErrors?.newPassword ? (
@@ -64,10 +65,9 @@ export function ChangePasswordForm() {
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="confirmPassword">Confirm new password</Label>
-          <Input
+          <PasswordInput
             id="confirmPassword"
             name="confirmPassword"
-            type="password"
             autoComplete="new-password"
           />
           {state.fieldErrors?.confirmPassword ? (
@@ -92,7 +92,7 @@ export function ChangePasswordForm() {
 
       <Button
         type="submit"
-        disabled={pending}
+        disabled={pending || !valid}
         className="h-11 self-start px-6 text-sm"
       >
         {pending ? <Loader2 className="animate-spin" /> : null}
