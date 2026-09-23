@@ -1,6 +1,6 @@
 "use client"
 
-import { useActionState, useEffect, useRef } from "react"
+import { useActionState, useEffect, useMemo, useState } from "react"
 import { CheckCircle2, Loader2, Send } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -18,9 +18,11 @@ import {
   submitInquiry,
   type InquiryState,
 } from "@/app/(marketing)/admissions/actions"
+import { buildInquirySchema } from "@/app/(marketing)/admissions/schema"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import { admissionsTermOptions } from "@/lib/admissions-terms"
 import { cn } from "@/lib/utils"
+import { useFormValid } from "@/hooks/use-form-valid"
 
 const initialState: InquiryState = { status: "idle" }
 
@@ -38,16 +40,25 @@ export function AdmissionInquiryForm({
     submitInquiry,
     initialState
   )
-  const formRef = useRef<HTMLFormElement>(null)
   const validDefaultProgramSlug = programs.find(
     (program) => program.slug === defaultProgram
   )?.slug
+  // Controlled so a pick re-renders and re-runs the validity check (the
+  // Select's hidden input doesn't fire a change event).
+  const [program, setProgram] = useState<string | null>(
+    validDefaultProgramSlug ?? null
+  )
+  const schema = useMemo(
+    () => buildInquirySchema(new Set(programs.map((p) => p.slug))),
+    [programs]
+  )
+  const { formRef, valid, onChange, reset } = useFormValid(schema)
 
   useEffect(() => {
     if (state.status === "success") {
-      formRef.current?.reset()
+      reset()
     }
-  }, [state.status])
+  }, [state.status, reset])
 
   if (state.status === "success") {
     return (
@@ -67,6 +78,7 @@ export function AdmissionInquiryForm({
     <form
       ref={formRef}
       action={formAction}
+      onChange={onChange}
       noValidate
       className="flex flex-col gap-5"
     >
@@ -150,7 +162,7 @@ export function AdmissionInquiryForm({
           htmlFor="program"
           error={state.fieldErrors?.program}
         >
-          <Select name="program" defaultValue={validDefaultProgramSlug}>
+          <Select name="program" value={program} onValueChange={setProgram}>
             <SelectTrigger id="program" className="w-full">
               <SelectValue placeholder={f.programPlaceholder} />
             </SelectTrigger>
@@ -191,7 +203,7 @@ export function AdmissionInquiryForm({
       <Button
         type="submit"
         size="lg"
-        disabled={pending}
+        disabled={pending || !valid}
         className="h-11 self-start px-6 text-sm"
       >
         {pending ? (
