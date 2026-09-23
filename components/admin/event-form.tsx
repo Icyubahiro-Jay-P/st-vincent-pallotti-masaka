@@ -18,11 +18,13 @@ import {
   saveEvent,
   type EventFormState,
 } from "@/app/admin/(dashboard)/events/actions"
+import { eventCapsSchema } from "@/app/admin/(dashboard)/events/schema"
 import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
 import { translateField } from "@/lib/translate-action"
 import { getUploadCredentials } from "@/app/admin/(dashboard)/events/upload-actions"
 import { compressImage } from "@/lib/media/compress-image"
 import { compressVideo } from "@/lib/media/compress-video"
+import { cloudinaryUrl } from "@/lib/media/cloudinary-url"
 
 const initialState: EventFormState = { status: "idle" }
 
@@ -196,7 +198,7 @@ export function EventForm({
   // Snapshot of the originally-fetched values, captured once on mount and
   // never re-synced - used to disable Save/Publish until something actually
   // changes from what's in the database.
-  const original = useRef({
+  const [original] = useState(() => ({
     fields: {
       titleEn: defaultEvent?.titleEn ?? "",
       titleFr: defaultEvent?.titleFr ?? "",
@@ -206,7 +208,7 @@ export function EventForm({
       bodyFr: defaultEvent?.bodyFr ?? "",
     },
     category: defaultEvent?.category ?? "",
-  }).current
+  }))
   const [translating, setTranslating] = useState<
     Partial<Record<keyof LocalizedFields, boolean>>
   >({})
@@ -356,6 +358,12 @@ export function EventForm({
     cover !== null ||
     galleryItems.length > 0
   const saveDisabled = pending || uploadsInFlight || (isEditMode && !isDirty)
+  // Mirrors saveEvent's rules: a draft needs a title in either language,
+  // publishing needs every field. Every field is in state, so no DOM read.
+  const caps = eventCapsSchema.safeParse({ ...fields, category })
+  const draftValid =
+    caps.success && Boolean(caps.data.titleEn || caps.data.titleFr)
+  const publishValid = caps.success && Object.values(caps.data).every(Boolean)
 
   return (
     <form action={formAction} noValidate className="flex flex-col gap-6">
@@ -553,7 +561,7 @@ export function EventForm({
                   ) : (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={item.cloudinaryUrl}
+                      src={cloudinaryUrl(item.cloudinaryUrl, 128)}
                       alt=""
                       className="size-full object-cover"
                     />
@@ -620,7 +628,7 @@ export function EventForm({
             name="intent"
             value="draft"
             variant="outline"
-            disabled={saveDisabled}
+            disabled={saveDisabled || !draftValid}
             className="h-11 px-6 text-sm"
           >
             {pending ? <Loader2 className="animate-spin" /> : null}
@@ -630,7 +638,7 @@ export function EventForm({
             type="submit"
             name="intent"
             value="publish"
-            disabled={saveDisabled}
+            disabled={saveDisabled || !publishValid}
             className="h-11 px-6 text-sm"
           >
             {pending ? <Loader2 className="animate-spin" /> : null}
