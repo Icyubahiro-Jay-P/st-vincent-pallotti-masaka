@@ -1,16 +1,17 @@
 "use client"
 
-import * as React from "react"
 import { useActionState } from "react"
-import { Eye, EyeOff, KeyRound, Loader2 } from "lucide-react"
+import { KeyRound, Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
   resetPassword,
   type ResetPasswordState,
 } from "@/app/admin/reset-password/actions"
+import { resetPasswordSchema } from "@/app/admin/reset-password/schema"
+import { PasswordInput } from "@/components/admin/password-input"
+import { useFormValid } from "@/hooks/use-form-valid"
 
 const initialState: ResetPasswordState = { status: "idle" }
 
@@ -19,8 +20,7 @@ export function ResetPasswordForm({ token }: { token?: string }) {
     resetPassword,
     initialState
   )
-  const [showPasswords, setShowPasswords] = React.useState(false)
-  const fieldType = showPasswords ? "text" : "password"
+  const { formRef, valid, onChange } = useFormValid(resetPasswordSchema)
 
   if (!token) {
     return (
@@ -35,7 +35,13 @@ export function ResetPasswordForm({ token }: { token?: string }) {
   }
 
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-5">
+    <form
+      ref={formRef}
+      action={formAction}
+      onChange={onChange}
+      noValidate
+      className="flex flex-col gap-5"
+    >
       {state.status === "error" && state.message && (
         <p
           role="alert"
@@ -49,10 +55,9 @@ export function ResetPasswordForm({ token }: { token?: string }) {
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="newPassword">New password</Label>
-        <Input
+        <PasswordInput
           id="newPassword"
           name="newPassword"
-          type={fieldType}
           autoComplete="new-password"
           minLength={8}
           required
@@ -61,33 +66,19 @@ export function ResetPasswordForm({ token }: { token?: string }) {
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="confirmPassword">Confirm password</Label>
-        <Input
+        <PasswordInput
           id="confirmPassword"
           name="confirmPassword"
-          type={fieldType}
           autoComplete="new-password"
           minLength={8}
           required
         />
       </div>
 
-      <button
-        type="button"
-        onClick={() => setShowPasswords((prev) => !prev)}
-        className="flex items-center gap-1.5 self-start text-xs text-muted-foreground hover:text-foreground"
-      >
-        {showPasswords ? (
-          <EyeOff className="size-3.5" />
-        ) : (
-          <Eye className="size-3.5" />
-        )}
-        {showPasswords ? "Hide passwords" : "Show passwords"}
-      </button>
-
       <Button
         type="submit"
         size="lg"
-        disabled={pending}
+        disabled={pending || !valid}
         className="h-11 px-6 text-sm"
       >
         {pending ? (
