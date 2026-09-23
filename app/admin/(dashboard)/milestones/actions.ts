@@ -3,28 +3,12 @@
 import { revalidatePath, updateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import { eq } from "drizzle-orm"
-import { z } from "zod"
 
 import { db } from "@/lib/db"
 import { milestones } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
-import { iconMap } from "@/components/icon-map"
-import {
-  nonEmptyString,
-  positionSchema,
-  zodFieldErrors,
-} from "@/lib/validation"
-
-const milestoneSchema = z.object({
-  yearEn: nonEmptyString(100, "an English year/period label"),
-  yearFr: nonEmptyString(100, "a French year/period label"),
-  titleEn: nonEmptyString(200, "an English title"),
-  titleFr: nonEmptyString(200, "a French title"),
-  descriptionEn: nonEmptyString(1000, "an English description"),
-  descriptionFr: nonEmptyString(1000, "a French description"),
-  icon: z.string().refine((v) => v in iconMap, "Choose an icon."),
-  position: positionSchema,
-})
+import { zodFieldErrors } from "@/lib/validation"
+import { milestoneSchema } from "@/app/admin/(dashboard)/milestones/schema"
 
 export type MilestoneFormState = {
   status: "idle" | "error"
