@@ -3,31 +3,13 @@
 import { revalidatePath, updateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import { eq } from "drizzle-orm"
-import { z } from "zod"
 
 import { db } from "@/lib/db"
 import { programs } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
-import { iconMap } from "@/components/icon-map"
-import {
-  nonEmptyString,
-  positionSchema,
-  zodFieldErrors,
-} from "@/lib/validation"
+import { zodFieldErrors } from "@/lib/validation"
+import { programSchema } from "@/app/admin/(dashboard)/programs/schema"
 import { generateUniqueSlug } from "@/lib/slug"
-
-const programSchema = z.object({
-  nameEn: nonEmptyString(200, "an English name"),
-  nameFr: nonEmptyString(200, "a French name"),
-  ageRangeEn: nonEmptyString(100, "an English age range"),
-  ageRangeFr: nonEmptyString(100, "a French age range"),
-  descriptionEn: nonEmptyString(1000, "an English description"),
-  descriptionFr: nonEmptyString(1000, "a French description"),
-  overviewEn: nonEmptyString(5000, "English overview text"),
-  overviewFr: nonEmptyString(5000, "French overview text"),
-  icon: z.string().refine((v) => v in iconMap, "Choose an icon."),
-  position: positionSchema,
-})
 
 export type ProgramFormState = {
   status: "idle" | "error"
