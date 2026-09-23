@@ -3,26 +3,12 @@
 import { revalidatePath, updateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import { eq } from "drizzle-orm"
-import { z } from "zod"
 
 import { db } from "@/lib/db"
 import { values } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
-import { iconMap } from "@/components/icon-map"
-import {
-  nonEmptyString,
-  positionSchema,
-  zodFieldErrors,
-} from "@/lib/validation"
-
-const valueSchema = z.object({
-  titleEn: nonEmptyString(200, "an English title"),
-  titleFr: nonEmptyString(200, "a French title"),
-  descriptionEn: nonEmptyString(1000, "an English description"),
-  descriptionFr: nonEmptyString(1000, "a French description"),
-  icon: z.string().refine((v) => v in iconMap, "Choose an icon."),
-  position: positionSchema,
-})
+import { zodFieldErrors } from "@/lib/validation"
+import { valueSchema } from "@/app/admin/(dashboard)/values/schema"
 
 export type ValueFormState = {
   status: "idle" | "error"
