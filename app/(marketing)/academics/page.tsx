@@ -85,9 +85,14 @@ export default async function AcademicsPage() {
                       {track.tagline}
                     </Badge>
                   </div>
-                  <h2 className="font-heading text-2xl font-semibold text-foreground">
-                    {track.name}
-                  </h2>
+                  <div>
+                    <h2 className="font-heading text-2xl font-semibold text-foreground">
+                      {track.name}
+                    </h2>
+                    <p className="mt-1 text-[0.7rem] font-medium tracking-wide text-teal uppercase">
+                      {track.range}
+                    </p>
+                  </div>
                   <p className="text-sm/relaxed text-muted-foreground">
                     {track.description}
                   </p>
