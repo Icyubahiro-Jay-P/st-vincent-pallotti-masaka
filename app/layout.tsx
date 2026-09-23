@@ -102,6 +102,14 @@ export default async function RootLayout({
       )}
     >
       <body className="flex min-h-svh flex-col">
+        <script
+          // Forget last visit's toggle so each full load follows the device
+          // theme. Must run before next-themes' own script, which
+          // ThemeProvider renders below.
+          dangerouslySetInnerHTML={{
+            __html: `try{localStorage.removeItem("theme")}catch(e){}`,
+          }}
+        />
         <JsonLd data={educationalOrganizationJsonLd} />
         <ThemeProvider>{children}</ThemeProvider>
         <CookieConsentBanner dict={dict} />
