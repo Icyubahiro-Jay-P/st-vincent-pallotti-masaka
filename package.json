@@ -27,7 +27,8 @@
     "seed:milestones": "tsx --env-file=.env.local scripts/seed-milestones.ts",
     "seed:site-settings": "tsx --env-file=.env.local scripts/seed-site-settings.ts",
     "seed:values": "tsx --env-file=.env.local scripts/seed-values.ts",
-    "seed:homepage-content": "tsx --env-file=.env.local scripts/seed-homepage-content.ts"
+    "seed:homepage-content": "tsx --env-file=.env.local scripts/seed-homepage-content.ts",
+    "import:assets": "tsx --env-file=.env.local scripts/import-assets.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1136.0",
@@ -67,7 +68,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.11",
-    "eslint": "^10",
+    "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
