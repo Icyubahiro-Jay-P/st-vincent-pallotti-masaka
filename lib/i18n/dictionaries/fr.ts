@@ -358,6 +358,13 @@ const fr: Dictionary = {
       eyebrow: "Ce que nous défendons",
       title: "Foi, excellence, inclusion, opportunité",
     },
+    headmistress: {
+      eyebrow: "Direction",
+      title: "Message de la Directrice",
+      message:
+        "Bienvenue à Saint Vincent Pallotti School Masaka. Avec nos Sœurs, notre personnel et les familles, nous accompagnons chaque enfant dans la foi, l'apprentissage et le service.",
+      photoAlt: "La Directrice de Saint Vincent Pallotti School Masaka",
+    },
     milestones: {
       eyebrow: "Notre parcours",
       title: "Étapes clés",
@@ -643,11 +650,18 @@ const fr: Dictionary = {
     },
     empty: "Pas encore d'actualités, revenez bientôt.",
     galleryHeading: "Photos",
+    backToNews: "Retour aux actualités",
+    galleryCarousel: "Photos de l'événement",
+    galleryPrev: "Photo précédente",
+    galleryNext: "Photo suivante",
+    galleryGoTo: "Aller à la photo {n}",
+    gallerySlideOf: "{n} sur {total}",
     follow: {
       eyebrow: "Suivez-nous",
       title: "Plus de vie scolaire sur Instagram et YouTube",
       instagram: "Instagram",
       youtube: "YouTube",
+      facebook: "Facebook",
     },
   },
 
