@@ -41,9 +41,9 @@ const structuralValues = [
     titleEn: "Opportunity",
     titleFr: "Opportunité",
     descriptionEn:
-      "From TVET trades to university-track Secondary, every graduate leaves with a real path forward.",
+      "From TVET trades to O'Level Secondary, every graduate leaves with a real path forward.",
     descriptionFr:
-      "Des filières TVET au secondaire préparant à l'université, chaque diplômé repart avec un véritable chemin d'avenir.",
+      "Des filières TVET au tronc commun (O'Level), chaque diplômé repart avec un véritable chemin d'avenir.",
   },
 ] as const
 
