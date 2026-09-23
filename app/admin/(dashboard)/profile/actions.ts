@@ -3,15 +3,15 @@
 import { headers } from "next/headers"
 import { revalidatePath } from "next/cache"
 import { APIError } from "better-auth/api"
-import { z } from "zod"
 
 import { auth } from "@/lib/auth"
 import { requireAdmin } from "@/lib/require-admin"
-import { nonEmptyString, zodFieldErrors } from "@/lib/validation"
-
-const profileSchema = z.object({
-  name: nonEmptyString(200, "your name"),
-})
+import { zodFieldErrors } from "@/lib/validation"
+import {
+  changeEmailSchema,
+  passwordSchema,
+  profileSchema,
+} from "@/app/admin/(dashboard)/profile/schema"
 
 export type UpdateProfileState = {
   status: "idle" | "error" | "success"
@@ -45,21 +45,6 @@ export async function updateProfile(
   return { status: "success", message: "Profile updated." }
 }
 
-const passwordSchema = z
-  .object({
-    currentPassword: z.string().min(1, "Enter your current password."),
-    newPassword: z
-      .string()
-      .min(8, "Password must be at least 8 characters.")
-      .max(200),
-    confirmPassword: z.string(),
-    revokeOtherSessions: z.boolean(),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match.",
-    path: ["confirmPassword"],
-  })
-
 export type ChangePasswordState = {
   status: "idle" | "error" | "success"
   message?: string
@@ -67,11 +52,6 @@ export type ChangePasswordState = {
     Record<"currentPassword" | "newPassword" | "confirmPassword", string>
   >
 }
-
-const emailSchema = z.object({
-  email: z.string().email("Enter a valid email address."),
-  revokeOtherSessions: z.boolean(),
-})
 
 export type ChangeEmailState = {
   status: "idle" | "error" | "success"
@@ -85,7 +65,7 @@ export async function changeEmail(
 ): Promise<ChangeEmailState> {
   await requireAdmin()
 
-  const parsed = emailSchema.safeParse({
+  const parsed = changeEmailSchema.safeParse({
     email: String(formData.get("email") ?? ""),
     revokeOtherSessions: formData.get("revokeOtherSessions") === "on",
   })
