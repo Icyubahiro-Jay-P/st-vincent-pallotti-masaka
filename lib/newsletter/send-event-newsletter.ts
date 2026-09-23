@@ -104,7 +104,7 @@ export async function sendNewsletterForEvent(eventId: number) {
 
     try {
       await resend.batch.send(payload)
-    } catch (error) {
+    } catch {
       // One failed chunk shouldn't abort the whole send  retry once after
       // a longer delay, then move on and log which chunk needs a manual
       // resend rather than losing every remaining subscriber's email.
