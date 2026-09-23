@@ -5,21 +5,12 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { eq, count } from "drizzle-orm"
 import { hashPassword } from "better-auth/crypto"
-import { z } from "zod"
 
 import { db } from "@/lib/db"
 import { admin, account } from "@/lib/db/schema"
 import { requireAdmin } from "@/lib/require-admin"
-import { emailSchema, nonEmptyString, zodFieldErrors } from "@/lib/validation"
-
-const createAdminSchema = z.object({
-  name: nonEmptyString(200, "a name"),
-  email: emailSchema,
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters.")
-    .max(200),
-})
+import { zodFieldErrors } from "@/lib/validation"
+import { createAdminSchema } from "@/app/admin/(dashboard)/admins/schema"
 
 export type CreateAdminState = {
   status: "idle" | "error" | "success"
