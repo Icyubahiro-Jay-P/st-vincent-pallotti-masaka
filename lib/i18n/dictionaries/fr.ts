@@ -273,7 +273,7 @@ const fr: Dictionary = {
           stage: "Primaire",
           range: "P1 – P6 · 1re – 8e année",
           description:
-            "Programme Cambridge ou national, construisant des bases académiques solides.",
+            "Programme Cambridge (1re – 8e année) ou national (P1 – P6), construisant des bases académiques solides.",
         },
         {
           stage: "Secondaire",
