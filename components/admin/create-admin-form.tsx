@@ -1,6 +1,6 @@
 "use client"
 
-import { useActionState, useEffect, useRef } from "react"
+import { useActionState, useEffect } from "react"
 import { Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -10,23 +10,27 @@ import {
   createAdmin,
   type CreateAdminState,
 } from "@/app/admin/(dashboard)/admins/actions"
+import { createAdminSchema } from "@/app/admin/(dashboard)/admins/schema"
+import { PasswordInput } from "@/components/admin/password-input"
 import { useToastOnActionState } from "@/components/admin/use-toast-on-action-state"
+import { useFormValid } from "@/hooks/use-form-valid"
 
 const initialState: CreateAdminState = { status: "idle" }
 
 export function CreateAdminForm() {
-  const formRef = useRef<HTMLFormElement>(null)
   const [state, formAction, pending] = useActionState(createAdmin, initialState)
   useToastOnActionState(state.status, state.message)
+  const { formRef, valid, onChange, reset } = useFormValid(createAdminSchema)
 
   useEffect(() => {
-    if (state.status === "success") formRef.current?.reset()
-  }, [state])
+    if (state.status === "success") reset()
+  }, [state, reset])
 
   return (
     <form
       ref={formRef}
       action={formAction}
+      onChange={onChange}
       noValidate
       className="flex flex-col gap-5"
     >
@@ -51,10 +55,9 @@ export function CreateAdminForm() {
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="password">Initial password</Label>
-          <Input
+          <PasswordInput
             id="password"
             name="password"
-            type="password"
             autoComplete="new-password"
           />
           {state.fieldErrors?.password ? (
@@ -67,7 +70,7 @@ export function CreateAdminForm() {
 
       <Button
         type="submit"
-        disabled={pending}
+        disabled={pending || !valid}
         className="h-11 self-start px-6 text-sm"
       >
         {pending ? <Loader2 className="animate-spin" /> : null}
