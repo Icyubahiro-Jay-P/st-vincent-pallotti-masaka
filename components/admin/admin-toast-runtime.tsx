@@ -4,6 +4,7 @@ import * as React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useTheme } from "next-themes"
 import { Toaster, toast } from "sonner"
+import { useMounted } from "@/hooks/use-mounted"
 
 // Central lookup so every admin mutation redirects with `?toast=<key>` and
 // this is the one place that decides the type/copy for each key, instead of
@@ -88,11 +89,7 @@ function ToastFromQuery() {
 
 export function AdminToastRuntime() {
   const { resolvedTheme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
-
-  React.useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useMounted()
 
   return (
     <>
