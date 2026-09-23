@@ -6,9 +6,10 @@ import { Badge } from "@/components/ui/badge"
 import { PaginationNav } from "@/components/pagination-nav"
 import { SubscribeForm } from "@/components/newsletter/subscribe-form"
 import {
+  FacebookGlyph,
   InstagramGlyph,
   YoutubeGlyph,
-  XGlyph,
+  XLogo,
 } from "@/components/icons/social-icons"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
@@ -107,7 +108,7 @@ export default async function NewsPage({
           <h2 className="font-heading text-[clamp(1.5rem,1.3rem+1vw,2.25rem)] font-semibold tracking-tight text-foreground">
             {n.follow.title}
           </h2>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <a
               href={settings.instagramUrl}
               target="_blank"
@@ -126,6 +127,15 @@ export default async function NewsPage({
               <YoutubeGlyph className="size-4" />
               {n.follow.youtube}
             </a>
+            <a
+              href={settings.facebookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border border-border bg-card px-4 py-2.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
+            >
+              <FacebookGlyph className="size-4" />
+              {n.follow.facebook}
+            </a>
             {settings.xUrl && (
               <a
                 href={settings.xUrl}
@@ -133,7 +143,7 @@ export default async function NewsPage({
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 border border-border bg-card px-4 py-2.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
               >
-                <XGlyph className="size-4" />X
+                <XLogo className="size-4" />X
               </a>
             )}
           </div>
