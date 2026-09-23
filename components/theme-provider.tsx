@@ -13,6 +13,13 @@ function ThemeProvider({
       defaultTheme="system"
       enableSystem
       disableTransitionOnChange
+      // The theme script only matters in the server HTML, where it runs
+      // before paint. If React ever creates it on the client (e.g. the root
+      // re-mounting after an error or Fast Refresh), it can't execute and
+      // React 19 warns, so there it's marked as an inert data block.
+      scriptProps={{
+        type: typeof window === "undefined" ? undefined : "text/plain",
+      }}
       {...props}
     >
       <ThemeHotkey />
