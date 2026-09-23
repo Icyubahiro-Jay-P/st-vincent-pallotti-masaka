@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
-import Image from "next/image"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import { notFound } from "next/navigation"
 
+import { EventGallery } from "@/components/news/event-gallery"
 import { PageHero } from "@/components/page-hero"
 import { Badge } from "@/components/ui/badge"
 import { getPublishedEventBySlug, getEventMedia } from "@/lib/events"
@@ -50,7 +52,13 @@ export default async function NewsDetailPage({
   const body = isFrench ? event.bodyFr : event.bodyEn
 
   const media = await getEventMedia(event.id)
-  const photos = media.filter((item) => item.kind === "photo")
+  // Cover leads the slideshow instead of sitting above the body on its own.
+  const photos = [
+    ...(event.coverImageUrl
+      ? [{ id: "cover", cloudinaryUrl: event.coverImageUrl }]
+      : []),
+    ...media.filter((item) => item.kind === "photo"),
+  ]
   const videos = media.filter((item) => item.kind === "video")
 
   return (
@@ -59,6 +67,13 @@ export default async function NewsDetailPage({
 
       <section className="border-b border-border bg-background py-16 sm:py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/news"
+            className="mb-6 inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ArrowLeft className="size-3.5" />
+            {dict.news.backToNews}
+          </Link>
           <div className="flex flex-wrap items-center gap-3">
             <Badge className="uppercase">{event.category}</Badge>
             <span className="text-xs text-muted-foreground">
@@ -72,58 +87,45 @@ export default async function NewsDetailPage({
             </span>
           </div>
 
-          {event.coverImageUrl && (
-            <div className="relative mt-6 aspect-video w-full overflow-hidden border border-border">
-              <Image
-                src={event.coverImageUrl}
-                alt={title}
-                fill
-                priority
-                className="object-cover"
-                sizes="(min-width: 1024px) 768px, 100vw"
-              />
-            </div>
-          )}
-
           <div className="mt-8 flex flex-col gap-4 text-sm/relaxed text-muted-foreground">
             {body.split("\n\n").map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
           </div>
 
-          {photos.length > 0 && (
+          {(photos.length > 0 || videos.length > 0) && (
             <div className="mt-10">
               <h2 className="font-heading text-xl font-semibold text-foreground">
                 {dict.news.galleryHeading}
               </h2>
-              <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {photos.map((photo) => (
-                  <a
-                    key={photo.id}
-                    href={photo.cloudinaryUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative aspect-video w-full overflow-hidden border border-border"
-                  >
-                    <Image
-                      src={photo.cloudinaryUrl}
-                      alt={title}
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 640px) 33vw, 50vw"
-                    />
-                  </a>
-                ))}
-                {videos.map((video) => (
-                  <video
-                    key={video.id}
-                    controls
-                    className="aspect-video w-full border border-border object-cover"
-                  >
-                    <source src={video.cloudinaryUrl} />
-                  </video>
-                ))}
-              </div>
+              {photos.length > 0 && (
+                <div className="mt-4">
+                  <EventGallery
+                    photos={photos}
+                    alt={title}
+                    labels={{
+                      carousel: dict.news.galleryCarousel,
+                      prev: dict.news.galleryPrev,
+                      next: dict.news.galleryNext,
+                      goTo: dict.news.galleryGoTo,
+                      slideOf: dict.news.gallerySlideOf,
+                    }}
+                  />
+                </div>
+              )}
+              {videos.length > 0 && (
+                <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {videos.map((video) => (
+                    <video
+                      key={video.id}
+                      controls
+                      className="aspect-video w-full border border-border object-cover"
+                    >
+                      <source src={video.cloudinaryUrl} />
+                    </video>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
