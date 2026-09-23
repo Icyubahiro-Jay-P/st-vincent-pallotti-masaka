@@ -5,6 +5,7 @@ import { APIError } from "better-auth/api"
 
 import { auth } from "@/lib/auth"
 import { checkRateLimit, getRequestIp } from "@/lib/rate-limit"
+import { resetPasswordSchema } from "@/app/admin/reset-password/schema"
 
 export type ResetPasswordState = {
   status: "idle" | "error"
@@ -27,25 +28,15 @@ export async function resetPassword(
     }
   }
 
-  const token = String(formData.get("token") ?? "")
-  const newPassword = String(formData.get("newPassword") ?? "")
-  const confirmPassword = String(formData.get("confirmPassword") ?? "")
-
-  if (!token || token.length > 500) {
-    return {
-      status: "error",
-      message: "This reset link is invalid or has expired.",
-    }
+  const parsed = resetPasswordSchema.safeParse({
+    token: String(formData.get("token") ?? ""),
+    newPassword: String(formData.get("newPassword") ?? ""),
+    confirmPassword: String(formData.get("confirmPassword") ?? ""),
+  })
+  if (!parsed.success) {
+    return { status: "error", message: parsed.error.issues[0].message }
   }
-  if (newPassword.length < 8 || newPassword.length > 200) {
-    return {
-      status: "error",
-      message: "Password must be at least 8 characters.",
-    }
-  }
-  if (newPassword !== confirmPassword) {
-    return { status: "error", message: "Passwords don't match." }
-  }
+  const { newPassword, token } = parsed.data
 
   try {
     await auth.api.resetPassword({ body: { newPassword, token } })
