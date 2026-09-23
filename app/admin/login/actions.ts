@@ -2,22 +2,15 @@
 
 import { redirect } from "next/navigation"
 import { APIError } from "better-auth/api"
-import { z } from "zod"
 
 import { auth } from "@/lib/auth"
+import { loginSchema } from "@/app/admin/login/schema"
 import { checkRateLimit, getRequestIp } from "@/lib/rate-limit"
 
 export type LoginState = {
   status: "idle" | "error"
   message?: string
 }
-
-const loginSchema = z.object({
-  email: z.string().trim().toLowerCase().max(320).email(),
-  // Login password: any non-empty string must reach auth.api.signInEmail so
-  // the auth layer itself rejects it  this isn't a new-password rule.
-  password: z.string().min(1),
-})
 
 const TOO_MANY_ATTEMPTS = "Too many attempts. Please try again later."
 
