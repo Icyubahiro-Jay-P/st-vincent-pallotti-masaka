@@ -26,7 +26,7 @@ const fr: Dictionary = {
     },
     kindergarten: {
       name: "Maternelle",
-      ageRange: "3 – 5 ans",
+      ageRange: "N1 – N3",
       description:
         "Un apprentissage précoce par le jeu qui développe le langage, le sens des nombres et les compétences sociales avant la première primaire.",
       overview:
@@ -40,7 +40,7 @@ const fr: Dictionary = {
     },
     "special-needs": {
       name: "Éducation spécialisée",
-      ageRange: "Tous âges",
+      ageRange: "Tous niveaux",
       description:
         "Un accompagnement individualisé et une classe inclusive pour que chaque enfant apprenne à son rythme, dans la dignité.",
       overview:
@@ -66,13 +66,27 @@ const fr: Dictionary = {
         "Du primaire au premier cycle du secondaire, de la 1re à la 8e année",
       ],
     },
+    "national-nursery": {
+      name: "Maternelle nationale",
+      ageRange: "N1 – N3",
+      description:
+        "Les premières années selon le programme rwandais basé sur les compétences : langage, sens du nombre et compétences sociales avant la première année du primaire.",
+      overview:
+        "La maternelle nationale suit le programme rwandais basé sur les compétences de la N1 à la N3, avec le jeu guidé et des activités structurées pour développer les premiers apprentissages en kinyarwanda et en anglais, le sens du nombre et les compétences sociales, afin que les enfants entrent en P1 confiants et prêts à apprendre.",
+      highlights: [
+        "De la Nursery 1 à la Nursery 3 (N1 – N3)",
+        "Programme officiel rwandais basé sur les compétences",
+        "Premiers apprentissages en kinyarwanda et en anglais",
+        "Préparation à la première année du primaire",
+      ],
+    },
     "national-primary": {
-      name: "Maternelle et primaire nationaux",
-      ageRange: "N1 – P6",
+      name: "Primaire national",
+      ageRange: "P1 – P6",
       description:
         "Le programme rwandais basé sur les compétences, enseigné dans une classe disciplinée et fondée sur des valeurs.",
       overview:
-        "La maternelle et le primaire nationaux suivent le programme rwandais basé sur les compétences, enseigné dans une classe disciplinée et fondée sur des valeurs, qui construit des bases académiques solides en kinyarwanda, anglais et mathématiques.",
+        "Le primaire national suit le programme rwandais basé sur les compétences de la P1 à la P6, enseigné dans une classe disciplinée et fondée sur des valeurs, qui construit des bases académiques solides en kinyarwanda, anglais et mathématiques.",
       highlights: [
         "Programme officiel rwandais basé sur les compétences",
         "Bases en kinyarwanda, anglais et mathématiques",
@@ -257,7 +271,7 @@ const fr: Dictionary = {
       eyebrow: "Ce que nous offrons",
       title: "Un seul campus, toutes les étapes du parcours",
       description:
-        "Sept programmes sous un même toit, du premier jour de garderie de votre enfant jusqu'à un certificat de métier ou une admission à l'université.",
+        "Huit programmes sous un même toit, du premier jour de garderie de votre enfant jusqu'à un certificat de métier ou une admission à l'université.",
     },
     pathway: {
       eyebrow: "Le parcours Pallotti",
@@ -271,7 +285,7 @@ const fr: Dictionary = {
         },
         {
           stage: "Maternelle",
-          range: "3 – 5 ans",
+          range: "N1 – N3",
           description:
             "Bases de la lecture, du calcul et des compétences sociales par le jeu guidé.",
         },
@@ -386,10 +400,10 @@ const fr: Dictionary = {
     },
     curricula: [
       {
-        slug: "cambridge-primary",
         name: "Programme Cambridge",
         tagline: "Reconnu à l'international",
-        range: "1re – 8e année",
+        range: "Maternelle · 1re – 8e année",
+        levels: ["kindergarten", "cambridge-primary"],
         description:
           "Notre filière Cambridge suit le programme Cambridge Primary en anglais, mathématiques et sciences, préparant les élèves à une progression reconnue à l'international.",
         subjects: [
@@ -401,10 +415,15 @@ const fr: Dictionary = {
         ],
       },
       {
-        slug: "national-primary",
         name: "Programme national",
         tagline: "Le programme rwandais basé sur les compétences",
-        range: "Maternelle – S3",
+        range: "N1 – S3 · TVET",
+        levels: [
+          "national-nursery",
+          "national-primary",
+          "national-secondary",
+          "tvet",
+        ],
         description:
           "La maternelle, le primaire et le secondaire nationaux suivent le programme officiel rwandais basé sur les compétences, enseigné dans une classe disciplinée et fondée sur des valeurs.",
         subjects: [
@@ -416,6 +435,7 @@ const fr: Dictionary = {
         ],
       },
     ],
+    chooseLevel: "Choisir un niveau",
     subjectHighlights: [
       "Mathématiques et sciences",
       "Anglais et kinyarwanda",
@@ -437,7 +457,7 @@ const fr: Dictionary = {
       eyebrow: "Tous les programmes",
       title: "Trouvez le programme de votre enfant",
       description:
-        "Chaque programme ci-dessous dispose de sa propre page avec la tranche d'âge, ce que les élèves apprennent et comment postuler.",
+        "Chaque programme ci-dessous dispose de sa propre page avec les niveaux de classe, ce que les élèves apprennent et comment postuler.",
     },
     closing: {
       paragraph:
@@ -445,7 +465,7 @@ const fr: Dictionary = {
       cta: "Postuler pour une place",
     },
     detail: {
-      ageRangeLabel: "Tranche d'âge",
+      ageRangeLabel: "Niveaux de classe",
       exploreMoreEyebrow: "Découvrir aussi",
       exploreMoreTitle: "Les autres programmes de Pallotti",
     },
