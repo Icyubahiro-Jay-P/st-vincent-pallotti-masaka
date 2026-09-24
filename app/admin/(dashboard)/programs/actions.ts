@@ -144,10 +144,10 @@ export async function saveProgram(
   }
 
   updateTag("programs")
-  revalidatePath("/academics")
-  revalidatePath("/tvet")
-  revalidatePath("/academics/[slug]", "page")
-  revalidatePath("/admissions")
+  revalidatePath("/[locale]/academics", "page")
+  revalidatePath("/[locale]/tvet", "page")
+  revalidatePath("/[locale]/academics/[slug]", "page")
+  revalidatePath("/[locale]/admissions", "page")
   redirect("/admin/programs?toast=program-saved")
 }
 
@@ -157,9 +157,9 @@ export async function deleteProgram(formData: FormData) {
   await db.delete(programs).where(eq(programs.id, id))
   revalidatePath("/admin/programs")
   updateTag("programs")
-  revalidatePath("/academics")
-  revalidatePath("/tvet")
-  revalidatePath("/academics/[slug]", "page")
-  revalidatePath("/admissions")
+  revalidatePath("/[locale]/academics", "page")
+  revalidatePath("/[locale]/tvet", "page")
+  revalidatePath("/[locale]/academics/[slug]", "page")
+  revalidatePath("/[locale]/admissions", "page")
   redirect("/admin/programs?toast=program-deleted")
 }

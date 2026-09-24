@@ -149,6 +149,11 @@ const en = {
       description:
         "News, achievements and school life updates from Saint Vincent Pallotti School Masaka.",
     },
+    gallery: {
+      title: "Photo Gallery",
+      description:
+        "Photos from events, classes and school life at Saint Vincent Pallotti School Masaka.",
+    },
     contact: {
       title: "Contact",
       description:
@@ -188,6 +193,7 @@ const en = {
     academics: "Academics",
     tvet: "TVET",
     news: "School Life",
+    gallery: "Gallery",
     admissions: "Admissions",
     contact: "Contact",
     applyNow: "Apply Now",
@@ -672,6 +678,16 @@ const en = {
       youtube: "YouTube",
       facebook: "Facebook",
     },
+  },
+
+  gallery: {
+    hero: {
+      eyebrow: "Gallery",
+      title: "Photo Gallery",
+      description:
+        "Moments from events, classes and community life at Pallotti.",
+    },
+    empty: "No photos yet, check back soon.",
   },
 
   newsletter: {

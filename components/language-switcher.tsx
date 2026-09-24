@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Languages } from "lucide-react"
 
 import {
@@ -10,15 +10,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { locales, localeNames } from "@/lib/i18n/config"
+import {
+  isLocale,
+  localeNames,
+  localePath,
+  locales,
+  stripLocale,
+} from "@/lib/i18n/config"
 import { LOCALE_COOKIE } from "@/lib/i18n/locale-cookie"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
-// Switches language via a cookie instead of a URL segment, so pages stay at
-// plain paths like /about. Setting the cookie client-side and refreshing
-// re-runs the server components with the new value, no page navigation or
-// full reload needed. To add Kinyarwanda later, no changes are needed here:
-// it shows up automatically once "rw" is added to lib/i18n/config.ts.
+// Switches language by moving to the same page under the other locale
+// segment (/en/about -> /fr/about), keeping any query string. Also saves the
+// choice in a cookie so proxy.ts sends later unprefixed visits (/, old
+// links) to that language. To add Kinyarwanda later, no changes are needed
+// here: it shows up automatically once "rw" is added to lib/i18n/config.ts.
 export function LanguageSwitcher({
   dict,
   className,
@@ -27,12 +33,13 @@ export function LanguageSwitcher({
   className?: string
 }) {
   const router = useRouter()
+  const pathname = usePathname()
 
   function switchTo(nextLocale: string | null) {
-    if (!nextLocale) return
+    if (!nextLocale || !isLocale(nextLocale)) return
     const secure = location.protocol === "https:" ? "; Secure" : ""
     document.cookie = `${LOCALE_COOKIE}=${encodeURIComponent(nextLocale)}; path=/; max-age=31536000; SameSite=Lax${secure}`
-    router.refresh()
+    router.push(localePath(nextLocale, stripLocale(pathname)) + location.search)
   }
 
   return (

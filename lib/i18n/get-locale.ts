@@ -1,36 +1,42 @@
 import { cookies, headers } from "next/headers"
+import { locale as localeParam } from "next/root-params"
 
-import { defaultLocale, isLocale, locales, type Locale } from "./config"
+import {
+  defaultLocale,
+  isLocale,
+  localeFromAcceptLanguage,
+  type Locale,
+} from "./config"
 import { LOCALE_COOKIE } from "./locale-cookie"
 
-// Picks the first Accept-Language entry (already sent in q-weighted order
-// by the browser) whose base language we support. Used only as a fallback
-// for visitors with no locale cookie yet  bots and first-time visits that
-// never run the client-side language switcher.
-function localeFromAcceptLanguage(header: string | null): Locale | null {
-  if (!header) return null
-  for (const part of header.split(",")) {
-    const tag = part.split(";")[0]?.trim().toLowerCase()
-    const base = tag?.split("-")[0]
-    if (base && (locales as readonly string[]).includes(base)) {
-      return base as Locale
-    }
-  }
-  return null
-}
-
-// Reads the visitor's language preference from a cookie instead of the URL,
-// so pages live at plain paths like /about rather than /en/about or
-// /fr/about. Falls back to Accept-Language, then the default locale, when
-// no cookie is set yet. Because this reads a per-request cookie/header,
-// every page that calls it is rendered dynamically (Next.js can't
-// statically prerender content that depends on either), a fair trade for
-// not needing a URL segment.
+// The language comes from the URL (/en/about, /fr/about): every public page
+// sits under app/[locale], so next/root-params can read it from any Server
+// Component without prop drilling, and pages can still render statically.
+//
+// Server Actions can't read root params (per Next's docs), so for those
+// (admissions form, newsletter signup) this falls back to the locale prefix
+// of the page the form was posted from, then the cookie the language
+// switcher sets, then Accept-Language.
 export async function getLocale(): Promise<Locale> {
-  const store = await cookies()
-  const cookieValue = store.get(LOCALE_COOKIE)?.value
+  try {
+    const value = await localeParam()
+    if (value && isLocale(value)) return value
+  } catch {
+    // Not in a Server Component render (e.g. a Server Action), see above.
+  }
+
+  const headerStore = await headers()
+  const referer = headerStore.get("referer")
+  if (referer) {
+    const first = new URL(referer).pathname.split("/")[1]
+    if (first && isLocale(first)) return first
+  }
+
+  const cookieValue = (await cookies()).get(LOCALE_COOKIE)?.value
   if (cookieValue && isLocale(cookieValue)) return cookieValue
 
-  const acceptLanguage = (await headers()).get("accept-language")
-  return localeFromAcceptLanguage(acceptLanguage) ?? defaultLocale
+  return (
+    localeFromAcceptLanguage(headerStore.get("accept-language")) ??
+    defaultLocale
+  )
 }

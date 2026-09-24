@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "@/components/locale-link"
 import { Mail, Phone, MapPin } from "lucide-react"
 
 import { Crest } from "@/components/crest"

@@ -47,7 +47,7 @@ function buildBatchPayload(
     const isFrench = subscriber.preferredLocale === "fr"
     const title = isFrench ? event.titleFr : event.titleEn
     const excerpt = isFrench ? event.excerptFr : event.excerptEn
-    const unsubscribeUrl = `${siteConfig.url}/newsletter/unsubscribe?token=${subscriber.unsubscribeToken}`
+    const unsubscribeUrl = `${siteConfig.url}/${isFrench ? "fr" : "en"}/newsletter/unsubscribe?token=${subscriber.unsubscribeToken}`
 
     return {
       from: fromAddress,
@@ -55,7 +55,7 @@ function buildBatchPayload(
       subject: title,
       html: `
         <p>${escapeHtml(excerpt)}</p>
-        <p><a href="${siteConfig.url}/news/${event.slug}">${isFrench ? "Lire la suite" : "Read more"}</a></p>
+        <p><a href="${siteConfig.url}/${isFrench ? "fr" : "en"}/news/${event.slug}">${isFrench ? "Lire la suite" : "Read more"}</a></p>
         <hr />
         <p style="font-size:12px;color:#666"><a href="${unsubscribeUrl}">${isFrench ? "Se désabonner" : "Unsubscribe"}</a></p>
       `,

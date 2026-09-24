@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "@/components/locale-link"
 import { ArrowUpRight } from "lucide-react"
 
 import { iconMap } from "@/components/icon-map"

@@ -28,6 +28,7 @@ export const navLinks = [
   { href: "/academics", key: "academics" },
   { href: "/tvet", key: "tvet" },
   { href: "/news", key: "news" },
+  { href: "/gallery", key: "gallery" },
   { href: "/admissions", key: "admissions" },
   { href: "/contact", key: "contact" },
 ] as const

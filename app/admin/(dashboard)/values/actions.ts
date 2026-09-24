@@ -86,7 +86,7 @@ export async function saveValue(
   }
 
   updateTag("values")
-  revalidatePath("/about")
+  revalidatePath("/[locale]/about", "page")
   redirect("/admin/values?toast=value-saved")
 }
 
@@ -96,6 +96,6 @@ export async function deleteValue(formData: FormData) {
   await db.delete(values).where(eq(values.id, id))
   revalidatePath("/admin/values")
   updateTag("values")
-  revalidatePath("/about")
+  revalidatePath("/[locale]/about", "page")
   redirect("/admin/values?toast=value-deleted")
 }
