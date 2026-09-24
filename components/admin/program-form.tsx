@@ -192,7 +192,7 @@ export function ProgramForm({
           errorFr={state.fieldErrors?.nameFr}
         />
         <TranslatedField
-          label="Age range"
+          label="Class range"
           idPrefix="ageRange"
           nameEn="ageRangeEn"
           nameFr="ageRangeFr"
