@@ -9,6 +9,7 @@ import {
   Palette,
   Trophy,
   ArrowRight,
+  ChevronDown,
   HeartHandshake,
 } from "lucide-react"
 
@@ -21,6 +22,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getPublishedPrograms } from "@/lib/programs"
 import { localeAlternates, localeUrl } from "@/lib/i18n/alternates"
+import { programHref } from "@/lib/site-config"
 
 const curriculumIcons = [Globe2, BookOpen] as const
 const subjectIcons = [Calculator, Languages, Microscope, Palette] as const
@@ -65,9 +67,12 @@ export default async function AcademicsPage() {
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {ac.curricula.map((track, index) => {
               const Icon = curriculumIcons[index]
+              const levels = track.levels.flatMap((slug) =>
+                publishedPrograms.filter((program) => program.slug === slug)
+              )
               return (
                 <div
-                  key={track.slug}
+                  key={track.name}
                   className="flex flex-col gap-5 border border-border bg-card p-8"
                 >
                   <div className="flex items-center justify-between">
@@ -97,13 +102,30 @@ export default async function AcademicsPage() {
                       </span>
                     ))}
                   </div>
-                  <Link
-                    href={`/academics/${track.slug}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-primary uppercase hover:underline"
-                  >
-                    {dict.common.viewFullProgramPage}
-                    <ArrowRight className="size-3.5" />
-                  </Link>
+                  <details className="group/levels">
+                    <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-xs font-semibold tracking-wide text-primary uppercase hover:underline [&::-webkit-details-marker]:hidden">
+                      {ac.chooseLevel}
+                      <ChevronDown className="size-3.5 transition-transform group-open/levels:rotate-180" />
+                    </summary>
+                    <ul className="mt-4 divide-y divide-border border border-border">
+                      {levels.map((level) => (
+                        <li key={level.slug}>
+                          <Link
+                            href={programHref(level.slug)}
+                            className="group flex items-center justify-between gap-4 px-4 py-3 transition-colors hover:bg-muted"
+                          >
+                            <span className="text-sm font-medium text-foreground group-hover:text-primary">
+                              {level.name}
+                            </span>
+                            <span className="flex items-center gap-2 text-[0.7rem] font-medium tracking-wide whitespace-nowrap text-teal uppercase">
+                              {level.ageRange}
+                              <ArrowRight className="size-3.5" />
+                            </span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
                 </div>
               )
             })}
