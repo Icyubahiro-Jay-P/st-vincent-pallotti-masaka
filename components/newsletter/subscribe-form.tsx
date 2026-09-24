@@ -1,8 +1,7 @@
 "use client"
 
-import { useActionState, useEffect } from "react"
+import { useActionState, useEffect, useRef, useState } from "react"
 import { Loader2, Mail } from "lucide-react"
-import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,13 +10,8 @@ import {
   type NewsletterState,
 } from "@/app/[locale]/newsletter/actions"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
-import { emailSchema } from "@/lib/validation"
-import { useFormValid } from "@/hooks/use-form-valid"
 
 const initialState: NewsletterState = { status: "idle" }
-
-// Same rule subscribeToNewsletter checks.
-const subscribeSchema = z.object({ email: emailSchema.max(320) })
 
 export function SubscribeForm({ dict }: { dict: Dictionary }) {
   const n = dict.newsletter
@@ -25,19 +19,24 @@ export function SubscribeForm({ dict }: { dict: Dictionary }) {
     subscribeToNewsletter,
     initialState
   )
-  const { formRef, valid, onChange, reset } = useFormValid(subscribeSchema)
+  // This form sits in the footer of every public page, so it uses the
+  // browser's own type="email" check to enable the button instead of zod
+  // (~95KB gzipped). subscribeToNewsletter still validates with zod.
+  const formRef = useRef<HTMLFormElement>(null)
+  const [valid, setValid] = useState(false)
 
   useEffect(() => {
-    if (state.status === "success") {
-      reset()
+    if (state.status === "success" && formRef.current) {
+      formRef.current.reset()
+      setValid(false)
     }
-  }, [state.status, reset])
+  }, [state.status])
 
   return (
     <form
       ref={formRef}
       action={formAction}
-      onChange={onChange}
+      onChange={(e) => setValid(e.currentTarget.checkValidity())}
       noValidate
       className="flex flex-col gap-2"
     >
@@ -46,6 +45,7 @@ export function SubscribeForm({ dict }: { dict: Dictionary }) {
           type="email"
           name="email"
           required
+          maxLength={320}
           placeholder={n.placeholder}
           aria-label={n.placeholder}
           className="bg-card pl-2 text-card-foreground"
