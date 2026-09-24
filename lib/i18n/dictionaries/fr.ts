@@ -223,6 +223,7 @@ const fr: Dictionary = {
   common: {
     viewFullProgramPage: "Voir la page complète du programme",
     applyTo: "Postuler à",
+    loading: "Chargement",
     programsHelp: {
       title: "Vous ne savez pas quel programme choisir ?",
       description:

@@ -229,6 +229,7 @@ const en = {
   common: {
     viewFullProgramPage: "View full program page",
     applyTo: "Apply to",
+    loading: "Loading",
     programsHelp: {
       title: "Not sure which program fits?",
       description:
