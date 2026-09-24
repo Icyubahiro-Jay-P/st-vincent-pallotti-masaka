@@ -229,6 +229,12 @@ const en = {
   common: {
     viewFullProgramPage: "View full program page",
     applyTo: "Apply to",
+    programsHelp: {
+      title: "Not sure which program fits?",
+      description:
+        "Tell us about your child and our admissions team will help you choose the right level.",
+      cta: "Talk to admissions",
+    },
   },
 
   footer: {

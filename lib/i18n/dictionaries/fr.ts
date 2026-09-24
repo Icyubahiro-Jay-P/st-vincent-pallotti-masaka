@@ -223,6 +223,12 @@ const fr: Dictionary = {
   common: {
     viewFullProgramPage: "Voir la page complète du programme",
     applyTo: "Postuler à",
+    programsHelp: {
+      title: "Vous ne savez pas quel programme choisir ?",
+      description:
+        "Parlez-nous de votre enfant et notre équipe des admissions vous aidera à choisir le bon niveau.",
+      cta: "Contacter les admissions",
+    },
   },
 
   footer: {

@@ -1,21 +1,37 @@
 import Link from "@/components/locale-link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 
 import { iconMap } from "@/components/icon-map"
 import { programHref } from "@/lib/site-config"
 import type { getPublishedPrograms } from "@/lib/programs"
+
+// Classes for the help card that fills the grid's leftover cells, so a
+// partial last row never shows the grey bg-border through empty cells.
+// Returns null when the count fills every row at both breakpoints.
+function helpCardClasses(count: number) {
+  const smEmpty = count % 2
+  const lgEmpty = (3 - (count % 3)) % 3
+  if (!smEmpty && !lgEmpty) return null
+  return [
+    smEmpty ? "" : "sm:hidden",
+    ["lg:hidden", "lg:flex", "lg:flex lg:col-span-2"][lgEmpty],
+  ].join(" ")
+}
 
 export function ProgramsGrid({
   eyebrow,
   title,
   description,
   items,
+  help,
 }: {
   eyebrow: string
   title: string
   description: string
   items: Awaited<ReturnType<typeof getPublishedPrograms>>
+  help: { title: string; description: string; cta: string }
 }) {
+  const helpClasses = helpCardClasses(items.length)
   return (
     <section className="border-b border-border bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -58,6 +74,23 @@ export function ProgramsGrid({
               </Link>
             )
           })}
+          {helpClasses ? (
+            <Link
+              href="/admissions"
+              className={`group flex flex-col justify-center gap-3 bg-muted p-6 transition-colors hover:bg-accent focus-visible:z-10 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring ${helpClasses}`}
+            >
+              <h3 className="font-heading text-base font-semibold text-foreground">
+                {help.title}
+              </h3>
+              <p className="text-xs/relaxed text-muted-foreground">
+                {help.description}
+              </p>
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-primary uppercase group-hover:underline">
+                {help.cta}
+                <ArrowRight className="size-3.5" />
+              </span>
+            </Link>
+          ) : null}
         </div>
       </div>
     </section>

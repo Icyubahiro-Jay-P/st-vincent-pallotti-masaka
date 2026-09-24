@@ -47,6 +47,7 @@ async function ProgramsGridSection({
       title={dict.home.programs.title}
       description={dict.home.programs.description}
       items={publishedPrograms}
+      help={dict.common.programsHelp}
     />
   )
 }

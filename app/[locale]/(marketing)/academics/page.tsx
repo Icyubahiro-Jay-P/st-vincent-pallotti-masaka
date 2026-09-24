@@ -189,6 +189,7 @@ export default async function AcademicsPage() {
         title={ac.allPrograms.title}
         description={ac.allPrograms.description}
         items={publishedPrograms}
+        help={dict.common.programsHelp}
       />
 
       <section className="bg-background py-16 sm:py-20">
