@@ -14,6 +14,7 @@ const structuralPrograms = [
   { slug: "kindergarten", icon: "Blocks" },
   { slug: "special-needs", icon: "HeartHandshake" },
   { slug: "cambridge-primary", icon: "Globe2" },
+  { slug: "national-nursery", icon: "Sprout" },
   { slug: "national-primary", icon: "BookOpen" },
   { slug: "national-secondary", icon: "GraduationCap" },
   { slug: "tvet", icon: "Hammer" },
