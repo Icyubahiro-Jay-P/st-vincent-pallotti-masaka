@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import {
   subscribeToNewsletter,
   type NewsletterState,
-} from "@/app/newsletter/actions"
+} from "@/app/[locale]/newsletter/actions"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import { emailSchema } from "@/lib/validation"
 import { useFormValid } from "@/hooks/use-form-valid"

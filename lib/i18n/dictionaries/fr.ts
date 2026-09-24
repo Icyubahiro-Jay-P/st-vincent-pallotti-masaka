@@ -143,6 +143,11 @@ const fr: Dictionary = {
       description:
         "Actualités, réussites et vie scolaire de Saint Vincent Pallotti School Masaka.",
     },
+    gallery: {
+      title: "Galerie photos",
+      description:
+        "Photos des événements, des cours et de la vie scolaire à Saint Vincent Pallotti School Masaka.",
+    },
     contact: {
       title: "Contact",
       description:
@@ -182,6 +187,7 @@ const fr: Dictionary = {
     academics: "Programmes",
     tvet: "TVET",
     news: "Vie scolaire",
+    gallery: "Galerie",
     admissions: "Admissions",
     contact: "Contact",
     applyNow: "Postuler",
@@ -665,6 +671,16 @@ const fr: Dictionary = {
       youtube: "YouTube",
       facebook: "Facebook",
     },
+  },
+
+  gallery: {
+    hero: {
+      eyebrow: "Galerie",
+      title: "Galerie photos",
+      description:
+        "Moments forts des événements, des cours et de la vie communautaire à Pallotti.",
+    },
+    empty: "Pas encore de photos, revenez bientôt.",
   },
 
   newsletter: {

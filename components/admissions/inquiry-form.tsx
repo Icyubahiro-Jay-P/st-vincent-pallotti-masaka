@@ -17,8 +17,8 @@ import {
 import {
   submitInquiry,
   type InquiryState,
-} from "@/app/(marketing)/admissions/actions"
-import { buildInquirySchema } from "@/app/(marketing)/admissions/schema"
+} from "@/app/[locale]/(marketing)/admissions/actions"
+import { buildInquirySchema } from "@/app/[locale]/(marketing)/admissions/schema"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import { admissionsTermOptions } from "@/lib/admissions-terms"
 import { cn } from "@/lib/utils"

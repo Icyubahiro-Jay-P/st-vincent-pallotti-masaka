@@ -109,7 +109,7 @@ export async function saveMilestone(
   }
 
   updateTag("milestones")
-  revalidatePath("/about")
+  revalidatePath("/[locale]/about", "page")
   redirect("/admin/milestones?toast=milestone-saved")
 }
 
@@ -119,6 +119,6 @@ export async function deleteMilestone(formData: FormData) {
   await db.delete(milestones).where(eq(milestones.id, id))
   revalidatePath("/admin/milestones")
   updateTag("milestones")
-  revalidatePath("/about")
+  revalidatePath("/[locale]/about", "page")
   redirect("/admin/milestones?toast=milestone-deleted")
 }

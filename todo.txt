@@ -4,20 +4,7 @@
 # for the full Phase-1 plan this backlog was split from.
 
 ## SEO / i18n INFRASTRUCTURE (code-heavy, no new content needed)
-- Add `Vary: Cookie` header in next.config.ts headers() -- technically
-  correct for cookie-based locale on dynamic pages, but touches shared
-  infra for every route and could affect CDN/edge cache hit rates.
-  Deferred pending explicit confirmation of caching setup.
-- Migrate to path-based i18n (/en/, /fr/) so alternates.languages can
-  point to real distinct URLs instead of the same URL for both locales.
-  Needs routing overhaul, middleware changes, locale-aware Links. Large.
-- Public breadcrumb component (adapt components/admin/admin-breadcrumb.tsx
-  for marketing pages) -- JSON-LD BreadcrumbList ships in Phase 1 without it.
-- NewsArticle JSON-LD on /news/[slug] (needs author/date policy decision).
 - Course/FAQPage JSON-LD (needs FAQ content to exist first -- see below).
-- Standalone /gallery page aggregating eventMedia across all events
-  (aggregation query + page + dictionary strings + likely lightbox dep).
-- Image sitemap entries in app/sitemap.ts for eventMedia photos.
 - Video rendering in news gallery, if cloudinaryUrl isn't directly
   embeddable (Phase 1 spot-check will determine this).
 
@@ -62,15 +49,13 @@
   that service.
 - Add a vercel.json Firewall/WAF config (rate limits, bot rules) -- none
   exists today. Needs Vercel Firewall setup/API access.
-- Decouple getLocale() (lib/i18n/get-locale.ts) from its unconditional
-  cookies()/headers() call so marketing pages can go static/ISR with a
-  real Cache-Control: s-maxage instead of rendering dynamically on every
-  request. This is a site-wide i18n architecture change (affects
-  app/layout.tsx for every route, not just marketing) -- needs a design
-  decision before touching it, not a drive-by fix. Related: proxy.ts's
-  matcher only covers /admin/:path* and does a DB-backed session check on
-  every unauthenticated admin request; widening it needs the same kind of
-  sitewide decision.
+- Remaining dynamic public pages: /[locale]/admissions, /news, /news/[slug],
+  /gallery and /newsletter/unsubscribe still render per request (searchParams
+  or forms). Everything else is now prerendered per locale since getLocale()
+  reads the URL (next/root-params) instead of cookies().
+- public/llms.txt and public/llm.txt conflict with app/llms.txt/route.ts and
+  app/llm.txt/route.ts (Next returns 500 for /llms.txt in dev). Keep one of
+  each pair.
 
 ## PAYMENTS / PORTALS / INTEGRATIONS (heaviest, most API-demanding)
 - Online fee payment integration (MTN MoMo / card processor) -- needs

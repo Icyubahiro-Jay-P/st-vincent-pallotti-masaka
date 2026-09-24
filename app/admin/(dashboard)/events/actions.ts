@@ -291,7 +291,7 @@ export async function saveEvent(
   }
 
   updateTag("events")
-  revalidatePath("/news")
+  revalidatePath("/[locale]/news", "page")
   const toastKey =
     intent === "publish" ? "event-published" : "event-draft-saved"
   const galleryDroppedParam =
@@ -308,6 +308,6 @@ export async function deleteEvent(formData: FormData) {
   await db.delete(events).where(eq(events.id, id))
   updateTag("events")
   revalidatePath("/admin/events")
-  revalidatePath("/news")
+  revalidatePath("/[locale]/news", "page")
   redirect("/admin/events?toast=event-deleted")
 }

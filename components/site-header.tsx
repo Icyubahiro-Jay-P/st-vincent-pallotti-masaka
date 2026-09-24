@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "@/components/locale-link"
 
 import { Crest } from "@/components/crest"
 import { SiteHeaderNav } from "@/components/site-header-nav"

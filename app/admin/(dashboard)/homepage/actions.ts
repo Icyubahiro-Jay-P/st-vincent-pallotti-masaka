@@ -148,7 +148,7 @@ export async function updateHomepageContent(
     .where(eq(homepageContent.id, CONTENT_ID))
 
   updateTag("homepage-content")
-  revalidatePath("/")
+  revalidatePath("/[locale]", "page")
 
   return { status: "success", message: "Homepage content saved." }
 }

@@ -125,7 +125,11 @@ export const getEventMedia = cache(getEventMediaCached)
 const getPublishedEventSummariesCached = unstable_cache(
   async () => {
     const rows = await db
-      .select({ slug: events.slug, publishedAt: events.publishedAt })
+      .select({
+        slug: events.slug,
+        publishedAt: events.publishedAt,
+        coverImageUrl: events.coverImageUrl,
+      })
       .from(events)
       .where(eq(events.status, "published"))
 
@@ -141,3 +145,63 @@ const getPublishedEventSummariesCached = unstable_cache(
 export const getPublishedEventSummaries = cache(
   getPublishedEventSummariesCached
 )
+
+const publishedPhoto = and(
+  eq(events.status, "published"),
+  eq(eventMedia.kind, "photo")
+)
+
+// Photo urls per published event slug, for the image sitemap. One query,
+// grouped here rather than one getEventMedia call per event.
+const getPublishedEventPhotoUrlsCached = unstable_cache(
+  async () => {
+    const rows = await db
+      .select({ slug: events.slug, url: eventMedia.cloudinaryUrl })
+      .from(eventMedia)
+      .innerJoin(events, eq(eventMedia.eventId, events.id))
+      .where(publishedPhoto)
+      .orderBy(eventMedia.position)
+
+    const bySlug: Record<string, string[]> = {}
+    for (const row of rows) (bySlug[row.slug] ??= []).push(row.url)
+    return bySlug
+  },
+  ["published-event-photo-urls"],
+  { revalidate: 3600, tags: ["events"] }
+)
+
+export const getPublishedEventPhotoUrls = cache(
+  getPublishedEventPhotoUrlsCached
+)
+
+const getPublishedPhotosPageCached = unstable_cache(
+  async (page: number) => {
+    const [rows, [{ total }]] = await Promise.all([
+      db
+        .select({
+          id: eventMedia.id,
+          url: eventMedia.cloudinaryUrl,
+          slug: events.slug,
+          titleEn: events.titleEn,
+          titleFr: events.titleFr,
+        })
+        .from(eventMedia)
+        .innerJoin(events, eq(eventMedia.eventId, events.id))
+        .where(publishedPhoto)
+        .orderBy(desc(events.publishedAt), eventMedia.position)
+        .limit(PAGE_SIZE)
+        .offset((page - 1) * PAGE_SIZE),
+      db
+        .select({ total: count() })
+        .from(eventMedia)
+        .innerJoin(events, eq(eventMedia.eventId, events.id))
+        .where(publishedPhoto),
+    ])
+
+    return { rows, total }
+  },
+  ["published-photos-page"],
+  { revalidate: 3600, tags: ["events"] }
+)
+
+export const getPublishedPhotosPage = cache(getPublishedPhotosPageCached)

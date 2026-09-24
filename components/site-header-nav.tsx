@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
+import Link from "@/components/locale-link"
 import { usePathname } from "next/navigation"
 import { Menu, ArrowRight } from "lucide-react"
 
@@ -19,6 +19,7 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet"
+import { stripLocale } from "@/lib/i18n/config"
 import { navLinks } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import { cn } from "@/lib/utils"
@@ -27,13 +28,14 @@ import { cn } from "@/lib/utils"
 // Sheet's open state, which is why it's split out of the server-rendered
 // SiteHeader shell into its own client island.
 export function SiteHeaderNav({ dict }: { dict: Dictionary }) {
-  const pathname = usePathname()
+  // Locale prefix stripped so "/fr/about" still matches the "/about" link.
+  const pathname = stripLocale(usePathname())
   const [open, setOpen] = React.useState(false)
 
   return (
     <>
       <nav
-        className="hidden items-center gap-1 lg:flex"
+        className="hidden items-center gap-1 xl:flex"
         aria-label={dict.nav.primaryLabel}
       >
         {navLinks.map((link) => {
@@ -48,7 +50,7 @@ export function SiteHeaderNav({ dict }: { dict: Dictionary }) {
               prefetch={false}
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "relative px-3 py-2 text-xs font-medium tracking-wide uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold",
+                "relative px-3 py-2 text-xs font-medium tracking-wide whitespace-nowrap uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold",
                 isActive
                   ? "text-gold"
                   : "text-ink-foreground/75 hover:text-ink-foreground"
@@ -67,7 +69,7 @@ export function SiteHeaderNav({ dict }: { dict: Dictionary }) {
         })}
       </nav>
 
-      <div className="hidden items-center gap-2 lg:flex">
+      <div className="hidden items-center gap-2 xl:flex">
         <LanguageSwitcher dict={dict} />
         <ThemeToggle
           dict={dict}
@@ -82,7 +84,7 @@ export function SiteHeaderNav({ dict }: { dict: Dictionary }) {
         </Button>
       </div>
 
-      <div className="flex items-center gap-1 lg:hidden">
+      <div className="flex items-center gap-1 xl:hidden">
         <LanguageSwitcher dict={dict} />
         <ThemeToggle
           dict={dict}
