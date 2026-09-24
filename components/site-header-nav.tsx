@@ -35,7 +35,7 @@ export function SiteHeaderNav({ dict }: { dict: Dictionary }) {
   return (
     <>
       <nav
-        className="hidden items-center gap-1 xl:flex"
+        className="hidden items-center lg:flex xl:gap-1"
         aria-label={dict.nav.primaryLabel}
       >
         {navLinks.map((link) => {
@@ -50,7 +50,7 @@ export function SiteHeaderNav({ dict }: { dict: Dictionary }) {
               prefetch={false}
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "relative px-3 py-2 text-xs font-medium tracking-wide whitespace-nowrap uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold",
+                "relative px-1.5 py-2 text-[11px] font-medium uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold xl:px-3 xl:text-xs xl:tracking-wide",
                 isActive
                   ? "text-gold"
                   : "text-ink-foreground/75 hover:text-ink-foreground"
@@ -59,7 +59,7 @@ export function SiteHeaderNav({ dict }: { dict: Dictionary }) {
               {dict.nav[link.key]}
               <span
                 className={cn(
-                  "absolute inset-x-3 -bottom-0.5 h-0.5 bg-gold transition-transform duration-200",
+                  "absolute inset-x-1.5 -bottom-0.5 h-0.5 bg-gold transition-transform duration-200 xl:inset-x-3",
                   isActive ? "scale-x-100" : "scale-x-0"
                 )}
                 aria-hidden="true"
@@ -69,7 +69,7 @@ export function SiteHeaderNav({ dict }: { dict: Dictionary }) {
         })}
       </nav>
 
-      <div className="hidden items-center gap-2 xl:flex">
+      <div className="hidden items-center gap-2 lg:flex">
         <LanguageSwitcher dict={dict} />
         <ThemeToggle
           dict={dict}
@@ -84,7 +84,7 @@ export function SiteHeaderNav({ dict }: { dict: Dictionary }) {
         </Button>
       </div>
 
-      <div className="flex items-center gap-1 xl:hidden">
+      <div className="flex items-center gap-1 lg:hidden">
         <LanguageSwitcher dict={dict} />
         <ThemeToggle
           dict={dict}
