@@ -2,27 +2,42 @@
 
 import * as React from "react"
 import Link from "@/components/locale-link"
+import dynamic from "next/dynamic"
 import { usePathname } from "next/navigation"
 import { Menu, ArrowRight } from "lucide-react"
 
-import { Crest } from "@/components/crest"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { Button } from "@/components/ui/button"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-  SheetFooter,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet"
 import { stripLocale } from "@/lib/i18n/config"
 import { navLinks } from "@/lib/site-config"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 import { cn } from "@/lib/utils"
+
+const loadMobileMenu = () => import("@/components/site-mobile-menu")
+const MobileMenu = dynamic(() => loadMobileMenu().then((m) => m.MobileMenu), {
+  ssr: false,
+  loading: () => <MenuButton />,
+})
+
+// The hamburger button, shared by the placeholder shown before the Sheet
+// has loaded and the Sheet's own trigger so the swap is invisible.
+export function MenuButton({
+  dict,
+  ...props
+}: React.ComponentProps<typeof Button> & { dict?: Dictionary }) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="size-11 text-ink-foreground hover:bg-white/10 hover:text-ink-foreground"
+      {...props}
+    >
+      <Menu />
+      {dict && <span className="sr-only">{dict.nav.openMenu}</span>}
+    </Button>
+  )
+}
 
 // Everything here needs usePathname() (active-link styling) or the mobile
 // Sheet's open state, which is why it's split out of the server-rendered
@@ -31,6 +46,8 @@ export function SiteHeaderNav({ dict }: { dict: Dictionary }) {
   // Locale prefix stripped so "/fr/about" still matches the "/about" link.
   const pathname = stripLocale(usePathname())
   const [open, setOpen] = React.useState(false)
+  // Mount (and so download) the Sheet on the first tap of the menu button.
+  const [menuWanted, setMenuWanted] = React.useState(false)
 
   return (
     <>
@@ -90,64 +107,27 @@ export function SiteHeaderNav({ dict }: { dict: Dictionary }) {
           dict={dict}
           className="text-ink-foreground hover:bg-white/10 hover:text-ink-foreground"
         />
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger
-            render={
-              <Button
-                variant="ghost"
-                size="icon"
-                className="size-11 text-ink-foreground hover:bg-white/10 hover:text-ink-foreground"
-              />
-            }
-          >
-            <Menu />
-            <span className="sr-only">{dict.nav.openMenu}</span>
-          </SheetTrigger>
-          <SheetContent
-            side="right"
-            className="flex w-full flex-col sm:max-w-xs"
-          >
-            <SheetHeader>
-              <SheetTitle className="flex items-center gap-2">
-                <Crest size={32} />
-                St. Vincent Pallotti
-              </SheetTitle>
-              <SheetDescription>{dict.nav.sheetDescription}</SheetDescription>
-            </SheetHeader>
-            <nav
-              className="flex flex-col gap-1 px-4"
-              aria-label={dict.nav.primaryLabel}
-            >
-              {navLinks.map((link) => {
-                const isActive =
-                  link.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(link.href)
-                return (
-                  <SheetClose
-                    key={link.key}
-                    render={<Link href={link.href} prefetch={false} />}
-                    className={cn(
-                      "border-b border-border py-3 text-sm font-medium",
-                      isActive ? "text-primary" : "text-foreground/80"
-                    )}
-                  >
-                    {dict.nav[link.key]}
-                  </SheetClose>
-                )
-              })}
-            </nav>
-            <SheetFooter>
-              <SheetClose
-                render={<Link href="/admissions" prefetch={false} />}
-                className="flex w-full items-center justify-center gap-1.5 bg-gold px-4 py-2.5 text-xs font-semibold text-gold-foreground uppercase transition-colors hover:bg-gold/85"
-              >
-                {dict.nav.applyNow}
-                <ArrowRight className="size-3.5" />
-              </SheetClose>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
+        {menuWanted ? (
+          <MobileMenu
+            dict={dict}
+            pathname={pathname}
+            open={open}
+            onOpenChange={setOpen}
+          />
+        ) : (
+          <MenuButton
+            dict={dict}
+            // Only a click swaps this button for the Sheet (swapping on
+            // hover/focus would eat the tap on touch and drop keyboard
+            // focus); hover/focus just warm the chunk.
+            onPointerEnter={loadMobileMenu}
+            onFocus={loadMobileMenu}
+            onClick={() => {
+              setMenuWanted(true)
+              setOpen(true)
+            }}
+          />
+        )}
       </div>
     </>
   )
