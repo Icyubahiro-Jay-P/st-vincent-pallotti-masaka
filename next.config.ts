@@ -1,5 +1,7 @@
 import type { NextConfig } from "next"
 
+const isDev = process.env.NODE_ENV === "development"
+
 // ponytail: connect-src allows any https: origin because uploads go
 // straight from the browser to a presigned URL on AWS_ENDPOINT_URL_S3,
 // which is env-configured and not knowable at build time. Narrow this to
@@ -14,10 +16,24 @@ const CSP = [
   // nonce via proxy.ts would be the stricter fix, but that middleware
   // currently only runs on /admin/** (see its own comment) and widening
   // it to every route is a separate, larger change than this CSP fix.
-  "script-src 'self' 'unsafe-inline'",
+  //
+  // blob: + 'wasm-unsafe-eval' let the admin video compressor load
+  // ffmpeg-core (fetched into a blob URL, then compiled as WebAssembly).
+  // Dev only: React needs eval for callstacks, and Vercel Analytics /
+  // Speed Insights load their debug scripts from va.vercel-scripts.com
+  // (production serves them from /_vercel on our own origin).
+  `script-src 'self' 'unsafe-inline' blob: 'wasm-unsafe-eval'${
+    isDev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""
+  }`,
+  "worker-src 'self' blob:",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' https: data:",
   "font-src 'self'",
+  // News videos come from Cloudinary/blob storage; blob: covers the admin
+  // upload previews made with URL.createObjectURL.
+  "media-src 'self' https: blob:",
+  // Google Maps embed on the contact page.
+  "frame-src https://www.google.com",
   "connect-src 'self' https:",
   "object-src 'none'",
   "base-uri 'self'",
