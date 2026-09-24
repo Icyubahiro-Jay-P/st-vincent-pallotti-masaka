@@ -12,7 +12,7 @@ const en = {
     skipToContent: "Skip to main content",
   },
 
-  // Translatable text for the seven programs, keyed by the slug defined in
+  // Translatable text for the programs, keyed by the slug defined in
   // lib/site-config.ts (which also owns the locale-independent icon name and
   // route). Keep the keys identical across locales.
   programs: {
@@ -32,7 +32,7 @@ const en = {
     },
     kindergarten: {
       name: "Kindergarten",
-      ageRange: "3 – 5 years",
+      ageRange: "N1 – N3",
       description:
         "Play-based early learning that builds language, number sense and social skills ahead of Primary One.",
       overview:
@@ -46,7 +46,7 @@ const en = {
     },
     "special-needs": {
       name: "Special Needs Education",
-      ageRange: "All ages",
+      ageRange: "All levels",
       description:
         "Individualised support and an inclusive classroom model so every child learns at their own pace, with dignity.",
       overview:
@@ -72,13 +72,27 @@ const en = {
         "Primary through Lower Secondary, Grade 1 to Grade 8",
       ],
     },
+    "national-nursery": {
+      name: "National Nursery",
+      ageRange: "N1 – N3",
+      description:
+        "Early years on Rwanda's competence-based curriculum, building language, number sense and social skills ahead of Primary One.",
+      overview:
+        "National Nursery follows Rwanda's competence-based curriculum from N1 to N3, using guided play and structured activities to build early literacy in Kinyarwanda and English, number sense and social skills, so children arrive in P1 confident and ready to learn.",
+      highlights: [
+        "Nursery 1 to Nursery 3 (N1 – N3)",
+        "Rwanda's official competence-based curriculum",
+        "Early literacy in Kinyarwanda and English",
+        "Preparation for Primary One",
+      ],
+    },
     "national-primary": {
-      name: "National Nursery & Primary",
-      ageRange: "N1 – P6",
+      name: "National Primary",
+      ageRange: "P1 – P6",
       description:
         "The Rwandan competence-based curriculum, delivered in a disciplined, values-led classroom.",
       overview:
-        "National Nursery and Primary follows Rwanda's competence-based curriculum, taught in a disciplined, values-led classroom that builds strong academic fundamentals in Kinyarwanda, English and Mathematics.",
+        "National Primary follows Rwanda's competence-based curriculum from P1 to P6, taught in a disciplined, values-led classroom that builds strong academic fundamentals in Kinyarwanda, English and Mathematics.",
       highlights: [
         "Rwanda's official competence-based curriculum",
         "Kinyarwanda, English and Mathematics foundations",
@@ -263,7 +277,7 @@ const en = {
       eyebrow: "What We Offer",
       title: "One campus, every stage of the journey",
       description:
-        "Seven programs under one roof, from a child's first day of care through to a trade certificate or university placement.",
+        "Eight programs under one roof, from a child's first day of care through to a trade certificate or university placement.",
     },
     pathway: {
       eyebrow: "The Pallotti Pathway",
@@ -276,8 +290,8 @@ const en = {
             "Nurturing care and early stimulation in a safe, loving environment.",
         },
         {
-          stage: "Kindergarten",
-          range: "3 – 5 yrs",
+          stage: "Nursery & Kindergarten",
+          range: "N1 – N3",
           description:
             "Foundational literacy, numeracy and social skills through guided play.",
         },
@@ -391,10 +405,10 @@ const en = {
     },
     curricula: [
       {
-        slug: "cambridge-primary",
         name: "Cambridge Curriculum",
         tagline: "Internationally benchmarked",
-        range: "Grade 1 – Grade 8",
+        range: "Kindergarten · Grade 1 – Grade 8",
+        levels: ["kindergarten", "cambridge-primary"],
         description:
           "Our Cambridge stream follows the Cambridge Primary framework in English, Mathematics and Science, preparing students for globally recognised progression.",
         subjects: [
@@ -406,10 +420,15 @@ const en = {
         ],
       },
       {
-        slug: "national-primary",
         name: "National Curriculum",
         tagline: "Rwanda's competence-based curriculum",
-        range: "Nursery – S3",
+        range: "N1 – S3 · TVET",
+        levels: [
+          "national-nursery",
+          "national-primary",
+          "national-secondary",
+          "tvet",
+        ],
         description:
           "National Nursery, Primary and Secondary follow Rwanda's official competence-based curriculum, taught in a disciplined, values-led classroom.",
         subjects: [
@@ -421,6 +440,7 @@ const en = {
         ],
       },
     ],
+    chooseLevel: "Choose a level",
     subjectHighlights: [
       "Mathematics & Sciences",
       "English & Kinyarwanda",
@@ -442,7 +462,7 @@ const en = {
       eyebrow: "Every Program",
       title: "Find your child's program",
       description:
-        "Every program below has its own page with age range, what students learn, and how to apply.",
+        "Every program below has its own page with class range, what students learn, and how to apply.",
     },
     closing: {
       paragraph:
@@ -450,7 +470,7 @@ const en = {
       cta: "Apply for a Place",
     },
     detail: {
-      ageRangeLabel: "Age Range",
+      ageRangeLabel: "Class Range",
       exploreMoreEyebrow: "Explore More",
       exploreMoreTitle: "Other programs at Pallotti",
     },
