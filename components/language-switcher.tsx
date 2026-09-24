@@ -1,66 +1,65 @@
 "use client"
 
-import { usePathname, useRouter } from "next/navigation"
-import { Languages } from "lucide-react"
+import * as React from "react"
+import { ChevronDownIcon, Languages } from "lucide-react"
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  isLocale,
-  localeNames,
-  localePath,
-  locales,
-  stripLocale,
-} from "@/lib/i18n/config"
-import { LOCALE_COOKIE } from "@/lib/i18n/locale-cookie"
+import { selectTriggerClassName } from "@/components/ui/select-trigger-class"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
+import { cn } from "@/lib/utils"
 
-// Switches language by moving to the same page under the other locale
-// segment (/en/about -> /fr/about), keeping any query string. Also saves the
-// choice in a cookie so proxy.ts sends later unprefixed visits (/, old
-// links) to that language. To add Kinyarwanda later, no changes are needed
-// here: it shows up automatically once "rw" is added to lib/i18n/config.ts.
+const loadSelect = () => import("@/components/language-switcher-select")
+const LazySelect = React.lazy(() =>
+  loadSelect().then((m) => ({ default: m.LanguageSwitcherSelect }))
+)
+
+// Base UI's Select (and its floating/focus-trap code) is the heaviest thing
+// in the header, so every page first renders this look-alike button and
+// only mounts the real Select, already open, on the first click. Hover and
+// focus just warm the chunk.
 export function LanguageSwitcher({
   dict,
-  className,
+  className = "h-9 gap-1.5 border-white/20 bg-transparent text-ink-foreground hover:bg-white/10",
 }: {
   dict: Dictionary
   className?: string
 }) {
-  const router = useRouter()
-  const pathname = usePathname()
+  const [wanted, setWanted] = React.useState(false)
+  const [open, setOpen] = React.useState(false)
 
-  function switchTo(nextLocale: string | null) {
-    if (!nextLocale || !isLocale(nextLocale)) return
-    const secure = location.protocol === "https:" ? "; Secure" : ""
-    document.cookie = `${LOCALE_COOKIE}=${encodeURIComponent(nextLocale)}; path=/; max-age=31536000; SameSite=Lax${secure}`
-    router.push(localePath(nextLocale, stripLocale(pathname)) + location.search)
+  const standIn = (props: React.ComponentProps<"button">) => (
+    <button
+      type="button"
+      data-slot="select-trigger"
+      data-size="default"
+      aria-label={dict.languageSwitcher.label}
+      aria-haspopup="listbox"
+      className={cn(selectTriggerClassName, className)}
+      {...props}
+    >
+      <Languages className="size-3.5" data-icon="inline-start" />
+      <span data-slot="select-value">{dict.locale.toUpperCase()}</span>
+      <ChevronDownIcon className="pointer-events-none size-3.5 text-muted-foreground" />
+    </button>
+  )
+
+  if (!wanted) {
+    return standIn({
+      onPointerEnter: loadSelect,
+      onFocus: loadSelect,
+      onClick: () => {
+        setWanted(true)
+        setOpen(true)
+      },
+    })
   }
-
   return (
-    <Select value={dict.locale} onValueChange={switchTo}>
-      <SelectTrigger
-        aria-label={dict.languageSwitcher.label}
-        className={
-          className ??
-          "h-9 gap-1.5 border-white/20 bg-transparent text-ink-foreground hover:bg-white/10"
-        }
-      >
-        <Languages className="size-3.5" data-icon="inline-start" />
-        <SelectValue>{dict.locale.toUpperCase()}</SelectValue>
-      </SelectTrigger>
-      <SelectContent align="end">
-        {locales.map((code) => (
-          <SelectItem key={code} value={code}>
-            {localeNames[code]}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <React.Suspense fallback={standIn({})}>
+      <LazySelect
+        dict={dict}
+        className={className}
+        open={open}
+        onOpenChange={setOpen}
+      />
+    </React.Suspense>
   )
 }
