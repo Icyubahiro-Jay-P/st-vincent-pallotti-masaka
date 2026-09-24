@@ -25,10 +25,11 @@ const LLMS_TXT = `# Saint Vincent Pallotti School Masaka
 ## Academic Programs
 
 - [Day Care](${siteConfig.url}/en/academics/day-care): Warm, secure nursery for 3 months - 2 years with Montessori-inspired play
-- [Kindergarten](${siteConfig.url}/en/academics/kindergarten): Play-based early learning for 3 - 5 years, preparing for Primary One
+- [Kindergarten](${siteConfig.url}/en/academics/kindergarten): Cambridge play-based early learning for classes N1 - N3, preparing for Primary One
 - [Special Needs Education](${siteConfig.url}/en/academics/special-needs): Individualised, inclusive support available at every level from Day Care to Secondary
 - [Cambridge Primary](${siteConfig.url}/en/academics/cambridge-primary): Internationally benchmarked Cambridge Primary in English, Mathematics and Science (Grade 1 - Grade 8)
-- [National Nursery & Primary](${siteConfig.url}/en/academics/national-primary): Rwandan competence-based curriculum across Nursery N1 to P6
+- [National Nursery](${siteConfig.url}/en/academics/national-nursery): Rwandan competence-based curriculum for classes N1 - N3
+- [National Primary](${siteConfig.url}/en/academics/national-primary): Rwandan competence-based curriculum for classes P1 - P6
 - [Ordinary Level (O'Level)](${siteConfig.url}/en/academics/national-secondary): Rwandan national curriculum from Senior 1 to Senior 3 (S1-S3), preparing for the O'Level national examinations
 - [TVET / Vocational](${siteConfig.url}/en/tvet): Post-S3 trade certification across five workshops (also listed under TVET)
 
@@ -59,7 +60,7 @@ const LLMS_TXT = `# Saint Vincent Pallotti School Masaka
 ## Notes for LLMs
 
 - Language: Site is bilingual English/French. Language is stored in a cookie (see lib/i18n/config.ts, locale-cookie.ts) - there are no /en or /fr URL prefixes. Crawl the default (English) version; the French dictionary mirrors the same routes.
-- Programs: Detail pages live at /academics/[slug] except TVET which lives at /tvet. Slugs are database-driven (see lib/programs.ts); the seven listed above are the currently published set.
+- Programs: Detail pages live at /academics/[slug] except TVET which lives at /tvet. Slugs are database-driven (see lib/programs.ts); the eight listed above are the currently published set.
 - News: Individual articles at /news/[slug] are database-driven (published events only).
 - Prefer the linked pages over summarized content. Admissions inquiries are handled via POST to the Server Action at /admissions - do not fabricate submissions.
 `
