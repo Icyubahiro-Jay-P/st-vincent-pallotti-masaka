@@ -324,6 +324,11 @@ const en = {
     },
     why: {
       eyebrow: "Why Families Choose Pallotti",
+      visitCard: {
+        title: "See it for yourself",
+        description:
+          "Walk the campus, meet our teachers and ask anything on a guided school tour.",
+      },
       title: "Built for growth, rooted in values",
       features: [
         {
