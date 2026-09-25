@@ -21,7 +21,7 @@ import { Breadcrumb } from "@/components/breadcrumb"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getPublishedPrograms } from "@/lib/programs"
-import { localeAlternates, localeUrl } from "@/lib/i18n/alternates"
+import { localeAlternates, localeUrl, ogImages } from "@/lib/i18n/alternates"
 import { programHref } from "@/lib/site-config"
 
 const curriculumIcons = [Globe2, BookOpen] as const
@@ -38,6 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: dict.meta.academics.title,
       description: dict.meta.academics.description,
       url: await localeUrl("/academics"),
+      images: await ogImages(),
     },
   }
 }
