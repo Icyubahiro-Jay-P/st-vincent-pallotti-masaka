@@ -318,6 +318,11 @@ const fr: Dictionary = {
     },
     why: {
       eyebrow: "Pourquoi les familles choisissent Pallotti",
+      visitCard: {
+        title: "Venez voir par vous-même",
+        description:
+          "Visitez le campus, rencontrez nos enseignants et posez toutes vos questions lors d'une visite guidée.",
+      },
       title: "Conçue pour grandir, enracinée dans nos valeurs",
       features: [
         {
