@@ -12,7 +12,7 @@ import { getPublishedEventBySlug, getEventMedia } from "@/lib/events"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { cloudinaryUrl } from "@/lib/media/cloudinary-url"
-import { localeAlternates, localeUrl } from "@/lib/i18n/alternates"
+import { localeAlternates, localeUrl, ogImages } from "@/lib/i18n/alternates"
 import { siteConfig } from "@/lib/site-config"
 
 export async function generateMetadata({
@@ -33,7 +33,14 @@ export async function generateMetadata({
     title,
     description,
     alternates: await localeAlternates(`/news/${slug}`),
-    openGraph: { title, description, url },
+    openGraph: {
+      title,
+      description,
+      url,
+      images: event.coverImageUrl
+        ? [cloudinaryUrl(event.coverImageUrl, 1200)]
+        : await ogImages(),
+    },
   }
 }
 
