@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { PageHero } from "@/components/page-hero"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
-import { localeAlternates, localeUrl } from "@/lib/i18n/alternates"
+import { localeAlternates, localeUrl, ogImages } from "@/lib/i18n/alternates"
 import { siteConfig } from "@/lib/site-config"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -18,6 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: dict.meta.accessibility.title,
       description: dict.meta.accessibility.description,
       url,
+      images: await ogImages(),
     },
   }
 }
