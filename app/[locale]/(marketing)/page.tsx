@@ -14,7 +14,7 @@ import { getPublishedPrograms } from "@/lib/programs"
 import { getSiteSettings } from "@/lib/site-settings"
 import { getHomepageContent } from "@/lib/homepage-content"
 import { getLatestPublishedEvents } from "@/lib/events"
-import { localeAlternates, localeUrl } from "@/lib/i18n/alternates"
+import { localeAlternates, localeUrl, ogImages } from "@/lib/i18n/alternates"
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -27,6 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: dict.meta.home.title,
       description: dict.meta.home.ogDescription,
       url: await localeUrl("/"),
+      images: await ogImages(),
     },
   }
 }
