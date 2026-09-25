@@ -21,3 +21,18 @@ export async function localeAlternates(path: string) {
     },
   }
 }
+
+// openGraph.images for a page. Needed on every page that sets its own
+// openGraph, because Next replaces the layout's openGraph wholesale rather
+// than merging, which would drop the layout's opengraph-image. Twitter
+// picks these up automatically.
+export async function ogImages() {
+  return [
+    {
+      url: localePath(await getLocale(), "/opengraph-image"),
+      width: 1200,
+      height: 630,
+      alt: siteConfig.name,
+    },
+  ]
+}
