@@ -17,8 +17,6 @@
 - Per-trade TVET detail pages (/tvet/[trade]) -- needs real per-trade
   content (curriculum, instructors, equipment photos), not just routing.
 - Academic/term calendar -- needs real term dates from school admin.
-- OG image asset (1200x630 branded image) for openGraph/twitter cards --
-  none exists yet, deferred rather than shipping a placeholder.
 
 ## NEW SCHEMA + ADMIN CRUD FEATURES (DB migrations required)
 - Fees table + admin CRUD + public fees page (depends on content above).
