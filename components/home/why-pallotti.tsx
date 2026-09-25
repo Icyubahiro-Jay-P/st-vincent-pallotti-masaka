@@ -1,11 +1,19 @@
 import { Building2, Award, Church, HeartHandshake } from "lucide-react"
 
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon"
+
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
 
 const icons = [Building2, Award, Church, HeartHandshake] as const
 const sizes = ["lg", "sm", "sm", "sm"] as const
 
-export function WhyPallotti({ dict }: { dict: Dictionary }) {
+export function WhyPallotti({
+  dict,
+  whatsappNumber,
+}: {
+  dict: Dictionary
+  whatsappNumber: string
+}) {
   const w = dict.home.why
 
   return (
@@ -62,6 +70,29 @@ export function WhyPallotti({ dict }: { dict: Dictionary }) {
               </div>
             )
           })}
+          {/* Fills the one cell the 2x2 feature leaves empty on desktop; the
+              1- and 2-column layouts are already full without it. */}
+          <a
+            href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+              dict.whatsapp.bookTourMessage
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group hidden flex-col gap-4 bg-muted p-6 transition-colors hover:bg-accent lg:flex"
+          >
+            <WhatsAppIcon className="size-7 text-primary" />
+            <div>
+              <h3 className="font-heading text-base font-semibold text-foreground">
+                {w.visitCard.title}
+              </h3>
+              <p className="mt-2 text-xs/relaxed text-muted-foreground">
+                {w.visitCard.description}
+              </p>
+            </div>
+            <span className="mt-auto text-xs font-semibold tracking-wide text-primary uppercase group-hover:underline">
+              {dict.whatsapp.bookTourLabel}
+            </span>
+          </a>
         </div>
       </div>
     </section>
