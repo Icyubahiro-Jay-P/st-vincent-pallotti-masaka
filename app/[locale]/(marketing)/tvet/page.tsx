@@ -8,7 +8,7 @@ import { iconMap } from "@/components/icon-map"
 import { Breadcrumb } from "@/components/breadcrumb"
 import { tvetTradeIcons } from "@/lib/site-config"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
-import { localeAlternates, localeUrl } from "@/lib/i18n/alternates"
+import { localeAlternates, localeUrl, ogImages } from "@/lib/i18n/alternates"
 import { getLocale } from "@/lib/i18n/get-locale"
 
 const reasonIcons = [Wrench, Award, Briefcase] as const
@@ -24,6 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: dict.meta.tvet.title,
       description: dict.meta.tvet.description,
       url: await localeUrl("/tvet"),
+      images: await ogImages(),
     },
   }
 }
