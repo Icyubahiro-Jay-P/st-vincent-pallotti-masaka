@@ -52,7 +52,14 @@ export function NewsTeaser({
           </Link>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
+        <div
+          className={`mt-10 grid grid-cols-1 gap-6 ${
+            // Fewer than 3 events would otherwise leave blank columns.
+            ["sm:grid-cols-3", "sm:grid-cols-1", "sm:grid-cols-2"][
+              Math.min(events.length, 3) % 3
+            ]
+          }`}
+        >
           {events.map((event) => (
             <Link
               key={event.slug}
