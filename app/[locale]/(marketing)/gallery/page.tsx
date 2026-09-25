@@ -9,7 +9,7 @@ import { getLocale } from "@/lib/i18n/get-locale"
 import { getPublishedPhotosPage } from "@/lib/events"
 import { cloudinaryUrl } from "@/lib/media/cloudinary-url"
 import { parsePage, totalPages } from "@/lib/pagination"
-import { localeAlternates, localeUrl } from "@/lib/i18n/alternates"
+import { localeAlternates, localeUrl, ogImages } from "@/lib/i18n/alternates"
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -22,6 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: dict.meta.gallery.title,
       description: dict.meta.gallery.description,
       url: await localeUrl("/gallery"),
+      images: await ogImages(),
     },
   }
 }
