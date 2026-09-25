@@ -9,7 +9,7 @@ import { getLocale } from "@/lib/i18n/get-locale"
 import { getSiteSettings } from "@/lib/site-settings"
 import { getPublishedMilestones } from "@/lib/milestones"
 import { getPublishedValues } from "@/lib/values"
-import { localeAlternates, localeUrl } from "@/lib/i18n/alternates"
+import { localeAlternates, localeUrl, ogImages } from "@/lib/i18n/alternates"
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -22,6 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: dict.meta.about.title,
       description: dict.meta.about.description,
       url: await localeUrl("/about"),
+      images: await ogImages(),
     },
   }
 }
