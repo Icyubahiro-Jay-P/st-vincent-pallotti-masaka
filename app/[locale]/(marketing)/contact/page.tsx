@@ -16,7 +16,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getSiteSettings } from "@/lib/site-settings"
 import type { Dictionary } from "@/lib/i18n/get-dictionary"
-import { localeAlternates, localeUrl } from "@/lib/i18n/alternates"
+import { localeAlternates, localeUrl, ogImages } from "@/lib/i18n/alternates"
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -29,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: dict.meta.contact.title,
       description: dict.meta.contact.description,
       url: await localeUrl("/contact"),
+      images: await ogImages(),
     },
   }
 }
