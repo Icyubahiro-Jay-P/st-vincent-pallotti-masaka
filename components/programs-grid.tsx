@@ -8,7 +8,7 @@ import type { getPublishedPrograms } from "@/lib/programs"
 // Classes for the help card that fills the grid's leftover cells, so a
 // partial last row never shows the grey bg-border through empty cells.
 // Returns null when the count fills every row at both breakpoints.
-function helpCardClasses(count: number) {
+export function helpCardClasses(count: number) {
   const smEmpty = count % 2
   const lgEmpty = (3 - (count % 3)) % 3
   if (!smEmpty && !lgEmpty) return null
