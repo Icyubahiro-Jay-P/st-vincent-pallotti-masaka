@@ -7,6 +7,7 @@ import { Breadcrumb } from "@/components/breadcrumb"
 import { PageHero } from "@/components/page-hero"
 import { Button } from "@/components/ui/button"
 import { iconMap } from "@/components/icon-map"
+import { helpCardClasses } from "@/components/programs-grid"
 import { programHref } from "@/lib/site-config"
 import { getPublishedPrograms } from "@/lib/programs"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
@@ -150,6 +151,17 @@ export default async function ProgramDetailPage({
                 </Link>
               )
             })}
+            {helpCardClasses(otherPrograms.length) ? (
+              <Link
+                href="/admissions"
+                className={`group flex items-center justify-between gap-3 bg-muted p-5 transition-colors hover:bg-accent ${helpCardClasses(otherPrograms.length)}`}
+              >
+                <span className="text-sm font-medium text-primary group-hover:underline">
+                  {dict.common.programsHelp.cta}
+                </span>
+                <ArrowRight className="size-4 text-primary" />
+              </Link>
+            ) : null}
           </div>
         </div>
       </section>
