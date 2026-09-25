@@ -17,7 +17,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getLocale } from "@/lib/i18n/get-locale"
 import { getPublishedPrograms } from "@/lib/programs"
 import { getSiteSettings } from "@/lib/site-settings"
-import { localeAlternates, localeUrl } from "@/lib/i18n/alternates"
+import { localeAlternates, localeUrl, ogImages } from "@/lib/i18n/alternates"
 
 const processIcons = [
   UserPlus,
@@ -37,6 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: dict.meta.admissions.title,
       description: dict.meta.admissions.description,
       url: await localeUrl("/admissions"),
+      images: await ogImages(),
     },
   }
 }
