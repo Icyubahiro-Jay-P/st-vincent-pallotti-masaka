@@ -114,7 +114,7 @@ export default async function Page() {
         <ProgramsGridSection locale={locale} dict={dict} />
       </Suspense>
       <Pathway dict={dict} />
-      <WhyPallotti dict={dict} />
+      <WhyPallotti dict={dict} whatsappNumber={settings.whatsappNumber} />
       <Suspense fallback={<NewsTeaserSkeleton />}>
         <NewsTeaserSection
           dict={dict}
